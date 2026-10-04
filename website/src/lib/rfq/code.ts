@@ -21,7 +21,3 @@ export function makeRfqCodeSecure(now = new Date()): string {
   let i = 0;
   return makeRfqCode(now, () => (bytes[i++] ?? 0) / 256);
 }
-
-export function isRfqCode(value: string): boolean {
-  return RFQ_CODE_RE.test(value);
-}

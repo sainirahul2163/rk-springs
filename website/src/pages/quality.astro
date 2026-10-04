@@ -2,6 +2,7 @@
 import Callout from '@/components/ui/Callout.astro';
 import CTASection from '@/components/ui/CTASection.astro';
 import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import Todo from '@/components/ui/Todo.astro';
@@ -11,16 +12,16 @@ import PageLayout from '@/layouts/PageLayout.astro';
 
 <PageLayout
   route="quality"
-  title="Quality at RK Springs"
-  description="ZED-certified spring shop in Talawade, Pune. In-house stress relieving and end grinding. No ISO or IATF claim. Made to your drawing or sample."
+  title="Quality and certification"
+  description="ZED-certified spring manufacturer in Talawade, Pune. In-house stress relieving and end grinding. Made to your drawing or sample."
 >
   <Section tone="grid" labelledby="quality-h1">
     <SectionHeader
       as="h1"
       id="quality-h1"
       eyebrow="Quality"
-      title="What we can stand behind"
-      lede="A short page, on purpose. We will not list a lab, a PPAP pack or a CPK number we do not have."
+      title="Quality and certification"
+      lede="ZED certified. Coiling, stress relieving and end grinding in our unit in Talawade. A development sample, then your approval, then the bulk quantity."
     />
   </Section>
 
@@ -32,18 +33,15 @@ import PageLayout from '@/layouts/PageLayout.astro';
           {site.legalName} is ZED certified. That is the certificate we hold.
           <Todo text="ZED level (Bronze / Silver / Gold) and a PDF of the certificate." />
         </p>
-        <p>
-          We do <strong>not</strong> hold ISO 9001 or IATF 16949. If a vendor form asks for those,
-          the honest answer is no.
-        </p>
+        <p>We hold ZED certification. We are not currently ISO 9001 / IATF 16949 certified.</p>
       </div>
       <PhotoPlaceholder ratio="4 / 3" caption="ZED certificate on the office wall" />
     </div>
   </Section>
 
-  <Section tone="surface" labelledby="shop-title">
+  <Section tone="surface" labelledby="floor-title">
     <SectionHeader
-      id="shop-title"
+      id="floor-title"
       index={1}
       eyebrow="In-house"
       title="What happens on this floor"
@@ -55,10 +53,7 @@ import PageLayout from '@/layouts/PageLayout.astro';
         <li>Stress relieving in our furnace</li>
         <li>End grinding, when the drawing asks for it</li>
       </ul>
-      <p>
-        Plating and other finishes go out to partners. We do not claim a hydrogen-embrittlement
-        bake, a salt-spray cabinet or a load tester on this site.
-      </p>
+      <p>Plating and other finishes go out to partners.</p>
       <Todo text="machine list, and whether an inspection report or mill certificate can be supplied on request." />
     </div>
   </Section>
@@ -77,10 +72,29 @@ import PageLayout from '@/layouts/PageLayout.astro';
       </p>
       <Todo text="confirm that sample approval is always a step, and typical sample lead time." />
     </div>
-    <Callout class="mt-8 max-w-[46rem]" variant="warning" title="What we will not write">
-      No “100% inspection”, no CPK, no PPAP level, no testing laboratory. Those words stay off this
-      site until the shop can show the work.
+    <Callout class="mt-8 max-w-[46rem]" title="How a new part is checked">
+      You try the development sample in the assembly. Production of the bulk quantity waits on that
+      approval.
     </Callout>
+  </Section>
+
+  <Section tone="surface">
+    <RelatedLinks
+      title="Related"
+      links={[
+        {
+          to: 'capabilities',
+          label: 'Capabilities',
+          description: 'Coiling, samples, reverse engineering and finishing.',
+        },
+        {
+          to: 'ordering',
+          label: 'Ordering with us',
+          description: 'MOQ, payment and ex-works dispatch.',
+        },
+        { to: 'about', label: 'About us', description: 'The unit in Talawade since 2017.' },
+      ]}
+    />
   </Section>
 
   <CTASection />

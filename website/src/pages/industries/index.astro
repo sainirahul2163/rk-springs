@@ -18,7 +18,7 @@ const industries = [
     to: 'switchgear' as const,
     title: 'Electrical and switchgear',
     icon: 'zap' as const,
-    description: 'MCB and switch-mechanism springs. A regular job in this shop.',
+    description: 'MCB and switch-mechanism springs. A regular job in our unit.',
   },
   {
     to: 'instrumentation' as const,
@@ -47,18 +47,13 @@ const industries = [
       as="h1"
       id="ind-h1"
       eyebrow="Industries"
-      title="Where the springs go"
+      title="Springs for your industry"
       lede={`Automobile, electrical and switchgear, instrumentation and furniture, plus other light assemblies. Wire ${site.capability.wireRangeLabel}. Made to your drawing or sample.`}
     />
   </Section>
 
   <Section labelledby="grid-title">
-    <SectionHeader
-      id="grid-title"
-      index={1}
-      eyebrow="Sectors"
-      title="Four pages, not a claim list"
-    />
+    <SectionHeader id="grid-title" index={1} eyebrow="Sectors" title="Four industries we serve" />
     <ul class="mt-10 grid gap-5 sm:grid-cols-2">
       {industries.map((it) => (
         <li>
@@ -89,8 +84,10 @@ const industries = [
         type you have, send a photo of the assembly and we will say.
       </p>
       <p>
-        We do not make rolling-shutter, agriculture or heavy springs above 2.50 mm wire. Defence
-        work is not listed here until it is confirmed.
+        Wire {site.capability.wireRangeLabel}. Rolling-shutter, agriculture and heavier springs sit
+        outside this range. See <a href="/springs/">the springs we coil</a>,{' '}
+        <a href="/capabilities/">how we make them</a>, and{' '}
+        <a href="/request-a-quote/">request a quote</a>.
       </p>
     </div>
   </Section>

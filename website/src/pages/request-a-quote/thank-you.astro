@@ -4,7 +4,10 @@ import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import Todo from '@/components/ui/Todo.astro';
 import { whatsappHref } from '@/lib/contact';
+import { RFQ_CODE_RE } from '@/lib/rfq/code';
 import PageLayout from '@/layouts/PageLayout.astro';
+
+const rfqPattern = RFQ_CODE_RE.source;
 
 const wa = whatsappHref('the quote we just requested');
 ---
@@ -52,17 +55,16 @@ const wa = whatsappHref('the quote we just requested');
       <Todo text="company profile PDF for buyers to download from this page." />
     </div>
   </Section>
+  <script define:vars={{ rfqPattern }}>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id') || '';
+      if (!new RegExp(rfqPattern).test(id)) return;
+      const el = document.getElementById('rfq-code');
+      if (el) el.textContent = id;
+    })();
+  </script>
 </PageLayout>
-
-<script is:inline>
-  (function () {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id') || '';
-    if (!/^RFQ-\d{8}-[A-HJ-NP-Z2-9]{4}$/.test(id)) return;
-    const el = document.getElementById('rfq-code');
-    if (el) el.textContent = id;
-  })();
-</script>
 
 <style>
   .ref {

@@ -137,7 +137,7 @@ export const glossaryTerms: readonly GlossaryTerm[] = [
     id: 'hard-drawn',
     term: 'Hard-drawn spring steel',
     definition:
-      'Cold-drawn carbon spring wire, typical of IS 4454-1 / EN 10270-1. The everyday material for dry, general industrial springs in this shop.',
+      'Cold-drawn carbon spring wire, typical of IS 4454-1 / EN 10270-1. The everyday material for dry, general industrial springs in our unit.',
   },
   {
     id: 'hook-stress',
@@ -293,7 +293,7 @@ export const glossaryTerms: readonly GlossaryTerm[] = [
     id: 'shear-modulus',
     term: 'Shear modulus (G)',
     definition:
-      'The material stiffness used in the helical-spring rate formula, in MPa. Typical published values (music wire about 81,700 MPa) are not measured on this floor.',
+      'The material stiffness used in the helical-spring rate formula, in MPa. Typical published value for music wire is about 81,700 MPa.',
   },
   {
     id: 'side-hook',
@@ -323,7 +323,7 @@ export const glossaryTerms: readonly GlossaryTerm[] = [
     id: 'spring-steel',
     term: 'Spring steel',
     definition:
-      'Carbon steel drawn or tempered for springs. In this shop the everyday grade is hard-drawn wire. Music wire and oil-tempered are on request.',
+      'Carbon steel drawn or tempered for springs. In our unit the everyday grade is hard-drawn wire. Music wire and oil-tempered are on request.',
   },
   {
     id: 'stainless-302-304',
@@ -371,7 +371,7 @@ export const glossaryTerms: readonly GlossaryTerm[] = [
     id: 'wind-direction',
     term: 'Wind direction',
     definition:
-      'Whether the coil is left-hand or right-hand. Critical on torsion springs. Say it on the drawing; do not leave it to the shop to guess.',
+      'Whether the coil is left-hand or right-hand. Critical on torsion springs. Say it on the drawing; do not leave it for us to guess.',
   },
   {
     id: 'wire-diameter',
@@ -395,7 +395,7 @@ export const glossaryTerms: readonly GlossaryTerm[] = [
     id: 'youngs-modulus',
     term: "Young's modulus (E)",
     definition:
-      'Tensile stiffness of the material, in MPa. Used with G to credit extension-spring hooks: Na = Nb + G/E. Typical published values, not measured here.',
+      'Tensile stiffness of the material, in MPa. Used with G to credit extension-spring hooks: Na = Nb + G/E. Typical published value.',
   },
   {
     id: 'zed',

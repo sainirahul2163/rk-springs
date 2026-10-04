@@ -23,6 +23,8 @@ export interface JsonLdPage {
   faqs?: readonly FaqItem[];
   product?: { name: string; description: string };
   glossary?: readonly GlossaryTermLd[];
+  article?: { headline: string; datePublished: string; dateModified: string };
+  tool?: { name: string; description: string };
 }
 
 type Node = Record<string, unknown>;
@@ -52,14 +54,15 @@ function organization(): Node {
     foundingDate: String(site.foundingYear),
     taxID: site.gstin,
     url: absoluteUrl('/'),
-    logo: absoluteUrl('/og-default.png'),
+    // TODO(client): replace /favicon.svg with the real square logo file.
+    logo: absoluteUrl('/favicon.svg'),
     image: absoluteUrl('/og-default.png'),
     email: primaryEmail,
     telephone: primaryPhone.e164,
     address: {
       '@type': 'PostalAddress',
-      streetAddress: a.street,
-      addressLocality: a.locality,
+      streetAddress: `${a.street}, ${a.locality}`,
+      addressLocality: a.city,
       addressRegion: a.region,
       postalCode: a.postalCode,
       addressCountry: a.countryCode,
@@ -85,7 +88,7 @@ function organization(): Node {
       telephone: primaryPhone.e164,
       email: primaryEmail,
       areaServed: 'IN',
-      availableLanguage: ['en', 'hi'],
+      availableLanguage: ['en'],
     },
     openingHoursSpecification: site.hours.openDays.map((day) => ({
       '@type': 'OpeningHoursSpecification',
@@ -157,6 +160,14 @@ export function buildGraph(page: JsonLdPage): {
     publisher: { '@id': orgId() },
   };
 
+  if (page.kind === 'TechArticle' && page.article) {
+    webPage.headline = page.article.headline;
+    webPage.author = { '@id': orgId() };
+    webPage.publisher = { '@id': orgId() };
+    webPage.datePublished = page.article.datePublished;
+    webPage.dateModified = page.article.dateModified;
+  }
+
   if (page.route) {
     const crumbs = breadcrumbs(page.route, pageUrl);
     graph.push(crumbs);
@@ -194,27 +205,27 @@ export function buildGraph(page: JsonLdPage): {
 
   if (page.product) {
     graph.push({
-      '@type': 'Product',
-      '@id': `${pageUrl}#product`,
-      name: page.product.name,
-      description: page.product.description,
-      brand: { '@id': orgId() },
-      manufacturer: { '@id': orgId() },
-      material: [...site.capability.materials],
-      additionalProperty: {
-        '@type': 'PropertyValue',
-        name: 'Wire diameter',
-        value: site.capability.wireRangeLabel,
-      },
-    });
-    graph.push({
       '@type': 'Service',
       '@id': `${pageUrl}#service`,
       name: 'Custom spring manufacturing',
       serviceType: page.product.name,
       provider: { '@id': orgId() },
       areaServed: { '@type': 'Country', name: 'India' },
-      description: `Made to drawing or sample. Wire ${site.capability.wireRangeLabel}. Quote within 24 hours.`,
+      description: page.product.description,
+    });
+  }
+
+  if (page.tool) {
+    graph.push({
+      '@type': 'WebApplication',
+      '@id': `${pageUrl}#webapp`,
+      name: page.tool.name,
+      description: page.tool.description,
+      applicationCategory: 'EngineeringApplication',
+      operatingSystem: 'Any',
+      provider: { '@id': orgId() },
+      url: pageUrl,
+      inLanguage: 'en-IN',
     });
   }
 

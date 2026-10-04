@@ -7,7 +7,7 @@ const published = new Date('2026-10-04');
 const faqs = [
   {
     q: 'What is a typical price per spring?',
-    a: 'It depends on wire, material, quantity, tooling and finish. We do not publish rupee figures we have not quoted. Send the drawing; we reply within 24 hours.',
+    a: 'It depends on wire, material, quantity, tooling and finish. Send the drawing; we reply within 24 hours with a price for your part.',
   },
   {
     q: 'Why is a small order more per piece?',
@@ -19,9 +19,9 @@ const faqs = [
 <ArticleLayout
   route="priceGuide"
   title="Spring Price Guide India"
-  description="What decides the price of a custom spring in India: material, wire, quantity, tooling, finish, tolerances. No invented rupee figures."
+  description="What decides the price of a custom spring in India: material, wire, quantity, tooling, finish and tolerances. Quote within 24 hours."
   h1="Spring price guide (India)"
-  lede="A custom spring is priced from the drawing, not from a catalogue. These are the levers. We will not invent a rupee figure to look helpful."
+  lede="A custom spring is priced from the drawing, not from a catalogue. These are the levers we use on every quote."
   published={published}
   context="a priced spring"
   takeaways={[
@@ -32,7 +32,7 @@ const faqs = [
   toc={[
     { id: 'levers', text: 'What drives cost' },
     { id: 'moq', text: 'Quantity and development' },
-    { id: 'not', text: 'What we will not quote here' },
+    { id: 'quote', text: 'How to get a price' },
     { id: 'questions', text: 'Questions' },
   ]}
   faqs={faqs}
@@ -76,15 +76,15 @@ const faqs = [
 
   <h2 id="moq">Quantity and development</h2>
   <p>
-    We do not advertise “low MOQ”. Smaller runs are possible; they carry development or setup
-    charges. Payment is immediate or within 30 days. Delivery is ex-works Talawade — transport is
-    extra.
+    Usual minimum order is {site.terms.moq}. Smaller runs are possible; they carry development or
+    setup charges. Payment is immediate or within 30 days. Delivery is ex-works Talawade — transport
+    is extra.
   </p>
 
-  <h2 id="not">What we will not quote here</h2>
+  <h2 id="quote">How to get a price</h2>
   <p>
-    No ₹ per piece, no “from ₹X”, no weight-based guess. Those numbers would be invented.
+    Send the drawing or the sample. We quote that part within 24 hours — material, quantity, tooling
+    and finish included.
     <Todo text="optional public price bands, only if you want them published." />
   </p>
-  <p>Send the drawing or the sample. We quote within 24 hours.</p>
 </ArticleLayout>

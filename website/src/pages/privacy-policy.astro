@@ -1,4 +1,5 @@
 ---
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import Todo from '@/components/ui/Todo.astro';
@@ -48,5 +49,28 @@ import PageLayout from '@/layouts/PageLayout.astro';
         Questions: {primaryEmail} or {primaryPhone.display}.
       </p>
     </div>
+  </Section>
+
+  <Section tone="surface">
+    <RelatedLinks
+      title="Related"
+      links={[
+        {
+          to: 'terms',
+          label: 'Terms of use',
+          description: 'Quotes, drawings and commercial terms.',
+        },
+        {
+          to: 'contact',
+          label: 'Contact us',
+          description: 'Phone, WhatsApp and the factory address.',
+        },
+        {
+          to: 'rfq',
+          label: 'Request a quote',
+          description: 'The form that collects your enquiry.',
+        },
+      ]}
+    />
   </Section>
 </PageLayout>

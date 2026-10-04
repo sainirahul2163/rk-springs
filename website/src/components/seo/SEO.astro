@@ -6,7 +6,7 @@ import type { FaqItem } from '@/components/ui/FAQ.astro';
 import { site } from '@/data/site';
 import type { RouteId } from '@/data/routes';
 import { absoluteUrl, INDEXABLE } from '@/lib/env';
-import type { GlossaryTermLd, PageKind } from '@/lib/jsonld';
+import type { GlossaryTermLd, JsonLdPage, PageKind } from '@/lib/jsonld';
 import { formatTitle, seoWarnings } from '@/lib/seo';
 import JsonLd from './JsonLd.astro';
 
@@ -24,6 +24,8 @@ export interface SEOProps {
   faqs?: readonly FaqItem[];
   product?: { name: string; description: string };
   glossary?: readonly GlossaryTermLd[];
+  article?: JsonLdPage['article'];
+  tool?: JsonLdPage['tool'];
 }
 
 const {
@@ -38,6 +40,8 @@ const {
   faqs,
   product,
   glossary,
+  article,
+  tool,
 } = Astro.props as SEOProps;
 
 const fullTitle = formatTitle(title, absoluteTitle);
@@ -58,6 +62,8 @@ const jsonldProps = {
   ...(faqs && faqs.length > 0 ? { faqs } : {}),
   ...(product ? { product } : {}),
   ...(glossary && glossary.length > 0 ? { glossary } : {}),
+  ...(article ? { article } : {}),
+  ...(tool ? { tool } : {}),
 };
 ---
 

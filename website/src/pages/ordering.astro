@@ -1,6 +1,7 @@
 ---
 import CTASection from '@/components/ui/CTASection.astro';
 import FAQ from '@/components/ui/FAQ.astro';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import SpecTable from '@/components/ui/SpecTable.astro';
@@ -84,6 +85,29 @@ const faqs = [
   <Section labelledby="faq-title">
     <SectionHeader id="faq-title" index={3} eyebrow="Questions" title="FAQ" />
     <FAQ items={faqs} class="mt-8" />
+  </Section>
+
+  <Section tone="surface">
+    <RelatedLinks
+      title="Related"
+      links={[
+        {
+          to: 'rfq',
+          label: 'Request a quote',
+          description: 'Drawing or sample in, quote within 24 hours.',
+        },
+        {
+          to: 'springs',
+          label: 'Springs we make',
+          description: 'The types we coil in 0.40–2.50 mm wire.',
+        },
+        {
+          to: 'contact',
+          label: 'Contact us',
+          description: 'Phone, WhatsApp and the factory address.',
+        },
+      ]}
+    />
   </Section>
 
   <CTASection />

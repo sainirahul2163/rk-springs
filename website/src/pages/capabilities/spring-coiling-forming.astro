@@ -6,7 +6,7 @@ import CapabilityLayout from '@/layouts/CapabilityLayout.astro';
 const faqs = [
   {
     q: 'What wire sizes can you coil?',
-    a: `${site.capability.wireRangeLabel}. Outer diameter and length follow the drawing. Above 2.50 mm wire is outside this shop.`,
+    a: `${site.capability.wireRangeLabel}. Outer diameter and length follow the drawing. Above 2.50 mm wire is outside our range.`,
   },
   {
     q: 'Do you form wire forms as well as springs?',
@@ -20,7 +20,7 @@ const faqs = [
   title="Spring Coiling and Forming"
   description="Spring coiling and wire forming, wire Ø 0.40–2.50 mm, to drawing or sample in Talawade, Pune. Quote within 24 hours."
   h1="Spring coiling and forming"
-  lede="Helices and bends from 0.40–2.50 mm wire. This is the work the shop is built around."
+  lede="Helices and bends from 0.40–2.50 mm wire. This is the work our unit is built around."
   context="a coiled spring"
   faqs={faqs}
   related={[
@@ -66,7 +66,7 @@ const faqs = [
 
   <h2>Limits</h2>
   <p>
-    No rolling-shutter, agriculture or heavy springs. No export. We will not invent a CNC list or a
-    capacity figure we have not measured.
+    Wire {site.capability.wireRangeLabel}. Rolling-shutter, agriculture and heavier springs sit
+    outside this range. We supply across India, ex-works Talawade.
   </p>
 </CapabilityLayout>

@@ -2,7 +2,7 @@
 /** Footer with link columns and an engineering-drawing "title block" (brand, legal IDs, address). */
 import { footerNav, legalNav } from '@/data/navigation';
 import { linkTo } from '@/data/routes';
-import { primaryEmail, primaryPhone, site } from '@/data/site';
+import { fullAddress, primaryEmail, primaryPhone, site } from '@/data/site';
 import { mailHref, telHref, whatsappHref } from '@/lib/contact';
 import Icon from '../ui/Icon.astro';
 import SmartLink from '../ui/SmartLink.astro';
@@ -16,7 +16,7 @@ const cells: { k: string; v: string; wide?: boolean }[] = [
   { k: 'Est.', v: String(site.foundingYear) },
   { k: 'GSTIN', v: site.gstin },
   { k: 'Udyam', v: site.udyam },
-  { k: 'Address', v: `${a.street}, ${a.locality}, ${a.city} ${a.postalCode}`, wide: true },
+  { k: 'Address', v: fullAddress, wide: true },
 ];
 ---
 
@@ -126,11 +126,18 @@ const cells: { k: string; v: string; wide?: boolean }[] = [
 
   @media (min-width: 1024px) {
     .ftr-top {
-      grid-template-columns: 1.6fr 1fr 1fr 1fr;
-      gap: 48px;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 40px;
     }
     .ftr-about {
       grid-column: auto;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .ftr-top {
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+      gap: 48px;
     }
   }
 

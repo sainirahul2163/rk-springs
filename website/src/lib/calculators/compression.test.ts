@@ -108,4 +108,21 @@ describe('computeCompression', () => {
     expect(result.k).not.toBeNull();
     expect(result.loads[0]?.F).toBeCloseTo(result.k! * 10, 10);
   });
+
+  it('warns when free length is at or below solid height', () => {
+    const result = computeCompression({ ...required, l0: '10' });
+    expect(result.warnings.some((w) => w.id === 'free-solid')).toBe(true);
+  });
+
+  it('warns when a working length is greater than free length', () => {
+    const result = computeCompression({ ...required, l1: '50' });
+    expect(result.warnings.some((w) => w.id.startsWith('neg'))).toBe(true);
+    expect(result.loads[0]?.F).toBeLessThan(0);
+  });
+
+  it('uses OD and warns when both OD and ID are entered', () => {
+    const result = computeCompression({ ...required, od: '10', id: '8' });
+    expect(result.D).toBe(9);
+    expect(result.warnings.some((w) => w.id === 'od-used')).toBe(true);
+  });
 });

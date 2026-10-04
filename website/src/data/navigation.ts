@@ -95,8 +95,6 @@ export const footerNav: { heading: string; items: { route: RouteId; label: strin
     heading: 'Company',
     items: [
       { route: 'about', label: 'About us' },
-      { route: 'capabilities', label: 'Capabilities' },
-      { route: 'industries', label: 'Industries' },
       { route: 'quality', label: 'Quality' },
       { route: 'ordering', label: 'Ordering with us' },
       { route: 'rfq', label: 'Request a quote' },
@@ -112,6 +110,26 @@ export const footerNav: { heading: string; items: { route: RouteId; label: strin
       { route: 'glossary', label: 'Spring glossary' },
       { route: 'hsnGst', label: 'HSN code and GST' },
       { route: 'resources', label: 'All resources' },
+    ],
+  },
+  {
+    heading: 'Industries',
+    items: [
+      { route: 'automotive', label: 'Automotive' },
+      { route: 'switchgear', label: 'Electrical and switchgear' },
+      { route: 'instrumentation', label: 'Instrumentation' },
+      { route: 'furniture', label: 'Furniture' },
+      { route: 'industries', label: 'All industries' },
+    ],
+  },
+  {
+    heading: 'Capabilities',
+    items: [
+      { route: 'coilingForming', label: 'Coiling and forming' },
+      { route: 'prototype', label: 'Prototype development' },
+      { route: 'reverseEngineering', label: 'Reverse engineering' },
+      { route: 'heatTreatment', label: 'Stress relieving and grinding' },
+      { route: 'capabilities', label: 'All capabilities' },
     ],
   },
 ];

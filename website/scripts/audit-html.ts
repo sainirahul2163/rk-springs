@@ -111,9 +111,20 @@ for (const p of pages) {
       if (p.path !== '/404/' && !u.pathname.endsWith('/') && u.pathname !== '/') {
         fail(p.path, `canonical path should end with / (${u.pathname})`);
       }
+      const site = (process.env.PUBLIC_SITE_URL || '').replace(/\/+$/, '');
+      if (site) {
+        const expected = new URL(p.path === '/404/' ? '/404/' : p.path, `${site}/`).toString();
+        if (p.canonical !== expected) {
+          fail(p.path, `canonical ${p.canonical} !== ${expected}`);
+        }
+      }
     } catch {
       fail(p.path, `canonical is not an absolute URL (${p.canonical})`);
     }
+  }
+
+  if (/<\/(?:strong|a|em)>[A-Za-z]/.test(p.html)) {
+    fail(p.path, 'missing space after </strong>, </a> or </em>');
   }
 
   if (process.env.PUBLIC_SHOW_TODOS !== 'true') {

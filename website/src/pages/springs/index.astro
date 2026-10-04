@@ -24,7 +24,7 @@ const list = [...products, wireFormsItem].filter((p) => linkTo(p.route));
       id="springs-h1"
       eyebrow="Catalogue"
       title="Industrial springs made in Pune"
-      lede={`Wire ${site.capability.wireRangeLabel}. Torsion and double torsion are the largest share of what leaves this shop. Every part is made to your drawing or sample.`}
+      lede={`Wire ${site.capability.wireRangeLabel}. Torsion and double torsion are the largest share of what leaves our unit. Every part is made to your drawing or sample.`}
     />
   </Section>
 
@@ -61,22 +61,21 @@ const list = [...products, wireFormsItem].filter((p) => linkTo(p.route));
     />
     <div class="prose mt-8 max-w-[46rem]">
       <p>
-        If the part <strong>twists</strong> around a pin or shaft, start with a
+        If the part <strong>twists</strong> around a pin or shaft, start with a{' '}
         <a href={linkTo('torsion') ?? '#'}>torsion spring</a>. If both sides of a hinge must push
-        together, that is usually a
-        <a href={linkTo('doubleTorsion') ?? '#'}>double torsion spring</a>
-        with a centre loop.
+        together, that is usually a{' '}
+        <a href={linkTo('doubleTorsion') ?? '#'}>double torsion spring</a> with a centre loop.
       </p>
       <p>
-        If the part <strong>pulls</strong>, you want a
-        <a href={linkTo('extension') ?? '#'}>tension / extension spring</a>
-        and you must specify the hooks. If it <strong>pushes</strong>, you want a
-        <a href={linkTo('compression') ?? '#'}>compression spring</a>— or a{' '}
+        If the part <strong>pulls</strong>, you want a{' '}
+        <a href={linkTo('extension') ?? '#'}>tension / extension spring</a> and you must specify the
+        hooks. If it <strong>pushes</strong>, you want a{' '}
+        <a href={linkTo('compression') ?? '#'}>compression spring</a> — or a{' '}
         <a href={linkTo('conical') ?? '#'}>conical spring</a> when the solid height has to be very
         short.
       </p>
       <p>
-        Clips, hooks and pins that are not a helix are
+        Clips, hooks and pins that are not a helix are{' '}
         <a href={linkTo('wireForms') ?? '#'}>wire forms</a>.
       </p>
       <p>

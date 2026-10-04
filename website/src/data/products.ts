@@ -26,6 +26,8 @@ export interface ProductPage {
   processNote: string;
   faqs: readonly FaqItem[];
   related: readonly RelatedLink[];
+  howWeMake?: readonly RelatedLink[];
+  usedIn?: readonly RelatedLink[];
 }
 
 const moq = site.terms.moq;
@@ -128,6 +130,31 @@ export const torsion: ProductPage = {
       label: 'What is a double torsion spring?',
       description: 'When two bodies are the better choice.',
     },
+    {
+      to: 'typesCompared',
+      label: 'Torsion vs extension vs compression',
+      description: 'Which spring the assembly actually needs.',
+    },
+  ],
+  howWeMake: [
+    {
+      to: 'coilingForming',
+      label: 'Spring coiling and forming',
+      description: 'Helices and legs in 0.40–2.50 mm wire.',
+    },
+    {
+      to: 'heatTreatment',
+      label: 'Stress relieving and grinding',
+      description: 'The furnace after the coil.',
+    },
+  ],
+  usedIn: [
+    {
+      to: 'switchgear',
+      label: 'Electrical and switchgear',
+      description: 'MCB and switch levers.',
+    },
+    { to: 'automotive', label: 'Automotive', description: 'Detents, returns and locks.' },
   ],
 };
 
@@ -137,7 +164,7 @@ export const doubleTorsion: ProductPage = {
   description:
     'Double torsion springs with a centre loop, wire Ø 0.40–2.50 mm, made to drawing or sample in Talawade, Pune. Quote within 24 hours.',
   h1: 'Double torsion springs',
-  lede: 'Two opposite-wound coils joined by a centre loop, from one length of wire. Balanced torque on both sides. A speciality of this shop.',
+  lede: 'Two opposite-wound coils joined by a centre loop, from one length of wire. Balanced torque on both sides. A speciality of our unit.',
   context: 'double torsion springs',
   rfqQuery: '?type=double-torsion',
   diagram: 'doubleTorsion',
@@ -174,7 +201,7 @@ export const doubleTorsion: ProductPage = {
     sharedFaqs.wire,
     {
       q: 'Do you make these for switchgear?',
-      a: 'Yes. Switchgear and MCB mechanisms are a regular job for this shop, in this wire range.',
+      a: 'Yes. Switchgear and MCB mechanisms are a regular job for our unit, in this wire range.',
     },
   ],
   related: [
@@ -190,6 +217,26 @@ export const doubleTorsion: ProductPage = {
       label: 'Electrical and switchgear springs',
       description: 'MCB and switch mechanisms.',
     },
+  ],
+  howWeMake: [
+    {
+      to: 'coilingForming',
+      label: 'Spring coiling and forming',
+      description: 'Both bodies and the centre loop from one wire.',
+    },
+    {
+      to: 'prototype',
+      label: 'Prototype development',
+      description: 'Sample first, then the bulk lot.',
+    },
+  ],
+  usedIn: [
+    {
+      to: 'switchgear',
+      label: 'Electrical and switchgear',
+      description: 'Balanced torque on a hinge.',
+    },
+    { to: 'furniture', label: 'Furniture', description: 'Lids and fold mechanisms.' },
   ],
 };
 
@@ -248,6 +295,26 @@ export const extension: ProductPage = {
       to: 'extensionCalc',
       label: 'Extension spring calculator',
       description: 'Rate and stress from your dimensions.',
+    },
+  ],
+  howWeMake: [
+    {
+      to: 'coilingForming',
+      label: 'Spring coiling and forming',
+      description: 'Close-wound body and hooks to the drawing.',
+    },
+    {
+      to: 'reverseEngineering',
+      label: 'Reverse engineering',
+      description: 'From a sample when there is no drawing.',
+    },
+  ],
+  usedIn: [
+    { to: 'furniture', label: 'Furniture', description: 'Returns on seating and folds.' },
+    {
+      to: 'switchgear',
+      label: 'Electrical and switchgear',
+      description: 'Trips and returns.',
     },
   ],
 };
@@ -317,6 +384,26 @@ export const compression: ProductPage = {
       description: 'What to send us if you have no drawing.',
     },
   ],
+  howWeMake: [
+    {
+      to: 'coilingForming',
+      label: 'Spring coiling and forming',
+      description: 'Open coils to the drawing.',
+    },
+    {
+      to: 'heatTreatment',
+      label: 'Stress relieving and grinding',
+      description: 'Ground ends when the drawing asks.',
+    },
+  ],
+  usedIn: [
+    { to: 'automotive', label: 'Automotive', description: 'Buttons, clips and light valves.' },
+    {
+      to: 'instrumentation',
+      label: 'Instrumentation',
+      description: 'Light springs in tight pockets.',
+    },
+  ],
 };
 
 export const conical: ProductPage = {
@@ -367,6 +454,25 @@ export const conical: ProductPage = {
       description: 'A first-pass rate for cylindrical coils.',
     },
   ],
+  howWeMake: [
+    {
+      to: 'heatTreatment',
+      label: 'Stress relieving and grinding',
+      description: 'Ends closed or ground if specified.',
+    },
+    {
+      to: 'coilingForming',
+      label: 'Spring coiling and forming',
+      description: 'Tapered coils in our wire range.',
+    },
+  ],
+  usedIn: [
+    {
+      to: 'instrumentation',
+      label: 'Instrumentation',
+      description: 'Buttons and contacts with a short solid height.',
+    },
+  ],
 };
 
 export const spiral: ProductPage = {
@@ -398,7 +504,7 @@ export const spiral: ProductPage = {
     sharedFaqs.sample,
     {
       q: 'Do you make clock-type flat-strip power springs?',
-      a: 'That is exactly what we need confirmed. Send a photo of the part. If it is in our wire range we can usually help; a wide flat strip may be outside what this shop does.',
+      a: 'That is exactly what we need confirmed. Send a photo of the part. If it is in our wire range we can usually help; a wide flat strip may be outside what our unit does.',
     },
     sharedFaqs.wire,
   ],
@@ -414,6 +520,16 @@ export const spiral: ProductPage = {
       description: 'Helical body, torque through the legs.',
     },
     { to: 'wireForms', label: 'Wire forms', description: 'Bent-wire parts that are not a spiral.' },
+  ],
+  howWeMake: [
+    {
+      to: 'coilingForming',
+      label: 'Spring coiling and forming',
+      description: 'Formed to the drawing or the sample.',
+    },
+  ],
+  usedIn: [
+    { to: 'automotive', label: 'Automotive', description: 'Light assemblies in our wire range.' },
   ],
 };
 

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isRfqCode, makeRfqCode, RFQ_CODE_RE } from './code';
+import { makeRfqCode, RFQ_CODE_RE } from './code';
 
 describe('makeRfqCode', () => {
   it('uses the UTC date and a 4-character suffix', () => {
@@ -9,8 +9,8 @@ describe('makeRfqCode', () => {
   });
 
   it('never emits I, O, 0 or 1 in the suffix', () => {
-    expect(isRfqCode('RFQ-20261004-7K2P')).toBe(true);
-    expect(isRfqCode('RFQ-20261004-IO01')).toBe(false);
-    expect(isRfqCode('rfq-20261004-7K2P')).toBe(false);
+    expect(RFQ_CODE_RE.test('RFQ-20261004-7K2P')).toBe(true);
+    expect(RFQ_CODE_RE.test('RFQ-20261004-IO01')).toBe(false);
+    expect(RFQ_CODE_RE.test('rfq-20261004-7K2P')).toBe(false);
   });
 });

@@ -1,5 +1,5 @@
 /** Materials we actually buy and coil. Only grades from CLIENT-PROFILE.md. */
-/** G and E are typical published values (SMI / Lee Spring), not measured here. */
+/** G and E are typical published values (SMI / Lee Spring). */
 
 export interface CalculatorMaterial {
   id: string;

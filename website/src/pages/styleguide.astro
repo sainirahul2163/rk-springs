@@ -38,6 +38,12 @@ import { linkTo } from '@/data/routes';
 import { site } from '@/data/site';
 import PageLayout from '@/layouts/PageLayout.astro';
 
+export const prerender = false;
+
+if (import.meta.env.DEV !== true && import.meta.env.PUBLIC_SHOW_TODOS !== 'true') {
+  return new Response(null, { status: 404 });
+}
+
 const colours: { group: string; items: { token: string; use: string; dark?: boolean }[] }[] = [
   {
     group: 'Navy and blue',

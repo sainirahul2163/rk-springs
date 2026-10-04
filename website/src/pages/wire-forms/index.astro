@@ -58,7 +58,32 @@ const product: ProductPage = {
   related: [
     { to: 'torsion', label: 'Torsion springs', description: 'When the wire has to store torque.' },
     { to: 'extension', label: 'Extension springs', description: 'When the wire has to pull.' },
-    { to: 'springs', label: 'All spring types', description: 'Helical parts from the same shop.' },
+    { to: 'springs', label: 'All spring types', description: 'Helical parts from the same unit.' },
+    {
+      to: 'measure',
+      label: 'How to measure a spring',
+      description: 'What to send if you have no drawing.',
+    },
+  ],
+  howWeMake: [
+    {
+      to: 'coilingForming',
+      label: 'Spring coiling and forming',
+      description: 'Bends from the same wire as the springs.',
+    },
+    {
+      to: 'reverseEngineering',
+      label: 'Reverse engineering',
+      description: 'Match a sample clip or pin.',
+    },
+  ],
+  usedIn: [
+    { to: 'automotive', label: 'Automotive', description: 'Clips, retainers and pins.' },
+    {
+      to: 'switchgear',
+      label: 'Electrical and switchgear',
+      description: 'Clips and retainers in the mechanism.',
+    },
   ],
 };
 ---

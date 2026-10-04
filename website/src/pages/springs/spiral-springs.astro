@@ -3,11 +3,12 @@ import MaterialsTable from '@/components/ui/MaterialsTable.astro';
 import SpiralSpring from '@/components/diagrams/SpiralSpring.astro';
 import Todo from '@/components/ui/Todo.astro';
 import { spiral } from '@/data/products';
-import { allowDraft } from '@/lib/draft';
 import ProductLayout from '@/layouts/ProductLayout.astro';
 
-if (!allowDraft) {
-  return Astro.rewrite('/404/');
+export const prerender = false;
+
+if (import.meta.env.DEV !== true && import.meta.env.PUBLIC_SHOW_TODOS !== 'true') {
+  return new Response(null, { status: 404 });
 }
 ---
 
@@ -15,8 +16,8 @@ if (!allowDraft) {
   <Fragment slot="about">
     <p>
       This page is a <strong>draft</strong>. The client lists spiral springs among the parts they
-      make, together with conical springs. What “spiral” means in this shop is not yet confirmed: a
-      wire wound in a flat spiral, or a flat-strip power / clock spring.
+      make, together with conical springs. What “spiral” means here is not yet confirmed: a wire
+      wound in a flat spiral, or a flat-strip power / clock spring.
     </p>
     <Todo
       block
@@ -28,7 +29,7 @@ if (!allowDraft) {
     </p>
     <p>
       The drawing on this page is a generic wire spiral with an arbor tab and an outer hook. It is
-      there so the layout is honest, not so we can pretend we have a finished product story.
+      there as a generic drawing until the part family is confirmed.
     </p>
   </Fragment>
 

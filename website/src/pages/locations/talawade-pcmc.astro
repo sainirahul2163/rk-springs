@@ -5,16 +5,19 @@ import CTASection from '@/components/ui/CTASection.astro';
 import FAQ from '@/components/ui/FAQ.astro';
 import HoursTable from '@/components/ui/HoursTable.astro';
 import LocationMap from '@/components/ui/LocationMap.astro';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import Todo from '@/components/ui/Todo.astro';
-import { site } from '@/data/site';
+import { fullAddress, site } from '@/data/site';
 import PageLayout from '@/layouts/PageLayout.astro';
+
+const a = site.address;
 
 const faqs = [
   {
     q: 'Where is the factory?',
-    a: `Sr. No. 166, Sai Krupa Society, Sahyog Nagar, ${site.address.locality}, ${site.address.city} ${site.address.postalCode}. That is in the Pimpri-Chinchwad industrial belt.`,
+    a: `${fullAddress}. That is in the Pimpri-Chinchwad industrial belt.`,
   },
   {
     q: 'When are you open?',
@@ -30,7 +33,7 @@ const faqs = [
 <PageLayout
   route="talawade"
   title="Spring Maker in Talawade"
-  description="RK Springs & Wireforms, Sr. No. 166, Sai Krupa Society, Sahyog Nagar, Talawade, Pune 411062. Near Chikhali, Bhosari MIDC and Chakan. Thursday closed."
+  description={`RK Springs & Wireforms, ${a.street}, ${a.locality}, ${a.city} ${a.postalCode}. Near Chikhali, Bhosari MIDC and Chakan. Thursday closed.`}
   context="a spring from Talawade"
   faqs={faqs}
 >
@@ -53,9 +56,8 @@ const faqs = [
     />
     <div class="prose mt-8 max-w-[46rem]">
       <p>
-        {site.legalName} coils springs at Sr. No. 166, Sai Krupa Society, Sahyog Nagar,{' '}
-        {site.address.locality}, {site.address.city} {site.address.postalCode}. The public name of
-        the spring business is {site.brand}.
+        {site.legalName} coils springs at {fullAddress}. The public name of the spring business is{' '}
+        {site.brand}.
       </p>
       <p>
         Talawade sits in Pimpri-Chinchwad. Buyers in <strong>Chikhali</strong>,{' '}
@@ -63,8 +65,8 @@ const faqs = [
         Dispatch itself is ex-works: you collect, or you book the transporter.
       </p>
       <p>
-        We supply across India. We do not export. There is no second plant and no city-swap page
-        pretending we sit in Bhosari or Chakan.
+        We supply across India. We do not export. The factory is in Talawade; buyers in Chikhali,
+        Bhosari MIDC and Chakan collect from this gate.
       </p>
       <Todo text="landmarks and directions from the Talawade road; whether customer visits are welcome during working hours." />
     </div>
@@ -83,7 +85,7 @@ const faqs = [
     <SectionHeader id="area-title" index={2} eyebrow="PCMC" title="Nearby industrial areas" />
     <div class="prose mt-8 max-w-[46rem]">
       <p>
-        <strong>Chikhali</strong> and the Talawade residential-industrial mix sit next to the shop.{' '}
+        <strong>Chikhali</strong> and the Talawade residential-industrial mix sit next to the unit.{' '}
         <strong>Bhosari MIDC</strong> is the older engineering cluster to the south.{' '}
         <strong>Chakan</strong> is the vehicle and component belt to the north. If your stores are
         in any of those, a local pickup is straightforward.
@@ -98,6 +100,25 @@ const faqs = [
   <Section labelledby="faq-title">
     <SectionHeader id="faq-title" index={3} eyebrow="Questions" title="Finding us" />
     <FAQ items={faqs} class="mt-8" />
+  </Section>
+
+  <Section tone="surface">
+    <RelatedLinks
+      title="Related"
+      links={[
+        {
+          to: 'contact',
+          label: 'Contact us',
+          description: 'Phone, WhatsApp and a short enquiry form.',
+        },
+        { to: 'about', label: 'About us', description: 'The unit in Talawade since 2017.' },
+        {
+          to: 'rfq',
+          label: 'Request a quote',
+          description: 'Drawing or sample in, quote within 24 hours.',
+        },
+      ]}
+    />
   </Section>
 
   <CTASection context="a spring from Talawade" />

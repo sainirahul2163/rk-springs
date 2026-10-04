@@ -5,6 +5,7 @@ import ContactLinks from '@/components/ui/ContactLinks.astro';
 import CTASection from '@/components/ui/CTASection.astro';
 import HoursTable from '@/components/ui/HoursTable.astro';
 import LocationMap from '@/components/ui/LocationMap.astro';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import { EnquiryForm } from '@/components/rfq/EnquiryForm';
@@ -28,7 +29,7 @@ const talawadeHref = linkTo('talawade');
       as="h1"
       id="contact-h1"
       eyebrow="Contact"
-      title="Talk to the shop"
+      title="Contact RK Springs & Wireforms"
       lede="A phone call or a WhatsApp with the drawing attached is the fastest path. Thursday is closed."
     />
     <ContactLinks class="mt-8" />
@@ -83,6 +84,29 @@ const talawadeHref = linkTo('talawade');
         </Button>
       </div>
     </div>
+  </Section>
+
+  <Section>
+    <RelatedLinks
+      title="Related"
+      links={[
+        {
+          to: 'talawade',
+          label: 'Talawade factory',
+          description: 'Address, hours and nearby industrial areas.',
+        },
+        {
+          to: 'rfq',
+          label: 'Request a quote',
+          description: 'Drawing or sample in, quote within 24 hours.',
+        },
+        {
+          to: 'ordering',
+          label: 'Ordering with us',
+          description: 'MOQ, payment and ex-works dispatch.',
+        },
+      ]}
+    />
   </Section>
 
   <CTASection context="a quote" />

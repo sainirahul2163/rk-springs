@@ -50,6 +50,9 @@ export function CompressionCalculator({ search = '' }: { search?: string }) {
     ? [
         { label: 'Spring rate', value: sigfigs(result.k!), unit: 'N/mm', primary: true },
         { label: 'Mean diameter D', value: sigfigs(result.D!), unit: 'mm' },
+        ...(values.od.trim() && values.id.trim()
+          ? [{ label: 'Diameter used', value: 'OD (mean = OD − d)' }]
+          : []),
         { label: 'Spring index C', value: sigfigs(result.C!) },
         { label: 'Active coils Na', value: sigfigs(result.Na!) },
         { label: 'Solid height Ls', value: sigfigs(result.Ls!), unit: 'mm' },
@@ -91,6 +94,7 @@ export function CompressionCalculator({ search = '' }: { search?: string }) {
           onChange={(v) => setField('d', v)}
           unit="mm"
           required
+          error={result.errors.find((e) => e.toLowerCase().includes('wire'))}
         />
         <NumberField
           label="Outer diameter OD"
@@ -99,6 +103,7 @@ export function CompressionCalculator({ search = '' }: { search?: string }) {
           onChange={(v) => setField('od', v)}
           unit="mm"
           hint="Or enter ID below."
+          error={result.errors.find((e) => e.toLowerCase().includes('outer'))}
         />
         <NumberField
           label="Inner diameter ID"
@@ -106,6 +111,7 @@ export function CompressionCalculator({ search = '' }: { search?: string }) {
           value={values.id}
           onChange={(v) => setField('id', v)}
           unit="mm"
+          error={result.errors.find((e) => e.toLowerCase().includes('inner'))}
         />
         <NumberField
           label="Free length L0"
@@ -114,6 +120,7 @@ export function CompressionCalculator({ search = '' }: { search?: string }) {
           onChange={(v) => setField('l0', v)}
           unit="mm"
           required
+          error={result.errors.find((e) => e.toLowerCase().includes('free length'))}
         />
         <NumberField
           label="Total coils Nt"
@@ -121,6 +128,7 @@ export function CompressionCalculator({ search = '' }: { search?: string }) {
           value={values.nt}
           onChange={(v) => setField('nt', v)}
           required
+          error={result.errors.find((e) => e.toLowerCase().includes('coils'))}
         />
         <SelectField
           label="End type"
@@ -135,7 +143,7 @@ export function CompressionCalculator({ search = '' }: { search?: string }) {
           value={values.material}
           onChange={(v) => setField('material', v)}
           options={calculatorMaterials.map((m) => ({ value: m.id, label: m.label }))}
-          hint="G is a typical published value, not measured here."
+          hint="G is a typical published value."
         />
         <NumberField
           label="Working length L1"

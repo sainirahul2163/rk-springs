@@ -1,7 +1,6 @@
 ---
 /** Spring / wire-form product page chrome. Unique copy goes in the default and named slots. */
 import Button from '@/components/ui/Button.astro';
-import Callout from '@/components/ui/Callout.astro';
 import CTASection from '@/components/ui/CTASection.astro';
 import FAQ from '@/components/ui/FAQ.astro';
 import Icon from '@/components/ui/Icon.astro';
@@ -124,16 +123,17 @@ const { product: p } = Astro.props;
     <div class="prose mt-8 max-w-[46rem]">
       <slot name="applications" />
     </div>
+    {p.usedIn && p.usedIn.length > 0 && (
+      <RelatedLinks class="mt-8" title="Used in" links={p.usedIn} />
+    )}
   </Section>
 
   <Section labelledby="make-title">
     <SectionHeader id="make-title" index={7} eyebrow="Process" title="How we make it" />
     <p class="mt-8 max-w-[46rem] text-lead text-slate">{p.processNote}</p>
-    <Callout class="mt-6 max-w-[46rem]" title="What we do not claim">
-      We do not run a testing lab here. Do not expect a load-test report, PPAP pack or CPK numbers
-      unless that is agreed in writing later. What we do in-house is coiling and forming, stress
-      relieving, and end grinding where the part needs it.
-    </Callout>
+    {p.howWeMake && p.howWeMake.length > 0 && (
+      <RelatedLinks class="mt-8" title="How we make it" links={p.howWeMake} />
+    )}
   </Section>
 
   <Section tone="grid" labelledby="rfq-title">

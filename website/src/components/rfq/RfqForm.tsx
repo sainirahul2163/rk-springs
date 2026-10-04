@@ -322,6 +322,7 @@ export function RfqForm({ sourcePage, turnstileSiteKey, whatsappHref, search }: 
               className="sr-only"
               accept={ACCEPT_ATTR}
               multiple
+              tabIndex={-1}
               aria-labelledby="files-label"
               onChange={(e) => {
                 onFiles(e.target.files);
@@ -332,6 +333,8 @@ export function RfqForm({ sourcePage, turnstileSiteKey, whatsappHref, search }: 
               type="button"
               className="field-input min-h-14 text-left"
               onClick={() => fileInput.current?.click()}
+              aria-labelledby="files-label"
+              aria-describedby={fileError ? 'files-error' : undefined}
             >
               PDF, DWG, DXF, STEP, IGES, JPG or PNG. Up to 5 files, 25 MB total.
             </button>
@@ -340,24 +343,24 @@ export function RfqForm({ sourcePage, turnstileSiteKey, whatsappHref, search }: 
                 {files.map((file, i) => (
                   <li
                     key={`${file.name}-${i}`}
-                    className="flex min-h-11 items-center justify-between gap-3 text-small"
+                    className="flex items-center justify-between gap-3 text-small"
                   >
                     <span>
                       {file.name} <span className="text-slate">({formatBytes(file.size)})</span>
                     </span>
                     <button
                       type="button"
-                      className="text-blue-700 underline"
+                      className="min-h-11 px-3 text-blue-700 underline"
                       onClick={() => setFiles(files.filter((_, idx) => idx !== i))}
                     >
-                      Remove
+                      {`Remove ${file.name}`}
                     </button>
                   </li>
                 ))}
               </ul>
             ) : null}
             {fileError ? (
-              <p className="field-error" role="alert">
+              <p id="files-error" className="field-error" role="alert">
                 {fileError}
               </p>
             ) : null}

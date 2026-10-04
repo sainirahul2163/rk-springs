@@ -51,6 +51,11 @@ const {
   ogType="article"
   pageKind="TechArticle"
   context={context}
+  article={{
+    headline: h1,
+    datePublished: published.toISOString(),
+    dateModified: (updated ?? published).toISOString(),
+  }}
   {...(faqs ? { faqs } : {})}
 >
   <article class="container-page pb-16">

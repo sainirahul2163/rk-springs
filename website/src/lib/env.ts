@@ -8,6 +8,10 @@ export const SITE_URL = (import.meta.env.PUBLIC_SITE_URL || import.meta.env.SITE
   '',
 );
 
+if (process.env.VERCEL_ENV === 'production' && !import.meta.env.PUBLIC_SITE_URL) {
+  throw new Error('PUBLIC_SITE_URL is required for production deploys.');
+}
+
 /** Show TODO(client) markers and photo placeholders (dev, or an explicit client-review build). */
 export const SHOW_TODOS = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_TODOS === 'true';
 

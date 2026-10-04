@@ -5,9 +5,13 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { loadEnv } from 'vite';
+import { lastmodForPath } from './src/data/page-dates.ts';
 
 const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
 const siteUrl = (process.env.PUBLIC_SITE_URL || env.PUBLIC_SITE_URL || '').replace(/\/+$/, '');
+if (process.env.VERCEL_ENV === 'production' && !siteUrl) {
+  throw new Error('PUBLIC_SITE_URL is required for production deploys.');
+}
 const site = siteUrl || 'http://localhost:4321';
 /** Same gate as src/lib/env.ts INDEXABLE (kept here so the config never imports src). */
 const indexable =
@@ -21,6 +25,7 @@ const sitemapExclude = new Set([
   '/springs/spiral-springs/',
   '/404/',
   '/request-a-quote/thank-you/',
+  '/llms.txt',
 ]);
 
 export default defineConfig({
@@ -42,7 +47,7 @@ export default defineConfig({
       },
       serialize: (item) => ({
         ...item,
-        lastmod: '2026-10-04',
+        lastmod: lastmodForPath(new URL(item.url).pathname),
       }),
     }),
   ],

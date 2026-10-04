@@ -73,6 +73,7 @@ export function ExtensionCalculator({ search = '' }: { search?: string }) {
           onChange={(v) => setField('d', v)}
           unit="mm"
           required
+          error={result.errors.find((e) => e.toLowerCase().includes('wire'))}
         />
         <NumberField
           label="Outer diameter OD"
@@ -81,6 +82,7 @@ export function ExtensionCalculator({ search = '' }: { search?: string }) {
           onChange={(v) => setField('od', v)}
           unit="mm"
           required
+          error={result.errors.find((e) => e.toLowerCase().includes('outer'))}
         />
         <NumberField
           label="Body coils Nb"
@@ -89,6 +91,7 @@ export function ExtensionCalculator({ search = '' }: { search?: string }) {
           onChange={(v) => setField('nb', v)}
           hint="Close-wound body coils, not including the hooks."
           required
+          error={result.errors.find((e) => e.toLowerCase().includes('coil'))}
         />
         <NumberField
           label="Initial tension Fi"
@@ -112,7 +115,7 @@ export function ExtensionCalculator({ search = '' }: { search?: string }) {
           value={values.material}
           onChange={(v) => setField('material', v)}
           options={calculatorMaterials.map((m) => ({ value: m.id, label: m.label }))}
-          hint="G and E are typical published values, not measured here."
+          hint="G and E are typical published values."
         />
       </form>
       <div>

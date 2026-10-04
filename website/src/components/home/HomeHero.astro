@@ -130,6 +130,7 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
     padding-top: 20px;
     border-top: 1px solid var(--color-grid);
     max-width: 34rem;
+    min-height: 12.5rem;
   }
 
   .hero-copy :global(.hero-trust .trustbar-list) {
@@ -139,6 +140,10 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
   }
 
   @media (min-width: 480px) {
+    .hero-copy :global(.hero-trust) {
+      min-height: 7rem;
+    }
+
     .hero-copy :global(.hero-trust .trustbar-list) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }

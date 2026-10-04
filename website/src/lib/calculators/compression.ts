@@ -121,6 +121,18 @@ export function computeCompression(input: CompressionInput): CompressionResult {
       text: `Wire ${d} mm is outside our standard range of ${site.capability.wireRangeLabel}. Contact us.`,
     });
   }
+  if (od !== undefined && id !== undefined) {
+    warnings.push({
+      id: 'od-used',
+      text: 'Both OD and ID were entered. The calculation uses OD (mean diameter = OD − d).',
+    });
+  }
+  if (L0! <= Ls) {
+    warnings.push({
+      id: 'free-solid',
+      text: 'Free length is at or below solid height. This geometry cannot work as a compression spring.',
+    });
+  }
 
   const loads: CompressionResult['loads'] = [];
   for (const raw of [input.l1, input.l2]) {
@@ -136,6 +148,12 @@ export function computeCompression(input: CompressionInput): CompressionResult {
       warnings.push({
         id: `bind-${L}`,
         text: `Working length ${L} mm is at or below solid height. The coils will bind.`,
+      });
+    }
+    if (L > L0!) {
+      warnings.push({
+        id: `neg-${L}`,
+        text: `Working length ${L} mm is greater than free length. The calculated load is negative.`,
       });
     }
     const tau = Kw !== null && F > 0 ? shearStressMpa(F, D!, d!, Kw) : NaN;

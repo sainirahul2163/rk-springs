@@ -32,9 +32,9 @@ export function ResultPanel({
       aria-live="polite"
       aria-atomic="false"
     >
-      <h3 className="border-b border-grid px-5 py-3 font-mono text-[0.8125rem] font-medium tracking-[0.08em] text-blue-800 uppercase">
+      <h2 className="border-b border-grid px-5 py-3 font-mono text-[0.8125rem] font-medium tracking-[0.08em] text-blue-800 uppercase">
         {title}
-      </h3>
+      </h2>
       {rows.length === 0 ? (
         <p className="px-5 py-6 text-slate">{emptyText}</p>
       ) : (

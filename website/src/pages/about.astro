@@ -1,6 +1,7 @@
 ---
 import CTASection from '@/components/ui/CTASection.astro';
 import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import SpecTable from '@/components/ui/SpecTable.astro';
@@ -35,7 +36,7 @@ const rows = [
       id="about-h1"
       eyebrow="Company"
       title={`${site.brand}, since ${site.foundingYear}`}
-      lede={`${site.brandLine}. A small spring shop in ${site.address.locality}, ${site.address.city}, making parts to your drawing or sample.`}
+      lede={`${site.brandLine}. A spring manufacturer in ${site.address.locality}, ${site.address.city}, making parts to your drawing or sample.`}
     />
   </Section>
 
@@ -59,7 +60,10 @@ const rows = [
         </p>
         <Todo text="team size, and a simple timeline since 2017." />
       </div>
-      <PhotoPlaceholder ratio="4 / 3" caption="Shop floor in Talawade, with the coiling machines" />
+      <PhotoPlaceholder
+        ratio="4 / 3"
+        caption="Factory floor in Talawade, with the coiling machines"
+      />
     </div>
   </Section>
 
@@ -86,6 +90,29 @@ const rows = [
         and other finishes go through partners.
       </p>
     </div>
+  </Section>
+
+  <Section tone="surface">
+    <RelatedLinks
+      title="Related"
+      links={[
+        {
+          to: 'springs',
+          label: 'Springs we make',
+          description: 'Torsion, extension, compression and more.',
+        },
+        {
+          to: 'capabilities',
+          label: 'Capabilities',
+          description: 'Coiling, samples, reverse engineering and finishing.',
+        },
+        {
+          to: 'quality',
+          label: 'Quality and certification',
+          description: 'ZED certified. What we do in-house.',
+        },
+      ]}
+    />
   </Section>
 
   <CTASection />

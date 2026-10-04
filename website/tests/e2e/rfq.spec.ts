@@ -31,16 +31,12 @@ test('RFQ two-step form submits to a mocked API', async ({ page }) => {
   await expect(page.locator('select[name="spring_type"]')).toHaveValue('compression');
   await expect(page.locator('input[name="consent"]')).toBeChecked();
 
-  const [chooser] = await Promise.all([
-    page.waitForEvent('filechooser'),
-    page.getByRole('button', { name: /PDF, DWG/ }).click(),
-  ]);
-  await chooser.setFiles({
+  await page.locator('input#files').setInputFiles({
     name: 'drawing.pdf',
     mimeType: 'application/pdf',
     buffer: Buffer.from('%PDF-1.4 test drawing for quote'),
   });
-  await expect(page.getByText(/drawing\.pdf/)).toBeVisible();
+  await expect(page.getByText('drawing.pdf', { exact: false }).first()).toBeVisible();
 
   await page.getByRole('button', { name: 'Continue' }).click();
   await expect(page.getByRole('heading', { name: 'Optional dimensions' })).toBeVisible();

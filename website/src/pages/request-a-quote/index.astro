@@ -1,6 +1,7 @@
 ---
 import CompanyDetails from '@/components/ui/CompanyDetails.astro';
 import FAQ from '@/components/ui/FAQ.astro';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
 import { RfqForm } from '@/components/rfq/RfqForm';
@@ -46,7 +47,7 @@ const wa = whatsappHref('a quote');
         />
       </div>
       <aside class="rfq-aside">
-        <h2 class="text-h3 mb-4">Talk to the shop</h2>
+        <h2 class="text-h3 mb-4">Talk to us</h2>
         <CompanyDetails showTaxIds={false} />
         <p class="mt-6 text-small text-slate">
           Drawings stay with us. We use them only to quote and to make your parts.
@@ -69,6 +70,29 @@ const wa = whatsappHref('a quote');
   <Section tone="surface" labelledby="faq-title">
     <SectionHeader id="faq-title" index={1} eyebrow="Questions" title="Before you send" />
     <FAQ items={rfqFaqs} class="mt-8" />
+  </Section>
+
+  <Section>
+    <RelatedLinks
+      title="Related"
+      links={[
+        {
+          to: 'springs',
+          label: 'Springs we make',
+          description: 'Torsion, extension, compression and more.',
+        },
+        {
+          to: 'ordering',
+          label: 'Ordering with us',
+          description: 'MOQ, payment and ex-works dispatch.',
+        },
+        {
+          to: 'contact',
+          label: 'Contact us',
+          description: 'Phone, WhatsApp and the factory address.',
+        },
+      ]}
+    />
   </Section>
 </PageLayout>
 

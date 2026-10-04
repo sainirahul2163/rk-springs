@@ -86,7 +86,7 @@ const industries = [
     to: 'switchgear' as const,
     title: 'Electrical and switchgear',
     icon: 'zap' as const,
-    description: 'MCB and switch mechanisms — a regular job in this shop.',
+    description: 'MCB and switch mechanisms — a regular job in our unit.',
   },
   {
     to: 'instrumentation' as const,
@@ -184,7 +184,7 @@ const guides = [
     <SectionHeader
       id="why-title"
       index={2}
-      eyebrow="Why this shop"
+      eyebrow="Why this unit"
       title={`Why buyers choose ${site.brand}`}
       lede="The reasons customers give us, not a slogan."
     />
@@ -205,7 +205,7 @@ const guides = [
   </Section>
 
   <Section tone="tint" labelledby="cap-title">
-    <SectionHeader id="cap-title" index={4} eyebrow="Capability" title="What this shop can do" />
+    <SectionHeader id="cap-title" index={4} eyebrow="Capability" title="What we can do" />
     <SpecTable rows={capRows} caption="Capability snapshot" class="mt-8" />
     {capabilitiesHref && (
       <p class="mt-6">

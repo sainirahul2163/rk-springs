@@ -1,5 +1,5 @@
 import type { FaqItem } from '@/components/ui/FAQ.astro';
-import { site } from './site';
+import { fullAddress, site } from './site';
 
 export const homeFaqs: readonly FaqItem[] = [
   {
@@ -8,7 +8,7 @@ export const homeFaqs: readonly FaqItem[] = [
   },
   {
     q: 'Where are you based?',
-    a: `Sr. No. 166, Sai Krupa Society, Sahyog Nagar, ${site.address.locality}, ${site.address.city} ${site.address.postalCode}. That is in the Pimpri-Chinchwad industrial belt, near Chikhali, Bhosari MIDC and Chakan.`,
+    a: `${fullAddress}. That is in the Pimpri-Chinchwad industrial belt, near Chikhali, Bhosari MIDC and Chakan.`,
   },
   {
     q: 'What is the minimum order?',
@@ -23,8 +23,8 @@ export const homeFaqs: readonly FaqItem[] = [
     a: 'No. We supply across India, ex-works Talawade. Transport is not included.',
   },
   {
-    q: 'Are you ISO or IATF certified?',
-    a: 'No. The unit is ZED certified. We do not hold ISO 9001 or IATF 16949.',
+    q: 'Which certification do you hold?',
+    a: 'ZED certified (MSME).',
   },
   {
     q: 'When are you open?',
@@ -54,7 +54,7 @@ export const toolsFaqs: readonly FaqItem[] = [
 export const compressionCalcFaqs: readonly FaqItem[] = [
   {
     q: 'How do you calculate compression spring rate?',
-    a: 'k = G · d⁴ / (8 · D³ · Na), with D = OD − d. G is a typical published shear modulus, not a value we measure on this shop floor.',
+    a: 'k = G · d⁴ / (8 · D³ · Na), with D = OD − d. G is a typical published shear modulus.',
   },
   {
     q: 'What spring index should I aim for?',

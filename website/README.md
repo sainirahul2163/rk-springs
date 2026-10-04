@@ -2,6 +2,8 @@
 
 Static Astro site deployed on Vercel (project root = `/website`, functions region `bom1`). Read `../AGENTS.md` before changing anything.
 
+Requires **Node.js 22.18 or later** (the `scripts/*.ts` files run with Node’s built-in TypeScript strip).
+
 ## Local setup
 
 ```bash
@@ -41,14 +43,14 @@ npm run lh
 
 Copy `.env.example` to `.env`. Secrets stay server-side. `PUBLIC_*` is visible in the browser.
 
-| Variable                                                 | Use                                                                                           |
-| -------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `PUBLIC_SITE_URL`                                        | Canonical origin, no trailing slash. Empty locally. Production builds without it are noindex. |
-| `PUBLIC_SHOW_TODOS`                                      | `true` shows TODO markers and photo placeholders (always noindex).                            |
-| `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY`             | RFQ storage. Leave blank for the `.rfq-dev/` fallback.                                        |
-| `RESEND_API_KEY` / `RFQ_FROM_EMAIL` / `RFQ_NOTIFY_EMAIL` | Quote emails.                                                                                 |
-| `PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY`     | Bot check. Skipped when unset.                                                                |
-| `PUBLIC_GA4_ID` / `PUBLIC_CLARITY_ID`                    | Optional analytics. Scripts load only when set.                                               |
+| Variable                                                 | Use                                                                                                                                                                        |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_SITE_URL`                                        | Canonical origin, no trailing slash. **Required** on Vercel production (`VERCEL_ENV=production`); the build fails if it is missing. Local and preview builds stay noindex. |
+| `PUBLIC_SHOW_TODOS`                                      | `true` shows TODO markers, photo placeholders, `/styleguide/` and draft pages (always noindex).                                                                            |
+| `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY`             | RFQ storage. Leave blank for the `.rfq-dev/` fallback.                                                                                                                     |
+| `RESEND_API_KEY` / `RFQ_FROM_EMAIL` / `RFQ_NOTIFY_EMAIL` | Quote emails.                                                                                                                                                              |
+| `PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY`     | Bot check. Skipped when unset.                                                                                                                                             |
+| `PUBLIC_GA4_ID` / `PUBLIC_CLARITY_ID`                    | Optional analytics. Scripts load only when set.                                                                                                                            |
 
 Without RFQ keys, `POST /api/rfq` writes JSON and uploaded files to `.rfq-dev/` and still returns a reference.
 
@@ -64,9 +66,11 @@ Without RFQ keys, `POST /api/rfq` writes JSON and uploaded files to `.rfq-dev/` 
 - Root directory: `/website`
 - Framework: Astro
 - Functions region: `bom1`
+- Node.js 22.18 or later
 - Set `PUBLIC_SITE_URL` to the live origin (e.g. `https://www.rksprings.in`)
 - Do **not** set `PUBLIC_SHOW_TODOS` on production
 - Preview deployments stay noindex (`VERCEL_ENV !== production`)
+- `/styleguide/` and draft pages (spiral springs) return a real 404 unless `PUBLIC_SHOW_TODOS=true`
 
 ## Adding content
 
@@ -78,6 +82,8 @@ Without RFQ keys, `POST /api/rfq` writes JSON and uploaded files to `.rfq-dev/` 
 
 **Industry or capability.** Same pattern: route + page using `IndustryLayout` or `CapabilityLayout`. No customer names without written permission.
 
+Company facts (address, phones, hours) live in `src/data/site.ts`. Do not hard-code them on pages.
+
 ## Colour palette
 
 Tokens live in `src/styles/global.css` under `@theme`. Change the hex values there only. Components use token names (`navy-900`, `action-600`, …) and must not contain hard-coded hex.
@@ -88,4 +94,4 @@ Tokens live in `src/styles/global.css` under `@theme`. Change the hex values the
 - `src/data/routes.ts`: every URL. Unpublished pages are never linked in a production build.
 - `src/styles/global.css`: design tokens.
 - `src/components/diagrams/`: SVG technical drawings.
-- `/styleguide/` (noindex): every component and drawing.
+- `/styleguide/`: internal design-system page. 404 in production; visible in dev and `PUBLIC_SHOW_TODOS` builds (noindex).

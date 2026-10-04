@@ -1,6 +1,7 @@
 ---
 import '@/styles/global.css';
-import extraFonts from '@/styles/fonts-extra.css?url';
+import plexMono400 from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url';
+import plexSans400 from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2?url';
 import plexSans600 from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2?url';
 import Footer from '@/components/layout/Footer.astro';
 import Header from '@/components/layout/Header.astro';
@@ -26,33 +27,21 @@ const { context, hideActionBar = false, ...seo } = Astro.props as BaseProps;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <SEO {...seo} />
     <Analytics />
+    <link rel="preload" href={plexSans400} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={plexSans600} as="font" type="font/woff2" crossorigin />
-    <noscript>
-      <link rel="stylesheet" href={extraFonts} />
-    </noscript>
-    <script
-      is:inline
-      set:html={`
-      (function () {
-        var href = ${JSON.stringify(extraFonts)};
-        var add = function () {
-          var link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = href;
-          document.head.appendChild(link);
-        };
-        var schedule = function () {
-          if ('requestIdleCallback' in window) {
-            requestIdleCallback(add, { timeout: 4000 });
-          } else {
-            setTimeout(add, 2500);
-          }
-        };
-        if (document.readyState === 'complete') schedule();
-        else window.addEventListener('load', schedule, { once: true });
-      })();
-    `}
-    />
+    <link rel="preload" href={plexMono400} as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      document.addEventListener('click', function (e) {
+        const el = e.target && e.target.closest ? e.target.closest('[data-event]') : null;
+        if (!el) return;
+        const name = el.getAttribute('data-event');
+        if (!name) return;
+        const gtag = window.gtag;
+        if (typeof gtag === 'function') {
+          gtag('event', name, { href: el.getAttribute('href') || undefined });
+        }
+      });
+    </script>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="white" />
     <meta name="format-detection" content="telephone=no" />

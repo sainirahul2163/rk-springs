@@ -26,6 +26,7 @@ const { route, title, description, h1, lede, context, faqs } = Astro.props;
   description={description}
   {...(context ? { context } : {})}
   {...(faqs ? { faqs } : {})}
+  tool={{ name: h1, description }}
 >
   <section class="container-page pt-6 pb-8">
     <p class="eyebrow mb-3 text-blue-700">Engineering tool</p>

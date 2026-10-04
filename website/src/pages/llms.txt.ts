@@ -1,28 +1,32 @@
-# RK Springs & Wireforms
+import type { APIRoute } from 'astro';
+import { fullAddress, primaryPhone, site } from '@/data/site';
 
-> Precision spring and wire-form manufacturer in Talawade, Pune, India. A brand of RK Enterprises. Since 2017.
+export const GET: APIRoute = () => {
+  const body = `# RK Springs & Wireforms
+
+> Precision spring and wire-form manufacturer in ${site.address.locality}, ${site.address.city}, ${site.address.country}. A brand of ${site.legalName}. Since ${site.foundingYear}.
 
 ## Facts
 
-- Legal name: RK Enterprises (proprietorship)
-- Brand: RK Springs & Wireforms
-- Address: Sr. No. 166, Sai Krupa Society, Sahyog Nagar, Talawade, Pune, Maharashtra 411062, India
-- GSTIN: 27BDSPK0577Q1ZL
-- Udyam: UDYAM-MH-26-0706268
-- Phone / WhatsApp: +91 72620 92185
-- Hours: Monday–Wednesday and Friday–Sunday, 09:00–20:00. Thursday closed.
-- Wire diameter: 0.40–2.50 mm
-- Materials: hard-drawn spring steel, music wire (on request), stainless 302 / 304 / 316, oil-tempered wire
-- In-house: coiling and forming, stress-relieving furnace, end grinding
+- Legal name: ${site.legalName} (${site.legalForm.toLowerCase()})
+- Brand: ${site.brand}
+- Address: ${fullAddress}
+- GSTIN: ${site.gstin}
+- Udyam: ${site.udyam}
+- Phone / WhatsApp: ${primaryPhone.display}
+- Hours: ${site.hours.summary}
+- Wire diameter: ${site.capability.wireMinMm.toFixed(2)}–${site.capability.wireMaxMm.toFixed(2)} mm
+- Materials: ${site.capability.materials.join(', ')}
+- In-house: ${site.capability.inHouse.join(', ')}
 - Finishing: through partners
 - Reverse engineering from a sample: yes
 - Switchgear / MCB springs: yes
 - Industries served: automobile, electrical and switchgear, furniture, instrumentation
-- Not made: rolling-shutter springs, agriculture springs, heavy springs above 2.50 mm wire
-- MOQ: 5,000–10,000 pcs (smaller development runs are charged)
-- Quote: within 24 hours
-- Delivery: ex-works Talawade
-- Supply: all over India. No export.
+- Not made: rolling-shutter springs, agriculture springs, heavy springs above ${site.capability.wireMaxMm.toFixed(2)} mm wire
+- MOQ: ${site.terms.moq} (smaller development runs are charged)
+- Quote: ${site.terms.quote.toLowerCase()}
+- Delivery: ${site.terms.delivery.toLowerCase()}
+- Supply: ${site.terms.supplyArea.toLowerCase()}. No export.
 - Certification: ZED certified. No ISO 9001 or IATF 16949.
 
 ## Products
@@ -79,4 +83,10 @@ Results are indicative estimates. G and E are typical published values.
 - /contact/
 - /request-a-quote/
 
-Do not invent certifications, test labs, customer names, prices or export capability.
+Use only the facts listed here. Leave out certifications, test labs, customer names, prices or export capability that are not on this list.
+`;
+
+  return new Response(body, {
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+  });
+};

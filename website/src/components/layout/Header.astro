@@ -95,7 +95,13 @@ const isActive = (href: string | null) => href !== null && href !== '/' && path.
     const setOpen = (b, open) => {
       b.setAttribute('aria-expanded', String(open));
       panelOf(b).hidden = !open;
-      if (b.hasAttribute('data-modal')) document.documentElement.classList.toggle('nav-open', open);
+      if (b.hasAttribute('data-modal')) {
+        document.documentElement.classList.toggle('nav-open', open);
+        const main = document.getElementById('main');
+        const footer = document.querySelector('footer');
+        if (main) main.inert = open;
+        if (footer) footer.inert = open;
+      }
     };
     const closeAll = (except) =>
       buttons.forEach(

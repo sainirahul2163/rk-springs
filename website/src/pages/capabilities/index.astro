@@ -46,7 +46,7 @@ const caps = [
       as="h1"
       id="cap-h1"
       eyebrow="Capabilities"
-      title="What this shop can do"
+      title="Spring manufacturing capabilities"
       lede={`Wire ${site.capability.wireRangeLabel}. Coiling and forming, a stress-relieving furnace and end grinding in-house. Plating and other finishes through partners.`}
     />
   </Section>
@@ -74,13 +74,23 @@ const caps = [
     </ul>
   </Section>
 
-  <Section tone="surface" labelledby="not-title">
-    <SectionHeader id="not-title" index={2} eyebrow="Limits" title="What we will not list" />
+  <Section tone="surface" labelledby="how-title">
+    <SectionHeader
+      id="how-title"
+      index={2}
+      eyebrow="How we work"
+      title="Quote, sample, then the lot"
+    />
     <div class="prose mt-8 max-w-[46rem]">
       <p>
-        No CNC machine list until the plates are photographed. No load tester, no lab, no PPAP pack.
-        Usual minimum order is {site.terms.moq}. Smaller runs carry development charges. Quote
-        within 24 hours. Dispatch is ex-works Talawade.
+        Usual minimum order is {site.terms.moq}. Smaller runs carry development charges. We quote
+        within 24 hours. For a new part we make a development sample so you can try it in the
+        assembly. Dispatch is ex-works Talawade.
+      </p>
+      <p>
+        See <a href="/industries/">the industries we serve</a>,{' '}
+        <a href="/springs/">the springs we coil</a>, and{' '}
+        <a href="/quality/">quality and certification</a>.
       </p>
     </div>
   </Section>

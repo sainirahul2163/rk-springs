@@ -8,7 +8,8 @@ import { join, relative, sep } from 'node:path';
 const root = join(import.meta.dirname, '..');
 const dirs = ['src', 'public'];
 const exts = /\.(astro|ts|tsx|mdx?|css|svg|json)$/;
-const marker = /TODO\(client\)[:\s]*(.*)|<Todo\b[^>]*?text="([^"]*)"/g;
+const lineMarker = /TODO\(client\)[:\s]*(.*)/g;
+const todoTag = /<Todo\b[\s\S]*?\btext="([^"]*)"/g;
 
 function walk(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
@@ -17,16 +18,31 @@ function walk(dir: string): string[] {
   });
 }
 
+function lineNumber(src: string, index: number): number {
+  return src.slice(0, index).split('\n').length;
+}
+
+function clean(text: string): string {
+  return text
+    .replace(/\s*(\*\/|-->|\}\s*\/>|"\s*\/>)\s*$/, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 let count = 0;
 for (const file of dirs.flatMap((d) => walk(join(root, d)))) {
-  const lines = readFileSync(file, 'utf8').split('\n');
   if (file.endsWith(`${sep}Todo.astro`)) continue;
-  lines.forEach((line, i) => {
-    for (const m of line.matchAll(marker)) {
-      const text = (m[1] ?? m[2] ?? '').replace(/\s*(\*\/|-->|\}\s*\/>|"\s*\/>)\s*$/, '').trim();
-      console.log(`${relative(root, file)}:${i + 1}  ${text}`);
+  const src = readFileSync(file, 'utf8');
+  const rel = relative(root, file);
+
+  for (const re of [lineMarker, todoTag]) {
+    re.lastIndex = 0;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(src))) {
+      const text = clean(m[1] ?? '');
+      console.log(`${rel}:${lineNumber(src, m.index)}  ${text}`);
       count++;
     }
-  });
+  }
 }
 console.log(`\n${count} TODO(client) marker${count === 1 ? '' : 's'}.`);
