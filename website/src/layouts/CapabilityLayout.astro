@@ -1,0 +1,50 @@
+---
+/** Capability page: what it is, how it works, when, limits, CTA. */
+import type { FaqItem } from '@/components/ui/FAQ.astro';
+import type { RelatedLink } from '@/components/ui/RelatedLinks.astro';
+import CTASection from '@/components/ui/CTASection.astro';
+import FAQ from '@/components/ui/FAQ.astro';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
+import type { RouteId } from '@/data/routes';
+import PageLayout from './PageLayout.astro';
+
+interface Props {
+  route: RouteId;
+  title: string;
+  description: string;
+  h1: string;
+  lede?: string;
+  context?: string;
+  faqs?: readonly FaqItem[];
+  related?: readonly RelatedLink[];
+}
+
+const { route, title, description, h1, lede, context, faqs, related = [] } = Astro.props;
+---
+
+<PageLayout
+  route={route}
+  title={title}
+  description={description}
+  context={context}
+  {...(faqs ? { faqs } : {})}
+>
+  <section class="container-page pt-6 pb-8">
+    <p class="eyebrow mb-3 text-blue-700">Capability</p>
+    <h1 class="max-w-[46rem] text-h1">{h1}</h1>
+    {lede && <p class="mt-4 max-w-[46rem] text-lead text-slate">{lede}</p>}
+  </section>
+  <div class="container-page pb-16">
+    <div class="prose max-w-[46rem]">
+      <slot />
+    </div>
+    {faqs && faqs.length > 0 && (
+      <div class="mt-12 max-w-[46rem]">
+        <h2 class="text-h2 mb-6">Questions</h2>
+        <FAQ items={faqs} />
+      </div>
+    )}
+    {related.length > 0 && <RelatedLinks class="mt-12" links={related} />}
+  </div>
+  <CTASection context={context} />
+</PageLayout>

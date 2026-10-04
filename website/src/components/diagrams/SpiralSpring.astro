@@ -1,0 +1,50 @@
+---
+/**
+ * Flat (end-view) spiral with an inner arbor tab and an outer hook.
+ * Deliberately generic: it reads correctly for both wire spirals and flat-strip spirals.
+ * TODO(client): confirm which spiral type is made, then refine this drawing if needed.
+ */
+import Drawing from './Drawing.astro';
+import DimensionLine from './DimensionLine.astro';
+import Leader from './Leader.astro';
+import { fmt, spiral } from './geometry';
+
+interface Props {
+  annotated?: boolean;
+  decorative?: boolean;
+  class?: string;
+}
+
+const { annotated = false, decorative = false, class: cls } = Astro.props;
+
+const cx = 120;
+const cy = 72;
+const r0 = 9;
+const r1 = 58;
+const sp = spiral(cx, cy, r0, r1, 5);
+const tab = `M${fmt(sp.start.x)} ${fmt(sp.start.y)}L${fmt(cx - 4)} ${fmt(cy - 2)}`;
+const outer = `M${fmt(sp.end.x)} ${fmt(sp.end.y)}L${fmt(sp.end.x + 30)} ${fmt(sp.end.y)}A7 7 0 0 1 ${fmt(sp.end.x + 30)} ${fmt(sp.end.y + 14)}`;
+---
+
+<Drawing
+  viewBox="0 0 240 150"
+  title="Spiral spring with an inner arbor tab and an outer hook end"
+  decorative={decorative}
+  class={cls}
+>
+  <path class="c" d={`M${cx - 70} ${cy}L${cx + 70} ${cy}M${cx} ${cy - 66}L${cx} ${cy + 66}`}></path>
+  <path class="w" d={sp.d + tab + outer}></path>
+  {annotated && (
+    <>
+      <DimensionLine
+        x1={cx - r1}
+        y1={cy + r1 + 12}
+        x2={cx + r1}
+        y2={cy + r1 + 12}
+        label="OD"
+        extend={-8}
+      />
+      <Leader x={cx - 4} y={cy - 2} ex={cx - 70} ey={cy - 52} label="ARBOR" align="left" />
+    </>
+  )}
+</Drawing>

@@ -1,0 +1,70 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  variant?: 'info' | 'warning';
+  title?: string;
+  class?: string;
+}
+
+const { variant = 'info', title, class: className } = Astro.props;
+const label = variant === 'warning' ? 'Caution' : 'Note';
+---
+
+<aside class:list={['callout', `callout-${variant}`, className]}>
+  <div class="callout-head">
+    <Icon name={variant === 'warning' ? 'triangle-alert' : 'info'} size={20} />
+    <span class="callout-label eyebrow">{label}</span>
+    {title && <strong class="callout-title">{title}</strong>}
+  </div>
+  <div class="callout-body">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .callout {
+    border: 1px solid var(--color-border);
+    border-left-width: 3px;
+    border-radius: var(--radius-control);
+    padding: 14px 16px;
+    font-size: 0.9875rem;
+  }
+
+  .callout-info {
+    border-left-color: var(--color-blue-700);
+    background: var(--color-blue-50);
+  }
+
+  .callout-warning {
+    border-left-color: var(--color-warning);
+    background: var(--color-surface);
+  }
+
+  .callout-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .callout-info .callout-head {
+    color: var(--color-blue-700);
+  }
+
+  .callout-warning .callout-head {
+    color: var(--color-warning);
+  }
+
+  .callout-title {
+    color: var(--color-navy-900);
+    font-weight: 600;
+  }
+
+  .callout-body :global(a) {
+    color: var(--color-blue-700);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>

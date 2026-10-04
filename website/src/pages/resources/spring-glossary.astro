@@ -1,0 +1,98 @@
+---
+import { glossaryByLetter, glossaryTerms } from '@/data/glossary';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+const groups = glossaryByLetter();
+const glossary = glossaryTerms.map((t) => ({
+  id: t.id,
+  term: t.term,
+  definition: t.definition,
+}));
+---
+
+<PageLayout
+  route="glossary"
+  title="Spring Glossary"
+  description="Sixty-plus spring terms: active coils, spring index, rate, initial tension, solid height, wind direction. Anchored so other pages can link here."
+  context="a spring"
+  glossary={glossary}
+>
+  <article class="container-page pb-16">
+    <header class="max-w-[46rem] pt-6 pb-8">
+      <p class="eyebrow mb-3 text-blue-700">Resource</p>
+      <h1 class="text-h1">Spring glossary</h1>
+      <p class="mt-4 text-lead text-slate">
+        {glossaryTerms.length} terms. Each has an anchor so a product page or a guide can link
+        straight to it. Definitions are general engineering language, not lab claims.
+      </p>
+    </header>
+
+    <nav class="letters" aria-label="Letters">
+      {groups.map((g) => (
+        <a href={`#letter-${g.letter.toLowerCase()}`}>{g.letter}</a>
+      ))}
+    </nav>
+
+    {groups.map((g) => (
+      <section class="letter-block" aria-labelledby={`letter-${g.letter.toLowerCase()}`}>
+        <h2 class="text-h2" id={`letter-${g.letter.toLowerCase()}`}>
+          {g.letter}
+        </h2>
+        <dl>
+          {g.terms.map((t) => (
+            <div class="term">
+              <dt id={t.id}>{t.term}</dt>
+              <dd>{t.definition}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    ))}
+  </article>
+</PageLayout>
+
+<style>
+  .letters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 40px;
+  }
+
+  .letters a {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-grid;
+    place-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-control);
+    color: var(--color-blue-700);
+    font-family: var(--font-mono);
+    font-weight: 500;
+  }
+
+  .letters a:hover {
+    background: var(--color-blue-50);
+  }
+
+  .letter-block {
+    max-width: 46rem;
+    margin-bottom: 40px;
+  }
+
+  .term {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--color-grid);
+  }
+
+  dt {
+    font-weight: 600;
+    color: var(--color-navy-900);
+    scroll-margin-top: calc(var(--header-h) + 16px);
+  }
+
+  dd {
+    margin-top: 6px;
+    color: var(--color-ink);
+  }
+</style>

@@ -1,0 +1,70 @@
+---
+import Drawing from './Drawing.astro';
+import DimensionLine from './DimensionLine.astro';
+import Leader from './Leader.astro';
+import { fmt, helix } from './geometry';
+
+export type ExtensionHook = 'machine-loop' | 'extended-hook';
+
+interface Props {
+  hook?: ExtensionHook;
+  annotated?: boolean;
+  decorative?: boolean;
+  class?: string;
+}
+
+const { hook = 'machine-loop', annotated = false, decorative = false, class: cls } = Astro.props;
+
+const yc = 70;
+const R = 22;
+const x0 = 76;
+const h = helix({ x0, yc, turns: 16, pitch: 5.4, radius: R, tilt: 0.3 });
+const s = h.start;
+const e = h.end;
+
+let hooks: string;
+let innerL: number;
+let innerR: number;
+if (hook === 'machine-loop') {
+  // Full loop in the plane of the axis, tangent to the top of the body.
+  hooks =
+    `M${fmt(s.x)} ${fmt(s.y)}L${fmt(s.x - 22)} ${fmt(s.y)}A${R} ${R} 0 1 0 ${fmt(s.x - 22 + R)} ${yc}` +
+    `M${fmt(e.x)} ${fmt(e.y)}L${fmt(e.x + 22)} ${fmt(e.y)}A${R} ${R} 0 1 1 ${fmt(e.x + 22 - R)} ${yc}`;
+  innerL = s.x - 22 - R;
+  innerR = e.x + 22 + R;
+} else {
+  // Extended hook: straight shank along the axis, then an open hook.
+  const shank = 24;
+  hooks =
+    `M${fmt(s.x)} ${fmt(s.y)}Q${fmt(s.x - 10)} ${yc} ${fmt(s.x - 16)} ${yc}L${fmt(s.x - 16 - shank)} ${yc}` +
+    `A14 14 0 1 1 ${fmt(s.x - 16 - shank - 2)} ${yc + 22}` +
+    `M${fmt(e.x)} ${fmt(e.y)}Q${fmt(e.x + 10)} ${yc} ${fmt(e.x + 16)} ${yc}L${fmt(e.x + 16 + shank)} ${yc}` +
+    `A14 14 0 1 0 ${fmt(e.x + 16 + shank + 2)} ${yc + 22}`;
+  innerL = s.x - 16 - shank - 28;
+  innerR = e.x + 16 + shank + 28;
+}
+---
+
+<Drawing
+  viewBox="0 0 240 140"
+  title={`Extension spring with ${hook === 'machine-loop' ? 'machine loop' : 'extended hook'} ends`}
+  decorative={decorative}
+  class={cls}
+>
+  <path class="w w-back" d={h.back}></path>
+  <path class="w" d={h.front}></path>
+  <path class="w" d={hooks}></path>
+  {annotated && (
+    <>
+      <DimensionLine
+        x1={innerL}
+        y1={yc + R + 24}
+        x2={innerR}
+        y2={yc + R + 24}
+        label="LENGTH INSIDE HOOKS"
+        extend={-18}
+      />
+      <Leader x={x0 + 40} y={yc - R} ex={x0 + 52} ey={20} label="CLOSE-WOUND BODY" />
+    </>
+  )}
+</Drawing>

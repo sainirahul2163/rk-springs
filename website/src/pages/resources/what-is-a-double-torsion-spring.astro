@@ -1,0 +1,86 @@
+---
+import { site } from '@/data/site';
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+
+const published = new Date('2026-10-04');
+const faqs = [
+  {
+    q: 'When is a double torsion spring better than two single ones?',
+    a: 'When both sides of a hinge must push together and you want the torque balanced on one pin. One centre loop, one part number.',
+  },
+  {
+    q: 'Do you make them?',
+    a: `Yes. Double torsion is our second-highest volume, after single torsion. Wire ${site.capability.wireRangeLabel}.`,
+  },
+];
+---
+
+<ArticleLayout
+  route="whatIsDoubleTorsion"
+  title="What Is Double Torsion"
+  description="A double torsion spring is two opposite-wound coils joined by a centre loop. When to use one, and what to put on the drawing."
+  h1="What is a double torsion spring?"
+  lede="Two coils, wound opposite ways, joined by a centre loop that sits over the hinge pin. Both sides of the hinge can push together."
+  published={published}
+  context="a double torsion spring"
+  takeaways={[
+    'Two opposite-wound coils, one centre loop.',
+    'Used when a hinge needs balanced torque on both sides.',
+    'The drawing must give both legs, the loop width, wind and the shaft.',
+  ]}
+  toc={[
+    { id: 'what', text: 'The layout' },
+    { id: 'when', text: 'When to use it' },
+    { id: 'drawing', text: 'What to put on the drawing' },
+    { id: 'questions', text: 'Questions' },
+  ]}
+  faqs={faqs}
+  related={[
+    {
+      to: 'doubleTorsion',
+      label: 'Double torsion springs',
+      description: 'What we make, and the spec table.',
+    },
+    { to: 'torsion', label: 'Torsion springs', description: 'One coil, two legs.' },
+    {
+      to: 'typesCompared',
+      label: 'Torsion vs extension vs compression',
+      description: 'Which motion you have.',
+    },
+  ]}
+>
+  <h2 id="what">The layout</h2>
+  <p>
+    A <strong>double torsion spring</strong> is two helical coils on one piece of wire. They are
+    wound opposite ways so that when the legs move, both coils wind up (or both unwind) together. A{' '}
+    <a href="/resources/spring-glossary/#centre-loop">centre loop</a> joins them and usually sits
+    over the hinge pin.
+  </p>
+  <p>
+    It is not two springs loosely paired. It is one part. It is also not a spiral spring, which is
+    wound flat.
+  </p>
+
+  <h2 id="when">When to use it</h2>
+  <p>
+    A lid, a clamp, a switch or a fold where both sides of the pin must push. A single torsion
+    spring on one side leaves the hinge unbalanced. Two separate torsion springs mean two part
+    numbers and twice the chance the winds do not match.
+  </p>
+  <p>
+    In this shop, double torsion is the second-largest volume after single torsion. Wire{' '}
+    {site.capability.wireRangeLabel}.
+  </p>
+
+  <h2 id="drawing">What to put on the drawing</h2>
+  <ul>
+    <li>Wire diameter and mean or outer diameter of each coil</li>
+    <li>Coils on each side (they are often the same)</li>
+    <li>Centre-loop width, and the shaft or pin it sits on</li>
+    <li>Both leg lengths and shapes</li>
+    <li>Free angle and the working angle, with torque if you have it</li>
+    <li>Wind direction for each coil (they should be opposite)</li>
+    <li>Material and quantity</li>
+  </ul>
+  <p>Send the drawing or an unused sample. We quote within 24 hours.</p>
+</ArticleLayout>

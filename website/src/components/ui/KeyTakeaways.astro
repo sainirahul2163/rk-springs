@@ -1,0 +1,53 @@
+---
+interface Props {
+  items: readonly string[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<aside class:list={['kt', className]} aria-labelledby="kt-title">
+  <p id="kt-title" class="eyebrow kt-title">
+    Key takeaways
+  </p>
+  <ul>
+    {items.map((t) => (
+      <li>{t}</li>
+    ))}
+  </ul>
+</aside>
+
+<style>
+  .kt {
+    background: var(--color-blue-50);
+    border: 1px solid var(--color-grid);
+    border-radius: var(--radius-card);
+    padding: 18px 20px;
+  }
+
+  .kt-title {
+    color: var(--color-blue-700);
+    margin-bottom: 10px;
+  }
+
+  ul {
+    display: grid;
+    gap: 8px;
+  }
+
+  li {
+    position: relative;
+    padding-left: 22px;
+  }
+
+  li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.62em;
+    width: 10px;
+    height: 1.5px;
+    background: var(--color-action-600);
+  }
+</style>

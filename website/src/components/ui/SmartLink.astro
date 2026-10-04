@@ -1,0 +1,24 @@
+---
+/**
+ * Link to a registered route. Renders plain text when the target page isn't published in this
+ * build, so unbuilt pages never become broken links.
+ */
+import type { HTMLAttributes } from 'astro/types';
+import { linkTo, type RouteId } from '@/data/routes';
+
+type Props = { to: RouteId; class?: string } & Omit<HTMLAttributes<'a'>, 'href'>;
+
+const { to, class: className, ...rest } = Astro.props;
+const href = linkTo(to);
+const current = href !== null && Astro.url.pathname === href;
+---
+
+{href ? (
+  <a href={href} class={className} aria-current={current ? 'page' : undefined} {...rest}>
+    <slot />
+  </a>
+) : (
+  <span class={className} data-unpublished={to}>
+    <slot />
+  </span>
+)}

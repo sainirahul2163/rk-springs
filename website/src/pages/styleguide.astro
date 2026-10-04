@@ -1,0 +1,793 @@
+---
+/** Internal design-system reference (noindex). Every token, component and drawing in one place. */
+import CompressionSpring from '@/components/diagrams/CompressionSpring.astro';
+import ConicalSpring from '@/components/diagrams/ConicalSpring.astro';
+import DoubleTorsionSpring from '@/components/diagrams/DoubleTorsionSpring.astro';
+import ExtensionSpring from '@/components/diagrams/ExtensionSpring.astro';
+import SpiralSpring from '@/components/diagrams/SpiralSpring.astro';
+import TorsionSpring from '@/components/diagrams/TorsionSpring.astro';
+import WireForm from '@/components/diagrams/WireForm.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import { NumberField } from '@/components/tools/NumberField';
+import { ResultPanel } from '@/components/tools/ResultPanel';
+import { SelectField } from '@/components/tools/SelectField';
+import { WarningList } from '@/components/tools/WarningList';
+import ArticleMeta from '@/components/ui/ArticleMeta.astro';
+import Badge from '@/components/ui/Badge.astro';
+import Button from '@/components/ui/Button.astro';
+import Callout from '@/components/ui/Callout.astro';
+import Card from '@/components/ui/Card.astro';
+import CompanyDetails from '@/components/ui/CompanyDetails.astro';
+import ContactLinks from '@/components/ui/ContactLinks.astro';
+import CTASection from '@/components/ui/CTASection.astro';
+import FAQ from '@/components/ui/FAQ.astro';
+import HoursTable from '@/components/ui/HoursTable.astro';
+import KeyTakeaways from '@/components/ui/KeyTakeaways.astro';
+import LocationMap from '@/components/ui/LocationMap.astro';
+import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
+import ProcessSteps from '@/components/ui/ProcessSteps.astro';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import SpecChips from '@/components/ui/SpecChips.astro';
+import SpecTable from '@/components/ui/SpecTable.astro';
+import TableOfContents from '@/components/ui/TableOfContents.astro';
+import Todo from '@/components/ui/Todo.astro';
+import TrustBar from '@/components/ui/TrustBar.astro';
+import { linkTo } from '@/data/routes';
+import { site } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+const colours: { group: string; items: { token: string; use: string; dark?: boolean }[] }[] = [
+  {
+    group: 'Navy and blue',
+    items: [
+      { token: 'navy-950', use: 'Footer', dark: true },
+      { token: 'navy-900', use: 'Headings, dark sections', dark: true },
+      { token: 'blue-800', use: 'Secondary dark', dark: true },
+      { token: 'blue-700', use: 'Links, icons, outline buttons', dark: true },
+      { token: 'action-600', use: 'Primary buttons, focus ring', dark: true },
+      { token: 'action-700', use: 'Primary hover', dark: true },
+      { token: 'blue-400', use: 'Accents on dark' },
+      { token: 'blue-300', use: 'Body text on dark' },
+      { token: 'blue-100', use: 'Pressed states' },
+      { token: 'blue-50', use: 'Tints, zebra rows' },
+      { token: 'grid', use: 'Blueprint grid lines' },
+    ],
+  },
+  {
+    group: 'Neutrals',
+    items: [
+      { token: 'ink', use: 'Body text', dark: true },
+      { token: 'slate', use: 'Secondary text', dark: true },
+      { token: 'border-strong', use: 'Input borders', dark: true },
+      { token: 'border', use: 'Dividers' },
+      { token: 'surface', use: 'Alternate sections' },
+      { token: 'white', use: 'Page' },
+    ],
+  },
+  {
+    group: 'Status',
+    items: [
+      { token: 'success', use: 'Success', dark: true },
+      { token: 'warning', use: 'Warnings, TODO markers', dark: true },
+      { token: 'error', use: 'Errors', dark: true },
+      { token: 'whatsapp', use: 'WhatsApp button only' },
+    ],
+  },
+];
+
+const type = [
+  { cls: 'text-h1', label: 'H1 · clamp 32–56 / 600', sample: 'Precision spring manufacturer' },
+  { cls: 'text-h2', label: 'H2 · clamp 26–40 / 600', sample: 'Double torsion springs' },
+  { cls: 'text-h3', label: 'H3 · 22 / 600', sample: 'Centre loop and leg forms' },
+  { cls: 'text-lead', label: 'Lead · 19 / 400', sample: 'Made to your drawing or sample.' },
+  {
+    cls: 'text-body',
+    label: 'Body · 17 / 400',
+    sample: 'Send the drawing, quantity and material.',
+  },
+  {
+    cls: 'text-small',
+    label: 'Small · 15 / 400',
+    sample: 'Smaller runs carry development charges.',
+  },
+];
+
+const specRows = [
+  { label: 'Wire diameter', value: site.capability.wireRangeLabel },
+  { label: 'Materials', value: [...site.capability.materials] },
+  { label: 'In-house', value: [...site.capability.inHouse] },
+  { label: 'Through partners', value: [...site.capability.viaPartners] },
+  { label: 'Minimum order', value: site.terms.moq, note: site.terms.moqNote },
+  { label: 'Quotation', value: site.terms.quote },
+  { label: 'Delivery', value: site.terms.delivery },
+];
+
+const steps = [
+  {
+    title: 'Send drawing or sample',
+    text: 'A drawing, a photo with dimensions, or the old spring.',
+  },
+  { title: 'Quote in 24 hours', text: 'Price, development charges if any, and lead time.' },
+  { title: 'Development sample', text: 'We make samples for you to check in your assembly.' },
+  { title: 'Approval', text: 'You approve the sample before the production run.' },
+  { title: 'Production', text: 'Coiling, forming, stress relieving and grinding as needed.' },
+  { title: 'Dispatch', text: 'Ex-works Talawade. Transport is not included.' },
+];
+
+const faqs = [
+  {
+    q: 'What is your minimum order quantity?',
+    a: `Usually ${site.terms.moq}. ${site.terms.moqNote}`,
+  },
+  {
+    q: 'Can you make a spring from a sample?',
+    a: 'Yes. Send the old spring and tell us where it is used. We measure it and quote within 24 hours.',
+  },
+  {
+    q: 'What wire sizes do you work with?',
+    a: `Round wire from ${site.capability.wireRangeLabel}.`,
+  },
+];
+
+const toc = [
+  { id: 'colours', text: 'Colours' },
+  { id: 'type', text: 'Typography' },
+  { id: 'buttons', text: 'Buttons and links' },
+  { id: 'badges', text: 'Badges and chips' },
+  { id: 'cards', text: 'Cards' },
+  { id: 'data', text: 'Spec table, steps, FAQ' },
+  { id: 'callouts', text: 'Callouts and trust bar' },
+  { id: 'drawings', text: 'Technical drawings' },
+  { id: 'drawings-variants', text: 'End and hook variants', depth: 3 as const },
+  { id: 'forms', text: 'Forms and calculator UI' },
+  { id: 'contact', text: 'Contact blocks' },
+  { id: 'editorial', text: 'Editorial' },
+  { id: 'placeholders', text: 'Placeholders' },
+  { id: 'cta', text: 'CTA section' },
+];
+
+const drawings = [
+  { name: 'Torsion', Cmp: TorsionSpring },
+  { name: 'Double torsion', Cmp: DoubleTorsionSpring },
+  { name: 'Extension', Cmp: ExtensionSpring },
+  { name: 'Compression', Cmp: CompressionSpring },
+  { name: 'Conical', Cmp: ConicalSpring },
+  { name: 'Spiral', Cmp: SpiralSpring },
+  { name: 'Wire form', Cmp: WireForm },
+];
+
+const ends = ['closed-ground', 'closed', 'open', 'open-ground'] as const;
+const hooks = ['machine-loop', 'extended-hook'] as const;
+const home = linkTo('home') ?? '/';
+---
+
+<PageLayout
+  route="styleguide"
+  title="Style guide"
+  description="Internal design-system reference for the RK Springs & Wireforms website: tokens, type, components and technical drawings."
+>
+  <Section tone="grid" containerClass="sg-intro">
+    <SectionHeader
+      as="h1"
+      eyebrow="Design system"
+      title="Style guide"
+      lede="Blue-and-white engineering-blueprint system. Tokens are referenced by name only; values live in global.css and may change when the logo arrives."
+    />
+    <p class="mt-6">
+      <a href={home} class="link">
+        See the Home hero preview
+      </a>
+    </p>
+  </Section>
+
+  <div class="container-page sg-layout">
+    <aside class="sg-aside">
+      <TableOfContents items={toc} />
+    </aside>
+
+    <div class="sg-main">
+      <!-- Colours -->
+      <section id="colours" class="sg-sec" aria-labelledby="colours-h">
+        <SectionHeader id="colours-h" index={1} eyebrow="Tokens" title="Colours" />
+        {colours.map((g) => (
+          <div class="mt-8">
+            <h3 class="sg-h3">{g.group}</h3>
+            <ul class="sg-swatches">
+              {g.items.map((c) => (
+                <li class="sg-swatch">
+                  <span
+                    class:list={['sg-chip', c.dark && 'sg-chip-dark']}
+                    style={`background: var(--color-${c.token})`}
+                  >
+                    Aa
+                  </span>
+                  <span class="sg-token">{c.token}</span>
+                  <span class="sg-use">{c.use}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </section>
+
+      <!-- Type -->
+      <section id="type" class="sg-sec" aria-labelledby="type-h">
+        <SectionHeader
+          id="type-h"
+          index={2}
+          eyebrow="Tokens"
+          title="Typography"
+          lede="IBM Plex Sans for text, IBM Plex Mono for specs, units, eyebrows and numbers."
+        />
+        <dl class="mt-8 grid gap-6">
+          {type.map((t) => (
+            <div class="sg-type">
+              <dt class="sg-token">{t.label}</dt>
+              <dd class:list={[t.cls, t.cls.startsWith('text-h') && 'sg-heading']}>{t.sample}</dd>
+            </div>
+          ))}
+          <div class="sg-type">
+            <dt class="sg-token">Eyebrow · Mono 13 / 500 / caps</dt>
+            <dd class="eyebrow text-blue-700">01 · Products</dd>
+          </div>
+          <div class="sg-type">
+            <dt class="sg-token">Spec value · Mono tabular</dt>
+            <dd class="font-mono text-body tabular">
+              Ø 0.40–2.50 mm · 5,000–10,000 pcs · ₹ 1,23,456.00
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- Buttons -->
+      <section id="buttons" class="sg-sec" aria-labelledby="buttons-h">
+        <SectionHeader id="buttons-h" index={3} eyebrow="Components" title="Buttons and links" />
+        <div class="mt-8 grid gap-6">
+          <div class="sg-row">
+            <Button href="#buttons" iconRight="arrow-right">
+              Get a quote in 24 hours
+            </Button>
+            <Button href="#buttons" variant="secondary" icon="phone">
+              Call us
+            </Button>
+            <Button href="#buttons" variant="ghost">
+              Ghost
+            </Button>
+            <Button href="#buttons" variant="whatsapp" icon="message-circle">
+              WhatsApp us
+            </Button>
+          </div>
+          <div class="sg-row">
+            <Button size="sm">Small</Button>
+            <Button>Medium</Button>
+            <Button size="lg">Large</Button>
+            <Button unavailable>Unavailable</Button>
+          </div>
+          <div class="sg-row sg-dark" data-surface="dark">
+            <Button href="#buttons" variant="inverse" iconRight="arrow-right">
+              Inverse
+            </Button>
+            <Button href="#buttons" variant="whatsapp" icon="message-circle">
+              WhatsApp us
+            </Button>
+          </div>
+          <p>
+            Inline{' '}
+            <a href="#buttons" class="link">
+              text link
+            </a>{' '}
+            inside body copy. All interactive elements are at least 44 px tall and show a 2 px focus
+            ring.
+          </p>
+        </div>
+      </section>
+
+      <!-- Badges -->
+      <section id="badges" class="sg-sec" aria-labelledby="badges-h">
+        <SectionHeader id="badges-h" index={4} eyebrow="Components" title="Badges and chips" />
+        <div class="mt-8 grid gap-6">
+          <div class="sg-row">
+            <Badge>Default</Badge>
+            <Badge variant="outline">Outline</Badge>
+            <Badge variant="success">Approved</Badge>
+            <Badge variant="warning">Check</Badge>
+            <Badge variant="error">Missing</Badge>
+          </div>
+          <div class="sg-row sg-dark" data-surface="dark">
+            <Badge variant="dark">On dark</Badge>
+          </div>
+          <SpecChips chips={[site.capability.wireRangeLabel, 'LH / RH wind', 'Ground ends']} />
+        </div>
+      </section>
+
+      <!-- Cards -->
+      <section id="cards" class="sg-sec" aria-labelledby="cards-h">
+        <SectionHeader id="cards-h" index={5} eyebrow="Components" title="Cards" />
+        <ul class="mt-8 grid gap-5 sm:grid-cols-2">
+          <li>
+            <Card
+              variant="product"
+              title="Double torsion springs"
+              description="Two opposite-wound coils joined by a centre loop for balanced torque."
+              to="doubleTorsion"
+              diagram="doubleTorsion"
+              chips={[site.capability.wireRangeLabel, 'Centre loop']}
+              headingLevel="h3"
+            />
+          </li>
+          <li>
+            <Card
+              variant="industry"
+              title="Automotive"
+              description="Springs and wire forms for automotive assemblies, made to your drawing."
+              to="automotive"
+              icon="car"
+              headingLevel="h3"
+            />
+          </li>
+          <li>
+            <Card
+              variant="tool"
+              title="Compression spring calculator"
+              description="Rate, stress and solid height from wire, OD, coils and free length."
+              to="compressionCalc"
+              icon="calculator"
+              headingLevel="h3"
+            />
+          </li>
+          <li>
+            <Card
+              variant="article"
+              title="How to measure a spring"
+              description="What to measure, with which tool, and what to send us for a quote."
+              to="measure"
+              eyebrow="Guide"
+              meta="6 min read"
+              headingLevel="h3"
+            />
+          </li>
+        </ul>
+      </section>
+
+      <!-- Data -->
+      <section id="data" class="sg-sec" aria-labelledby="data-h">
+        <SectionHeader id="data-h" index={6} eyebrow="Components" title="Spec table, steps, FAQ" />
+        <SpecTable rows={specRows} caption="Capability snapshot" class="mt-8" />
+        <h3 class="sg-h3 mt-12">How it works</h3>
+        <ProcessSteps steps={steps} class="mt-6" />
+        <h3 class="sg-h3 mt-12">FAQ</h3>
+        <FAQ items={faqs} class="mt-4" />
+      </section>
+
+      <!-- Callouts -->
+      <section id="callouts" class="sg-sec" aria-labelledby="callouts-h">
+        <SectionHeader
+          id="callouts-h"
+          index={7}
+          eyebrow="Components"
+          title="Callouts and trust bar"
+        />
+        <div class="mt-8 grid gap-4">
+          <Callout title="Spring index">
+            Keep the spring index (mean diameter ÷ wire diameter) between about 4 and 12 for easy
+            coiling.
+          </Callout>
+          <Callout variant="warning" title="Development charges">
+            {site.terms.moqNote}
+          </Callout>
+        </div>
+        <div class="mt-8 grid gap-4">
+          <TrustBar />
+          <div class="sg-dark" data-surface="dark">
+            <TrustBar tone="dark" />
+          </div>
+        </div>
+      </section>
+
+      <!-- Drawings -->
+      <section id="drawings" class="sg-sec" aria-labelledby="drawings-h">
+        <SectionHeader
+          id="drawings-h"
+          index={8}
+          eyebrow="Drawings"
+          title="Technical drawings"
+          lede="Inline SVG line art, 1.5 px non-scaling strokes in currentColor. Plain for cards and menus, annotated for heroes and guides."
+        />
+        <ul class="sg-drawings">
+          {drawings.map(({ name, Cmp }) => (
+            <li class="sg-drawing">
+              <div class="sg-fig bp-grid">
+                <Cmp decorative />
+              </div>
+              <div class="sg-fig bp-grid">
+                <Cmp annotated />
+              </div>
+              <p class="sg-token">{name}</p>
+            </li>
+          ))}
+        </ul>
+
+        <h3 id="drawings-variants" class="sg-h3 mt-12">
+          End and hook variants
+        </h3>
+        <ul class="sg-drawings sg-drawings-4">
+          {ends.map((e) => (
+            <li class="sg-drawing">
+              <div class="sg-fig bp-grid">
+                <CompressionSpring ends={e} decorative />
+              </div>
+              <p class="sg-token">Compression · {e}</p>
+            </li>
+          ))}
+          {hooks.map((h) => (
+            <li class="sg-drawing">
+              <div class="sg-fig bp-grid">
+                <ExtensionSpring hook={h} decorative />
+              </div>
+              <p class="sg-token">Extension · {h}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <!-- Forms -->
+      <section id="forms" class="sg-sec" aria-labelledby="forms-h">
+        <SectionHeader
+          id="forms-h"
+          index={9}
+          eyebrow="Components"
+          title="Forms and calculator UI"
+          lede="Shown as static HTML here; on tool pages these become a React island."
+        />
+        <div class="mt-8 grid gap-8 lg:grid-cols-2">
+          <form class="grid gap-5" onsubmit="return false" aria-label="Form controls sample">
+            <div>
+              <label for="sg-name" class="field-label">
+                Your name
+              </label>
+              <input id="sg-name" name="name" class="field-input" autocomplete="name" />
+            </div>
+            <div>
+              <label for="sg-phone" class="field-label">
+                Mobile number
+              </label>
+              <input
+                id="sg-phone"
+                name="phone"
+                type="tel"
+                class="field-input"
+                aria-invalid="true"
+                aria-describedby="sg-phone-err"
+                value="98765"
+              />
+              <p id="sg-phone-err" class="field-error">
+                Enter a 10-digit mobile number.
+              </p>
+            </div>
+            <div>
+              <label for="sg-type" class="field-label">
+                Spring type
+              </label>
+              <select id="sg-type" name="type" class="field-input">
+                <option>Torsion</option>
+                <option>Double torsion</option>
+                <option>Extension</option>
+                <option>Compression</option>
+              </select>
+            </div>
+            <div>
+              <label for="sg-notes" class="field-label">
+                What does the spring do?
+              </label>
+              <textarea
+                id="sg-notes"
+                name="notes"
+                rows="3"
+                class="field-input"
+                aria-describedby="sg-notes-hint"
+              ></textarea>
+              <p id="sg-notes-hint" class="field-hint">
+                Where it is fitted, the load, and the travel.
+              </p>
+            </div>
+            <label class="flex min-h-11 items-center gap-3">
+              <input type="checkbox" class="check" />
+              <span>I can send a sample</span>
+            </label>
+            <div>
+              <label for="sg-disabled" class="field-label">
+                Disabled field
+              </label>
+              <input id="sg-disabled" class="field-input" disabled value="Not editable" />
+            </div>
+          </form>
+
+          <div class="grid content-start gap-5">
+            <div class="grid gap-5 sm:grid-cols-2">
+              <NumberField
+                label="Wire diameter"
+                name="d"
+                value="1.20"
+                unit="mm"
+                hint="0.40–2.50 mm"
+              />
+              <NumberField label="Outer diameter" name="od" value="9.6" unit="mm" />
+              <NumberField
+                label="Active coils"
+                name="n"
+                value="0"
+                error="Enter at least 1 active coil."
+              />
+              <SelectField
+                label="Material"
+                name="material"
+                value="hd"
+                options={[
+                  { value: 'hd', label: 'Hard-drawn spring steel' },
+                  { value: 'ss302', label: 'Stainless steel 302' },
+                ]}
+              />
+            </div>
+            <ResultPanel
+              rows={[
+                { label: 'Spring rate', value: '4.82', unit: 'N/mm', primary: true },
+                { label: 'Spring index', value: '7.0' },
+                { label: 'Solid height', value: '9.60', unit: 'mm' },
+                { label: 'Max. deflection', value: '14.4', unit: 'mm' },
+              ]}
+            >
+              <WarningList
+                warnings={[
+                  { id: 'c', text: 'Spring index above 12 makes coiling harder to control.' },
+                ]}
+              />
+            </ResultPanel>
+            <p class="text-small text-slate">Sample values for layout only.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact" class="sg-sec" aria-labelledby="contact-h">
+        <SectionHeader id="contact-h" index={10} eyebrow="Components" title="Contact blocks" />
+        <ContactLinks class="mt-8" />
+        <div class="mt-8 grid gap-8 lg:grid-cols-2">
+          <CompanyDetails />
+          <div>
+            <h3 class="sg-h3 mb-2">Working hours</h3>
+            <HoursTable />
+          </div>
+        </div>
+        <LocationMap class="mt-8" />
+      </section>
+
+      <!-- Editorial -->
+      <section id="editorial" class="sg-sec" aria-labelledby="editorial-h">
+        <SectionHeader id="editorial-h" index={11} eyebrow="Components" title="Editorial" />
+        <div class="mt-8 grid gap-6">
+          <Breadcrumbs route="measure" />
+          <ArticleMeta published={new Date('2026-09-01')} updated={new Date('2026-09-20')} />
+          <KeyTakeaways
+            items={[
+              'Measure wire diameter with a micrometer or vernier.',
+              'Outer diameter and free length decide most of the fit.',
+              'Send a photo with a ruler if you have no drawing.',
+            ]}
+          />
+          <div class="prose">
+            <h2>Spring index</h2>
+            <p>
+              The <strong>spring index</strong> is the mean coil diameter divided by the wire
+              diameter. A low index is hard to coil; a high index tangles and varies in size.
+            </p>
+            <h3>What to send for a quote</h3>
+            <ul>
+              <li>Wire diameter in mm</li>
+              <li>Outer or inner diameter</li>
+              <li>Free length and number of coils</li>
+            </ul>
+            <table>
+              <thead>
+                <tr>
+                  <th>Term</th>
+                  <th>Symbol</th>
+                  <th>Unit</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Wire diameter</td>
+                  <td>
+                    <code>d</code>
+                  </td>
+                  <td>mm</td>
+                </tr>
+                <tr>
+                  <td>Mean diameter</td>
+                  <td>
+                    <code>D</code>
+                  </td>
+                  <td>mm</td>
+                </tr>
+                <tr>
+                  <td>Spring rate</td>
+                  <td>
+                    <code>k</code>
+                  </td>
+                  <td>N/mm</td>
+                </tr>
+              </tbody>
+            </table>
+            <blockquote>
+              Measure an unused spring where you can. A used spring may have set.
+            </blockquote>
+          </div>
+          <RelatedLinks
+            title="Related"
+            links={[
+              {
+                label: 'Compression springs',
+                to: 'compression',
+                description: 'Ends, materials and sizes.',
+              },
+              { label: 'Spring glossary', to: 'glossary' },
+              { label: 'Spring rate converter', to: 'rateConverter' },
+            ]}
+          />
+        </div>
+      </section>
+
+      <!-- Placeholders -->
+      <section id="placeholders" class="sg-sec" aria-labelledby="placeholders-h">
+        <SectionHeader
+          id="placeholders-h"
+          index={12}
+          eyebrow="Content"
+          title="Placeholders"
+          lede="Both render nothing in production builds."
+        />
+        <div class="mt-8 grid gap-6 sm:grid-cols-2">
+          <PhotoPlaceholder
+            ratio="4 / 3"
+            caption="Coiling machine with a torsion spring in progress"
+          />
+          <div class="grid content-start gap-3">
+            <Todo text="inline marker for an unconfirmed fact." />
+            <Todo block text="block marker for a missing section." />
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="cta">
+    <CTASection id="sg-cta" />
+  </div>
+</PageLayout>
+
+<style>
+  .sg-layout {
+    display: grid;
+    gap: 32px;
+    padding-block: 40px 80px;
+  }
+
+  @media (min-width: 1024px) {
+    .sg-layout {
+      grid-template-columns: 15rem minmax(0, 1fr);
+      gap: 56px;
+    }
+
+    .sg-aside {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+      align-self: start;
+    }
+  }
+
+  .sg-sec {
+    padding-block: 48px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .sg-sec:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .sg-h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-navy-900);
+  }
+
+  .sg-token {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-slate);
+  }
+
+  .sg-swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .sg-swatch {
+    display: grid;
+    gap: 4px;
+  }
+
+  .sg-chip {
+    display: grid;
+    place-items: end start;
+    height: 72px;
+    padding: 8px 10px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    color: var(--color-navy-900);
+    font-weight: 600;
+  }
+
+  .sg-chip-dark {
+    color: var(--color-white);
+    border-color: transparent;
+  }
+
+  .sg-use {
+    font-size: var(--text-small);
+    color: var(--color-ink);
+  }
+
+  .sg-type {
+    display: grid;
+    gap: 6px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed var(--color-border);
+  }
+
+  .sg-heading {
+    color: var(--color-navy-900);
+  }
+
+  .sg-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sg-dark {
+    padding: 20px;
+    border-radius: var(--radius-card);
+    background: var(--color-navy-900);
+  }
+
+  .sg-drawings {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  .sg-drawings-4 {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    margin-top: 16px;
+  }
+
+  .sg-drawing {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+  }
+
+  .sg-fig {
+    padding: 16px;
+    border: 1px solid var(--color-grid);
+    border-radius: var(--radius-card);
+    color: var(--color-navy-900);
+  }
+</style>

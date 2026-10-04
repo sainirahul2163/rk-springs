@@ -1,0 +1,595 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens: CURSOR-BUILD-PROMPT.md §4.
+ * This file is the ONLY place colour values may appear. The palette may change once the
+ * client's logo arrives, so components must use these tokens via utilities or var(--color-*).
+ */
+@theme {
+  --color-*: initial;
+  --color-navy-950: #071a33;
+  --color-navy-900: #0b2545;
+  --color-blue-800: #123a6b;
+  --color-blue-700: #1d4e89;
+  --color-action-600: #1a56db;
+  --color-action-700: #1e40af;
+  --color-blue-400: #6ea8fe;
+  --color-blue-300: #9cc3f5;
+  --color-blue-100: #dce9f8;
+  --color-blue-50: #eef4fb;
+  --color-grid: #c9daf0;
+  --color-ink: #1f2933;
+  --color-slate: #52606d;
+  --color-border-strong: #7b8794;
+  --color-border: #e4e7eb;
+  --color-surface: #f5f7fa;
+  --color-white: #ffffff;
+  --color-success: #1b7f3b;
+  --color-warning: #b45309;
+  --color-error: #b42318;
+  --color-whatsapp: #25d366;
+
+  --font-sans: 'IBM Plex Sans', 'Plex Sans Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --text-h1: clamp(2rem, 1.35rem + 2.6vw, 3.5rem);
+  --text-h1--line-height: 1.1;
+  --text-h1--letter-spacing: -0.015em;
+  --text-h1--font-weight: 600;
+  --text-h2: clamp(1.625rem, 1.3rem + 1.3vw, 2.5rem);
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.01em;
+  --text-h2--font-weight: 600;
+  --text-h3: 1.375rem;
+  --text-h3--line-height: 1.3;
+  --text-h3--font-weight: 600;
+  --text-lead: 1.1875rem;
+  --text-lead--line-height: 1.6;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-eyebrow: 0.8125rem;
+  --text-eyebrow--line-height: 1.4;
+  --text-eyebrow--letter-spacing: 0.08em;
+
+  --radius-control: 4px;
+  --radius-card: 8px;
+
+  --breakpoint-nav: 75rem;
+
+  --shadow-header: 0 1px 10px color-mix(in srgb, var(--color-navy-950) 9%, transparent);
+  --shadow-menu: 0 12px 32px color-mix(in srgb, var(--color-navy-950) 14%, transparent);
+
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Metric-matched fallback keeps layout stable while Plex Sans loads. */
+@font-face {
+  font-family: 'Plex Sans Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Helvetica');
+  size-adjust: 99%;
+  ascent-override: 102%;
+  descent-override: 26%;
+  line-gap-override: 0%;
+}
+
+/* Heading weight only on the first paint. Body 400 loads after `load` (fonts-extra). */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-display: optional;
+  font-weight: 600;
+  src: url('@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2') format('woff2');
+}
+
+:root {
+  --page-pad: 20px;
+  --section-y: 64px;
+  --header-h: 64px;
+  --mobile-bar-h: 0px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-pad: 32px;
+    --section-y: 96px;
+    --header-h: 72px;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --page-pad: 40px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  :root {
+    --mobile-bar-h: 64px;
+  }
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    background: var(--color-white);
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + 16px);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-navy-900);
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-action-600);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  [data-surface='dark'] :focus-visible {
+    outline-color: var(--color-blue-400);
+  }
+
+  ::selection {
+    background: var(--color-blue-100);
+    color: var(--color-navy-900);
+  }
+
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Layout utilities ---------- */
+
+@utility container-page {
+  width: 100%;
+  max-width: calc(77.5rem + 2 * var(--page-pad));
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+}
+
+@utility section-y {
+  padding-block: var(--section-y);
+}
+
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-eyebrow);
+  line-height: var(--text-eyebrow--line-height);
+  letter-spacing: var(--text-eyebrow--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Body-text links are always underlined (§4.1). */
+@utility link {
+  color: var(--color-blue-700);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  transition:
+    text-decoration-thickness 150ms var(--ease-out),
+    color 150ms var(--ease-out);
+  &:hover {
+    color: var(--color-action-700);
+    text-decoration-thickness: 2px;
+  }
+}
+
+/*
+ * Blueprint grid (§4.4.1): 24 px minor / 120 px major lines, fading at the edges.
+ * Decorative only; never place behind long body text.
+ */
+@utility bp-grid {
+  background-color: var(--color-white);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-grid) 85%, transparent) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-grid) 85%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(color-mix(in srgb, var(--color-grid) 45%, transparent) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-grid) 45%, transparent) 1px,
+      transparent 1px
+    );
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: -1px -1px;
+}
+
+@utility bp-grid-fade {
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, black 40%, transparent 100%);
+}
+
+@utility bp-grid-dark {
+  background-color: var(--color-navy-900);
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--color-blue-400) 16%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-blue-400) 16%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(color-mix(in srgb, var(--color-blue-400) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-blue-400) 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: -1px -1px;
+}
+
+/* ---------- Technical drawing primitives ---------- */
+
+@layer components {
+  .drawing {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .drawing .w {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .drawing .w-back {
+    opacity: 0.38;
+  }
+
+  .drawing .c {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 0.75;
+    stroke-dasharray: 6 3 1.5 3;
+    opacity: 0.5;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .drawing .dim {
+    fill: none;
+    stroke: var(--dim-color, var(--color-action-600));
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .drawing .dim-head {
+    fill: var(--dim-color, var(--color-action-600));
+    stroke: none;
+  }
+
+  .drawing .dim-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    fill: var(--dim-label-color, var(--color-navy-900));
+    letter-spacing: 0.02em;
+  }
+
+  .drawing .dim-label-bg {
+    fill: var(--dim-label-bg, var(--color-white));
+  }
+
+  /* Form controls (shared by RFQ and calculators). */
+  .field-label {
+    display: block;
+    font-weight: 500;
+    font-size: 0.9375rem;
+    color: var(--color-navy-900);
+    margin-bottom: 6px;
+  }
+
+  .field-hint {
+    font-size: var(--text-small);
+    color: var(--color-slate);
+    margin-top: 6px;
+  }
+
+  .field-input {
+    display: block;
+    width: 100%;
+    min-height: 44px;
+    padding: 9px 12px;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--color-ink);
+    background: var(--color-white);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-control);
+    transition:
+      border-color 150ms var(--ease-out),
+      box-shadow 150ms var(--ease-out);
+  }
+
+  .field-input:hover {
+    border-color: var(--color-navy-900);
+  }
+
+  .field-input:focus-visible {
+    outline: 2px solid var(--color-action-600);
+    outline-offset: 0;
+    border-color: var(--color-action-600);
+  }
+
+  .field-input[aria-invalid='true'] {
+    border-color: var(--color-error);
+    border-width: 2px;
+  }
+
+  .field-input:disabled {
+    background: var(--color-surface);
+    color: var(--color-slate);
+    cursor: not-allowed;
+  }
+
+  select.field-input {
+    appearance: none;
+    padding-right: 40px;
+    background-image:
+      linear-gradient(45deg, transparent 50%, var(--color-navy-900) 50%),
+      linear-gradient(135deg, var(--color-navy-900) 50%, transparent 50%);
+    background-position:
+      calc(100% - 20px) 50%,
+      calc(100% - 15px) 50%;
+    background-size:
+      5px 5px,
+      5px 5px;
+    background-repeat: no-repeat;
+  }
+
+  .field-error {
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+    font-size: var(--text-small);
+    color: var(--color-error);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  .check {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-action-600);
+    flex: none;
+    margin-top: 3px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 20px;
+    border-radius: var(--radius-control);
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  .btn-primary {
+    background: var(--color-action-600);
+    color: var(--color-white);
+  }
+
+  .btn-primary:hover {
+    background: var(--color-action-700);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    border: 1px solid var(--color-blue-700);
+    background: var(--color-white);
+    color: var(--color-blue-700);
+  }
+
+  .btn-secondary:hover {
+    background: var(--color-blue-50);
+    border-color: var(--color-action-700);
+    color: var(--color-action-700);
+  }
+
+  .rfq-sketch {
+    padding: 12px 16px;
+    background: var(--color-blue-50);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    color: var(--color-navy-900);
+    max-width: 20rem;
+  }
+
+  .rfq-sketch .drawing {
+    width: 160px;
+  }
+}
+
+/* ---------- Prose (long-form content) ---------- */
+
+@layer components {
+  .prose {
+    max-width: 70ch;
+    color: var(--color-ink);
+  }
+
+  .prose > * + * {
+    margin-top: 1.1em;
+  }
+
+  .prose h2 {
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    letter-spacing: var(--text-h2--letter-spacing);
+    margin-top: 2em;
+  }
+
+  .prose h3 {
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    color: var(--color-blue-700);
+    margin-top: 1.6em;
+  }
+
+  .prose h2 + *,
+  .prose h3 + * {
+    margin-top: 0.6em;
+  }
+
+  .prose a {
+    color: var(--color-blue-700);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .prose a:hover {
+    color: var(--color-action-700);
+    text-decoration-thickness: 2px;
+  }
+
+  .prose ul,
+  .prose ol {
+    padding-left: 1.4em;
+  }
+
+  .prose ul {
+    list-style: square;
+  }
+
+  .prose ol {
+    list-style: decimal;
+  }
+
+  .prose li + li {
+    margin-top: 0.4em;
+  }
+
+  .prose li::marker {
+    color: var(--color-blue-700);
+  }
+
+  .prose strong {
+    font-weight: 600;
+    color: var(--color-navy-900);
+  }
+
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-blue-50);
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    padding: 0.05em 0.35em;
+  }
+
+  .prose blockquote {
+    border-left: 3px solid var(--color-blue-700);
+    padding-left: 1em;
+    color: var(--color-slate);
+  }
+
+  .prose hr {
+    border: 0;
+    border-top: 1px solid var(--color-border);
+    margin-block: 2em;
+  }
+
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .prose th,
+  .prose td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--color-border);
+    vertical-align: top;
+  }
+
+  .prose thead th {
+    font-family: var(--font-mono);
+    font-size: var(--text-eyebrow);
+    letter-spacing: var(--text-eyebrow--letter-spacing);
+    text-transform: uppercase;
+    color: var(--color-slate);
+    font-weight: 500;
+    border-bottom: 1px solid var(--color-border-strong);
+  }
+
+  .prose tbody tr:nth-child(even) {
+    background: var(--color-blue-50);
+  }
+
+  .prose figure figcaption {
+    font-size: var(--text-small);
+    color: var(--color-slate);
+    margin-top: 8px;
+  }
+}

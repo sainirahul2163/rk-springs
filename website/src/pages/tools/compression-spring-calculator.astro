@@ -1,0 +1,61 @@
+---
+import { CompressionCalculator } from '@/components/tools/CompressionCalculator';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
+import { compressionCalcFaqs } from '@/data/faqs';
+import { site } from '@/data/site';
+import ToolLayout from '@/layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  route="compressionCalc"
+  title="Compression Spring Calculator"
+  description="Rate, Wahl stress and solid height from wire, OD, coils and free length. Metric. Indicative estimate only."
+  h1="Compression spring calculator"
+  lede="Rate k, solid height and Wahl shear stress from wire, outer diameter, free length, coils and end type. Metric units."
+  context="a compression spring"
+  faqs={compressionCalcFaqs}
+>
+  <CompressionCalculator client:idle search={Astro.url.search} />
+
+  <Fragment slot="method">
+    <h2>Method</h2>
+    <p>
+      Mean diameter <strong>D = OD − d</strong> (or ID + d). Spring index <strong>C = D / d</strong>
+      . Active coils: closed or closed-and-ground, Nt − 2; open, Nt; open-and-ground, Nt − 1.
+    </p>
+    <p>
+      Rate <strong>k = G · d⁴ / (8 · D³ · Na)</strong> in N/mm. Load{' '}
+      <strong>F = k · (L0 − L)</strong>. Shear stress uses the Wahl factor Kw = (4C − 1)/(4C − 4) +
+      0.615/C.
+    </p>
+    <p>
+      Solid height is Nt · d when the ends are ground, and (Nt + 1) · d when they are not. G is a
+      typical published shear modulus (SMI / Lee Spring tables), labelled “typical” in the material
+      list. Wire outside {site.capability.wireRangeLabel} is flagged because that is our standard
+      range.
+    </p>
+  </Fragment>
+
+  <RelatedLinks
+    slot="related"
+    class="mt-12"
+    title="Related"
+    links={[
+      {
+        to: 'compression',
+        label: 'Compression springs',
+        description: 'What we make, and what to put on the drawing.',
+      },
+      {
+        to: 'extensionCalc',
+        label: 'Extension spring calculator',
+        description: 'Rate for a close-wound tension spring.',
+      },
+      {
+        to: 'rateConverter',
+        label: 'Spring rate converter',
+        description: 'N/mm, kgf/mm and lbf/in.',
+      },
+    ]}
+  />
+</ToolLayout>

@@ -1,0 +1,71 @@
+---
+import Todo from '@/components/ui/Todo.astro';
+import { site } from '@/data/site';
+import CapabilityLayout from '@/layouts/CapabilityLayout.astro';
+
+const faqs = [
+  {
+    q: 'Can you make a spring from a sample?',
+    a: 'Yes. Send an unused spring if you still have one, and tell us where it is used. We measure it and quote within 24 hours.',
+  },
+  {
+    q: 'What if I only have a worn spring?',
+    a: 'We can still read wire, OD and the end type. Free length and load will be short if the spring has taken set. Say so, and give the pocket it has to fill.',
+  },
+];
+---
+
+<CapabilityLayout
+  route="reverseEngineering"
+  title="Spring from a Sample"
+  description="No drawing? Send an unused spring. We reverse-engineer it and quote within 24 hours. Wire Ø 0.40–2.50 mm, Talawade, Pune."
+  h1="Reverse engineering from a sample"
+  lede="No drawing is fine. Send the unused spring if you still have one. We measure it and quote within 24 hours."
+  context="a spring from a sample"
+  faqs={faqs}
+  related={[
+    {
+      to: 'measure',
+      label: 'How to measure a spring',
+      description: 'What to record if you cannot send the part yet.',
+    },
+    {
+      to: 'prototype',
+      label: 'Prototype development',
+      description: 'Sample first, then the bulk lot.',
+    },
+    { to: 'rfq', label: 'Request a quote', description: 'Tick “I will send a sample”.' },
+  ]}
+>
+  <h2>What it is</h2>
+  <p>
+    Copying a spring from a physical part when there is no drawing. We do this. It is a confirmed
+    capability, not a marketing line.
+  </p>
+  <p>
+    <Todo text="how samples are measured on this floor (tools actually used)." />
+  </p>
+
+  <h2>How it works</h2>
+  <p>
+    You send the spring — unused if you have one — and say where it lives and what it has to do. We
+    take the dimensions we need to coil a replacement, quote within 24 hours, and make a development
+    piece for you to try. The bulk lot waits on that check.
+  </p>
+  <p>
+    A used spring has often taken set. Copying its free length blindly will sit short. Tell us the
+    pocket or the load you still need.
+  </p>
+
+  <h2>When to use it</h2>
+  <p>
+    A broken instrument spring, an MCB part with no drawing, a furniture mechanism whose maker is
+    gone. If the wire is inside {site.capability.wireRangeLabel}, it is regular work.
+  </p>
+
+  <h2>Limits</h2>
+  <p>
+    We do not claim a lab or a scan. We do not reverse-engineer rolling-shutter or heavy springs.
+    Usual minimum {site.terms.moq}, with development charges on a smaller run.
+  </p>
+</CapabilityLayout>

@@ -1,0 +1,87 @@
+---
+/**
+ * Temporary text wordmark with a small coil glyph.
+ * TODO(client): replace with the real logo once the file arrives.
+ */
+import { site } from '@/data/site';
+
+interface Props {
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { tone = 'light', class: className } = Astro.props;
+---
+
+<span class:list={['wm', `wm-${tone}`, className]}>
+  <svg class="wm-glyph" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="4" class="wm-frame"></rect>
+    <path class="wm-coil" d="M6 21c2-9 4-9 5 0s3 9 5 0 3-9 5 0 3 9 5 0M4 26h24"></path>
+  </svg>
+  <span class="wm-text" aria-hidden="true">
+    <span class="wm-a">RK Springs</span>
+    <span class="wm-b">&amp; Wireforms</span>
+  </span>
+  <span class="sr-only">{site.brand}</span>
+</span>
+
+<style>
+  .wm {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    line-height: 1;
+  }
+
+  .wm-glyph {
+    width: 32px;
+    height: 32px;
+    flex: none;
+  }
+
+  .wm-frame {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+
+  .wm-coil {
+    fill: none;
+    stroke: var(--wm-accent);
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .wm-text {
+    display: inline-flex;
+    flex-wrap: wrap;
+    column-gap: 0.3em;
+    font-weight: 600;
+    font-size: 1.0625rem;
+    letter-spacing: -0.01em;
+  }
+
+  .wm-light {
+    color: var(--color-navy-900);
+    --wm-accent: var(--color-action-600);
+  }
+
+  .wm-dark {
+    color: var(--color-white);
+    --wm-accent: var(--color-blue-400);
+  }
+
+  .wm-b {
+    font-weight: 500;
+    color: var(--wm-sub, inherit);
+  }
+
+  .wm-light .wm-b {
+    --wm-sub: var(--color-blue-700);
+  }
+
+  .wm-dark .wm-b {
+    --wm-sub: var(--color-blue-300);
+  }
+</style>

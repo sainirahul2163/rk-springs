@@ -1,0 +1,323 @@
+---
+import { headerNav } from '@/data/navigation';
+import { linkTo } from '@/data/routes';
+import { primaryPhone } from '@/data/site';
+import { quoteHref, telHref } from '@/lib/contact';
+import Button from '../ui/Button.astro';
+import Icon from '../ui/Icon.astro';
+import SmartLink from '../ui/SmartLink.astro';
+import MegaMenu from './MegaMenu.astro';
+import MobileNav from './MobileNav.astro';
+import Wordmark from './Wordmark.astro';
+
+const home = linkTo('home') ?? '/';
+const path = Astro.url.pathname;
+const isActive = (href: string | null) => href !== null && href !== '/' && path.startsWith(href);
+---
+
+<header class="site-header" data-site-header>
+  <div class="container-page hdr">
+    <a href={home} class="hdr-brand" aria-label="RK Springs & Wireforms, home">
+      <Wordmark />
+    </a>
+
+    <nav aria-label="Main" class="hdr-nav">
+      <ul class="hdr-list">
+        {headerNav
+          .filter((item) => item.mega || linkTo(item.route))
+          .map((item) =>
+            item.mega ? (
+              <li class="hdr-mega" data-menu-root>
+                <button
+                  type="button"
+                  class="hdr-link"
+                  aria-expanded="false"
+                  aria-controls="mega-springs"
+                  data-menu-button
+                >
+                  {item.label}
+                  <Icon name="chevron-down" size={16} class="hdr-chev" />
+                </button>
+                <MegaMenu id="mega-springs" />
+              </li>
+            ) : (
+              <li>
+                <SmartLink
+                  to={item.route}
+                  class={isActive(linkTo(item.route)) ? 'hdr-link is-active' : 'hdr-link'}
+                >
+                  {item.label}
+                </SmartLink>
+              </li>
+            ),
+          )}
+      </ul>
+    </nav>
+
+    <div class="hdr-actions">
+      <a
+        href={telHref()}
+        class="hdr-phone"
+        data-event="call_click"
+        aria-label={`Call ${primaryPhone.display}`}
+      >
+        <Icon name="phone" size={18} />
+        <span class="hdr-phone-num tabular">{primaryPhone.display}</span>
+      </a>
+      <Button href={quoteHref()} size="sm" class="hdr-cta">
+        Get a quote
+      </Button>
+      <button
+        type="button"
+        class="hdr-burger"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        data-menu-button
+        data-modal
+      >
+        <span class="burger-open">
+          <Icon name="menu" size={24} />
+        </span>
+        <span class="burger-close">
+          <Icon name="x" size={24} />
+        </span>
+        <span class="sr-only">Menu</span>
+      </button>
+    </div>
+  </div>
+  <MobileNav id="mobile-nav" />
+</header>
+
+<script is:inline>
+  (() => {
+    const buttons = document.querySelectorAll('[data-menu-button]');
+    const panelOf = (b) => document.getElementById(b.getAttribute('aria-controls'));
+    const setOpen = (b, open) => {
+      b.setAttribute('aria-expanded', String(open));
+      panelOf(b).hidden = !open;
+      if (b.hasAttribute('data-modal')) document.documentElement.classList.toggle('nav-open', open);
+    };
+    const closeAll = (except) =>
+      buttons.forEach(
+        (b) => b !== except && b.getAttribute('aria-expanded') === 'true' && setOpen(b, false),
+      );
+    buttons.forEach((b) => {
+      b.addEventListener('click', () => {
+        const open = b.getAttribute('aria-expanded') !== 'true';
+        closeAll(b);
+        setOpen(b, open);
+      });
+      const root = b.closest('[data-menu-root]');
+      if (root) {
+        root.addEventListener('focusout', (e) => {
+          if (!root.contains(e.relatedTarget)) setOpen(b, false);
+        });
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      buttons.forEach((b) => {
+        if (b.getAttribute('aria-expanded') === 'true') {
+          setOpen(b, false);
+          b.focus();
+        }
+      });
+    });
+    document.addEventListener('click', (e) => {
+      buttons.forEach((b) => {
+        const root = b.closest('[data-menu-root]');
+        if (root && !root.contains(e.target) && b.getAttribute('aria-expanded') === 'true')
+          setOpen(b, false);
+      });
+    });
+    matchMedia('(min-width: 75rem)').addEventListener('change', () => closeAll());
+  })();
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--color-white);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .site-header {
+      animation: header-lift linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 48px;
+    }
+
+    @keyframes header-lift {
+      to {
+        box-shadow: var(--shadow-header);
+      }
+    }
+  }
+
+  .hdr {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: var(--header-h);
+  }
+
+  .hdr-brand {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-right: auto;
+  }
+
+  .hdr-nav {
+    display: none;
+  }
+
+  .hdr-list {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .hdr-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 44px;
+    padding-inline: 11px;
+    border-radius: var(--radius-control);
+    font-size: 0.9688rem;
+    font-weight: 500;
+    color: var(--color-navy-900);
+    cursor: pointer;
+    transition:
+      background-color 150ms var(--ease-out),
+      color 150ms var(--ease-out);
+  }
+
+  a.hdr-link:hover,
+  button.hdr-link:hover,
+  .hdr-link[aria-expanded='true'] {
+    background: var(--color-blue-50);
+    color: var(--color-action-700);
+  }
+
+  .hdr-link.is-active,
+  .hdr-link[aria-current='page'] {
+    color: var(--color-action-700);
+    box-shadow: inset 0 -2px 0 var(--color-action-600);
+    border-radius: 0;
+  }
+
+  .hdr-link :global(.hdr-chev) {
+    transition: transform 200ms var(--ease-out);
+  }
+
+  .hdr-link[aria-expanded='true'] :global(.hdr-chev) {
+    transform: rotate(180deg);
+  }
+
+  .hdr-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hdr-phone {
+    display: none;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding-inline: 8px;
+    color: var(--color-navy-900);
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    border-radius: var(--radius-control);
+  }
+
+  .hdr-phone:hover {
+    color: var(--color-action-700);
+    background: var(--color-blue-50);
+  }
+
+  .hdr-phone :global(svg) {
+    color: var(--color-blue-700);
+  }
+
+  .hdr-cta {
+    display: none !important;
+  }
+
+  .hdr-burger {
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-right: -8px;
+    border-radius: var(--radius-control);
+    color: var(--color-navy-900);
+    cursor: pointer;
+  }
+
+  .hdr-burger:hover {
+    background: var(--color-blue-50);
+  }
+
+  .burger-close {
+    display: none;
+  }
+
+  .hdr-burger[aria-expanded='true'] .burger-open {
+    display: none;
+  }
+
+  .hdr-burger[aria-expanded='true'] .burger-close {
+    display: inline;
+  }
+
+  @media (min-width: 640px) {
+    .hdr-cta {
+      display: inline-flex !important;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .hdr-phone {
+      display: inline-flex;
+    }
+  }
+
+  @media (min-width: 75rem) {
+    .hdr-nav {
+      display: block;
+      margin-right: auto;
+    }
+
+    .hdr-burger {
+      display: none;
+    }
+
+    .hdr-brand {
+      margin-right: 8px;
+    }
+
+    /* Number waits until 1440 so the seven nav items stay on one line. */
+    .hdr-phone-num {
+      display: none;
+    }
+  }
+
+  @media (min-width: 90rem) {
+    .hdr-phone-num {
+      display: inline;
+    }
+  }
+
+  :global(html.nav-open) {
+    overflow: hidden;
+  }
+</style>

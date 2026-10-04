@@ -1,0 +1,105 @@
+---
+import { site } from '@/data/site';
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+
+const published = new Date('2026-10-04');
+const faqs = [
+  {
+    q: 'What if I have no drawing?',
+    a: 'Measure the points below, photograph the spring next to a ruler, and send both. Or post an unused spring and we will measure it.',
+  },
+  {
+    q: 'Should I measure a used spring?',
+    a: 'You can, but say that it is used. Free length and load are often short after set. An unused spare is better.',
+  },
+];
+---
+
+<ArticleLayout
+  route="measure"
+  title="How to Measure a Spring"
+  description="How to measure wire, OD, free length, coils and ends so we can quote. Metric. Send an unused sample if you can."
+  h1="How to measure a spring"
+  lede="Five numbers get most quotes moving: wire, outer diameter, free length, coils, and the end or hook type. Metric first."
+  published={published}
+  context="a measured spring"
+  takeaways={[
+    'Measure wire diameter, outer diameter, free length and coil count.',
+    'Name the ends, hooks or legs. Photograph the spring next to a ruler.',
+    'An unused sample beats a used one. We reverse-engineer from a sample if you send it.',
+  ]}
+  toc={[
+    { id: 'tools', text: 'What you need' },
+    { id: 'all', text: 'Every spring' },
+    { id: 'by-type', text: 'By type' },
+    { id: 'send', text: 'What to send' },
+    { id: 'questions', text: 'Questions' },
+  ]}
+  faqs={faqs}
+  related={[
+    {
+      to: 'reverseEngineering',
+      label: 'Reverse engineering',
+      description: 'Send the sample instead.',
+    },
+    {
+      to: 'compressionCalc',
+      label: 'Compression spring calculator',
+      description: 'First-pass rate from those numbers.',
+    },
+    { to: 'rfq', label: 'Request a quote', description: 'Upload the photo or the drawing.' },
+  ]}
+>
+  <h2 id="tools">What you need</h2>
+  <p>
+    A ruler marked in millimetres, and a way to read wire diameter — a digital caliper is enough for
+    a first pass. We do not publish a list of instruments used on this floor.
+  </p>
+
+  <h2 id="all">Every spring</h2>
+  <ol>
+    <li>
+      <strong>Wire diameter d.</strong> Measure across the wire, not along it. Rate changes with the
+      fourth power of d, so this number matters most.
+    </li>
+    <li>
+      <strong>Outer diameter OD.</strong> Across the coil, outside to outside. If the spring works
+      in a hole or over a rod, write that diameter as well.
+    </li>
+    <li>
+      <strong>Free length.</strong> Unloaded. For an extension spring, length inside the hooks. For
+      a torsion spring, the free angle between the legs.
+    </li>
+    <li>
+      <strong>Coils.</strong> Count every coil you can see. Say whether that is total coils or
+      active coils if you know the difference.
+    </li>
+    <li>
+      <strong>Ends.</strong> Open, closed, closed and ground; hook type; leg shape and wind
+      direction.
+    </li>
+  </ol>
+
+  <h2 id="by-type">By type</h2>
+  <p>
+    <strong>Compression.</strong> Add solid height if you can close it by hand without force, and
+    one working length with the load you need there. See the{' '}
+    <a href="/springs/compression-springs/">compression spring</a> page.
+  </p>
+  <p>
+    <strong>Extension.</strong> Length inside hooks, hook type and whether the openings face the
+    same way. Initial tension if you know it. See{' '}
+    <a href="/resources/extension-spring-end-types/">end types</a>.
+  </p>
+  <p>
+    <strong>Torsion / double torsion.</strong> Both leg lengths and shapes, free angle, working
+    angle, shaft diameter, wind direction, and the centre-loop width on a double torsion spring.
+  </p>
+
+  <h2 id="send">What to send</h2>
+  <p>
+    A photo next to a ruler, the numbers above, the quantity, and the material if you know it. Or
+    post an unused spring. We measure it and quote within 24 hours. Usual minimum {site.terms.moq}.
+  </p>
+  <p>Wire outside {site.capability.wireRangeLabel} is outside this shop.</p>
+</ArticleLayout>

@@ -1,0 +1,67 @@
+---
+import Todo from '@/components/ui/Todo.astro';
+import { site } from '@/data/site';
+import IndustryLayout from '@/layouts/IndustryLayout.astro';
+
+const faqs = [
+  {
+    q: 'How small a wire can you coil?',
+    a: 'Down to 0.40 mm. That is the bottom of our standard range. Below that, ask — it is outside what we treat as regular work.',
+  },
+  {
+    q: 'Can you copy an instrument spring from a sample?',
+    a: 'Yes. Send an unused spring if you still have one. We measure it and quote within 24 hours.',
+  },
+  {
+    q: 'What is the minimum order?',
+    a: `Usually ${site.terms.moq}. Smaller development runs are charged.`,
+  },
+];
+---
+
+<IndustryLayout
+  route="instrumentation"
+  title="Instrumentation Springs"
+  description="Light springs for instruments and control gear, wire Ø 0.40–2.50 mm. Made to drawing or sample in Talawade, Pune."
+  h1="Instrumentation springs"
+  lede="Light, precise springs for instruments and control gear. The same 0.40–2.50 mm wire we use on the rest of the floor."
+  context="instrumentation springs"
+  faqs={faqs}
+  related={[
+    { to: 'extension', label: 'Tension / extension springs', description: 'Returns and floats.' },
+    { to: 'torsion', label: 'Torsion springs', description: 'Levers and resets.' },
+    {
+      to: 'reverseEngineering',
+      label: 'Reverse engineering',
+      description: 'From a sample when there is no drawing.',
+    },
+  ]}
+>
+  <h2>Light springs, tight pockets</h2>
+  <p>
+    Instrumentation is one of the industries we serve. The parts are small: a return on a pointer, a
+    bias on a switch, a light compression spring in a sensor housing. Wire toward the bottom of our{' '}
+    {site.capability.wireRangeLabel} range is common.
+  </p>
+  <p>
+    Level and flow instruments are a typical home for these springs.
+    <Todo text="permission to describe a customer anonymously (for example a Pune maker of level and flow instruments)." />
+  </p>
+
+  <h2>What to send</h2>
+  <p>
+    A dimensioned drawing is best. If you only have the old spring, send an unused one — a used
+    instrument spring has often taken set, and copying that length will sit short in the assembly.
+    Say where it lives (oil, outdoor, a sealed box) so we can pick hard-drawn or stainless.
+  </p>
+  <p>
+    We do not claim a load tester or a lab. The quote is from the drawing or the sample. You try the
+    development piece in the instrument before we run the bulk quantity.
+  </p>
+
+  <h2>Limits</h2>
+  <p>
+    Wire {site.capability.wireRangeLabel}. Usual minimum {site.terms.moq}. Quote within 24 hours.
+    Ex-works Talawade. Across India; no export.
+  </p>
+</IndustryLayout>

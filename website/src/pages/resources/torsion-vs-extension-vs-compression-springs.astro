@@ -1,0 +1,91 @@
+---
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+
+const published = new Date('2026-10-04');
+const faqs = [
+  {
+    q: 'How do I tell which spring I have?',
+    a: 'If it pushes when you shorten it, compression. If it pulls, extension. If the legs twist around the coil, torsion. Two coils joined by a loop is double torsion.',
+  },
+  {
+    q: 'Can one spring do two of these jobs?',
+    a: 'Rarely well. Use the type that matches the motion. A conical spring is still a compression spring with a taper.',
+  },
+];
+---
+
+<ArticleLayout
+  route="typesCompared"
+  title="Torsion vs Extension"
+  description="Torsion, extension and compression springs compared: push, pull or twist, what to put on the drawing, and which page to open next."
+  h1="Torsion vs extension vs compression springs"
+  lede="The assembly either pushes, pulls or twists. Pick the spring that does that one thing. The drawing still has to give wire, size and load."
+  published={published}
+  context="the right spring type"
+  takeaways={[
+    'Compression pushes, extension pulls, torsion twists.',
+    'Double torsion is two opposite coils with a centre loop.',
+    'Wire, OD, free length or free angle, and a load get a quote moving.',
+  ]}
+  toc={[
+    { id: 'which', text: 'Which motion?' },
+    { id: 'compression', text: 'Compression' },
+    { id: 'extension', text: 'Extension' },
+    { id: 'torsion', text: 'Torsion and double torsion' },
+    { id: 'questions', text: 'Questions' },
+  ]}
+  faqs={faqs}
+  related={[
+    { to: 'springs', label: 'Springs we make', description: 'The catalogue, by type.' },
+    {
+      to: 'whatIsDoubleTorsion',
+      label: 'What is a double torsion spring?',
+      description: 'Two coils, one loop.',
+    },
+    {
+      to: 'measure',
+      label: 'How to measure a spring',
+      description: 'Numbers to send with the photo.',
+    },
+  ]}
+>
+  <h2 id="which">Which motion?</h2>
+  <p>
+    If the part <strong>shortens and must push back</strong>, you want a{' '}
+    <a href="/springs/compression-springs/">compression spring</a> — or a{' '}
+    <a href="/springs/conical-springs/">conical spring</a> when solid height has to be very short.
+  </p>
+  <p>
+    If the part <strong>lengthens and must pull back</strong>, you want a{' '}
+    <a href="/springs/extension-springs/">tension / extension spring</a>. Specify the hooks.
+  </p>
+  <p>
+    If the part <strong>rotates around a pin</strong>, you want a{' '}
+    <a href="/springs/torsion-springs/">torsion spring</a>. If both sides of a hinge must push
+    together, that is usually a <a href="/springs/double-torsion-springs/">double torsion spring</a>
+    .
+  </p>
+
+  <h2 id="compression">Compression</h2>
+  <p>
+    Open-coiled. Rate k = G · d⁴ / (8 · D³ · Na). Watch solid height and buckling (free length more
+    than about four times the mean diameter). Ends: open, closed, or closed and ground.
+  </p>
+
+  <h2 id="extension">Extension</h2>
+  <p>
+    Close-wound. The body does not start to open until the pull beats initial tension. The hook is
+    bent tighter than the body, so it usually fails first. See{' '}
+    <a href="/resources/extension-spring-end-types/">end types</a>.
+  </p>
+
+  <h2 id="torsion">Torsion and double torsion</h2>
+  <p>
+    Legs rotate around the coil. Wind direction must match the load or the spring unwinds the wrong
+    way. A double torsion spring joins two opposite-wound coils with a centre loop so the hinge sees
+    balanced torque. That is the largest share of what leaves this shop.
+  </p>
+  <p>
+    Clips, hooks and pins that are not a helix are <a href="/wire-forms/">wire forms</a>.
+  </p>
+</ArticleLayout>

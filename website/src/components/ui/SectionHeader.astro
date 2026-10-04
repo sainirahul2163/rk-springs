@@ -1,0 +1,54 @@
+---
+/** Mono index eyebrow (e.g. "01 · PRODUCTS") + heading + optional lede. */
+interface Props {
+  title: string;
+  eyebrow?: string;
+  index?: number;
+  lede?: string;
+  id?: string;
+  as?: 'h1' | 'h2' | 'h3';
+  tone?: 'light' | 'dark';
+  align?: 'left' | 'center';
+  class?: string;
+}
+
+const {
+  title,
+  eyebrow,
+  index,
+  lede,
+  id,
+  as: Tag = 'h2',
+  tone = 'light',
+  align = 'left',
+  class: className,
+} = Astro.props;
+const label = [index !== undefined ? String(index).padStart(2, '0') : null, eyebrow]
+  .filter(Boolean)
+  .join(' · ');
+const sizes = { h1: 'text-h1', h2: 'text-h2', h3: 'text-h3' } as const;
+---
+
+<header class:list={['max-w-[46rem]', align === 'center' && 'mx-auto text-center', className]}>
+  {label && (
+    <p
+      class:list={[
+        'eyebrow mb-3 flex items-center gap-3',
+        tone === 'dark' ? 'text-blue-300' : 'text-blue-700',
+        align === 'center' && 'justify-center',
+      ]}
+    >
+      <span
+        aria-hidden="true"
+        class:list={['h-px w-8', tone === 'dark' ? 'bg-blue-400' : 'bg-action-600']}
+      />
+      {label}
+    </p>
+  )}
+  <Tag id={id} class:list={[sizes[Tag], tone === 'dark' && 'text-white']}>
+    {title}
+  </Tag>
+  {lede && (
+    <p class:list={['mt-4 text-lead', tone === 'dark' ? 'text-blue-300' : 'text-slate']}>{lede}</p>
+  )}
+</header>

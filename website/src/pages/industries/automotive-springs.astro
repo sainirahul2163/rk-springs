@@ -1,0 +1,73 @@
+---
+import Todo from '@/components/ui/Todo.astro';
+import { site } from '@/data/site';
+import IndustryLayout from '@/layouts/IndustryLayout.astro';
+
+const faqs = [
+  {
+    q: 'Do you make suspension or valve springs?',
+    a: 'No. Those use wire above our 2.50 mm limit. Work in this shop is light: detents, returns, clips and small seat or lock springs.',
+  },
+  {
+    q: 'Do you make two-wheeler springs?',
+    a: 'Two-wheeler assemblies often use torsion and extension springs in this wire range. Whether that is a regular RK product is still to be confirmed.',
+  },
+  {
+    q: 'What is the minimum order?',
+    a: `Usually ${site.terms.moq}. Smaller development runs are charged. We quote within 24 hours.`,
+  },
+];
+---
+
+<IndustryLayout
+  route="automotive"
+  title="Automotive Springs, Pune"
+  description="Light automotive springs and wire forms, wire Ø 0.40–2.50 mm. Detents, returns and clips to drawing or sample. Not suspension coils."
+  h1="Automotive springs"
+  lede="Light springs for vehicle assemblies, in the 0.40–2.50 mm wire range. Not coil springs for suspension, and not heavy valve springs."
+  context="automotive springs"
+  faqs={faqs}
+  related={[
+    { to: 'torsion', label: 'Torsion springs', description: 'The largest share of what we coil.' },
+    { to: 'wireForms', label: 'Wire forms', description: 'Clips, hooks and pins.' },
+    {
+      to: 'switchgear',
+      label: 'Electrical and switchgear',
+      description: 'MCB and switch mechanisms.',
+    },
+  ]}
+>
+  <h2>What this shop can make for a vehicle</h2>
+  <p>
+    Automobile is one of the industries we serve. In our wire range that usually means a{' '}
+    <strong>detent, a return, a small seat spring or a clip</strong> — not a suspension coil and not
+    a heavy engine valve spring.
+  </p>
+  <p>
+    Torsion and double torsion springs turn up in levers and locks. Extension springs turn up in
+    returns. Compression springs sit under buttons and in small valves. Wire forms become clips and
+    pins.
+  </p>
+  <p>
+    Two-wheeler work is a common use of these types.
+    <Todo text="confirm whether two-wheeler springs are a regular RK product, before we treat it as one." />
+  </p>
+
+  <h2>What the drawing must say</h2>
+  <p>
+    Oil, heat, outdoor parking and road dirt decide the material. Hard-drawn spring steel is fine
+    when the part stays dry. Stainless 302 / 304 is the usual step up if rust would jam the
+    mechanism. Tell us the finish if the part is visible or if the buyer spec names one. Plating
+    goes through partners.
+  </p>
+  <p>
+    We do not claim PPAP, CPK or a testing lab. If the vendor form asks for ISO 9001 or IATF 16949,
+    the honest answer is no. The unit is ZED certified.
+  </p>
+
+  <h2>Limits</h2>
+  <p>
+    Wire {site.capability.wireRangeLabel}. Usual minimum {site.terms.moq}. Quote within 24 hours.
+    Dispatch is ex-works Talawade. We supply across India; we do not export.
+  </p>
+</IndustryLayout>

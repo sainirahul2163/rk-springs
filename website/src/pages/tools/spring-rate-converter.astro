@@ -1,0 +1,54 @@
+---
+import { RateConverter } from '@/components/tools/RateConverter';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
+import { rateConverterFaqs } from '@/data/faqs';
+import ToolLayout from '@/layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  route="rateConverter"
+  title="Spring Rate Converter"
+  description="Convert spring rate between N/mm, kgf/mm and lbf/in, plus force, length and N·mm/° units."
+  h1="Spring rate converter"
+  lede="N/mm, kgf/mm and lbf/in on one page, plus force, length and torque-per-degree. We quote in metric."
+  context="a spring"
+  faqs={rateConverterFaqs}
+>
+  <RateConverter client:idle search={Astro.url.search} />
+
+  <Fragment slot="method">
+    <h2>Method</h2>
+    <p>
+      1 kgf = 9.80665 N. 1 in = 25.4 mm. 1 lbf = 4.4482216152605 N. Rate converts as force over
+      length, so 1 N/mm = 25.4 / 4.44822 ≈ 5.71 lbf/in. Torque per degree scales by the same force
+      and length factors.
+    </p>
+    <p>
+      We work in millimetres and newtons. If the drawing uses kgf or inches, convert it here and
+      send both sets of numbers on the quote.
+    </p>
+  </Fragment>
+
+  <RelatedLinks
+    slot="related"
+    class="mt-12"
+    title="Related"
+    links={[
+      {
+        to: 'compressionCalc',
+        label: 'Compression spring calculator',
+        description: 'Rate from wire, OD and coils.',
+      },
+      {
+        to: 'extensionCalc',
+        label: 'Extension spring calculator',
+        description: 'Rate for a close-wound tension spring.',
+      },
+      {
+        to: 'rfq',
+        label: 'Request a quote',
+        description: 'Send the drawing. Quote within 24 hours.',
+      },
+    ]}
+  />
+</ToolLayout>

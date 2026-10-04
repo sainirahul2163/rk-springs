@@ -1,0 +1,28 @@
+# build output
+dist/
+.vercel/
+.astro/
+
+# dependencies
+node_modules/
+
+# env
+.env
+.env.*
+!.env.example
+
+# local RFQ dev fallback
+.rfq-dev/
+
+# local review screenshots
+.screens/
+
+# test output
+test-results/
+playwright-report/
+coverage/
+.lighthouseci/
+
+# logs and OS
+npm-debug.log*
+.DS_Store

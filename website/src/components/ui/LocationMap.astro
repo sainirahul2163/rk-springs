@@ -1,0 +1,111 @@
+---
+/**
+ * Static location panel linking to Google Maps. No map iframe or API key.
+ * TODO(client): replace the address search with the factory-gate pin once we have coordinates.
+ */
+import { fullAddress, mapUrl, site } from '@/data/site';
+import Button from './Button.astro';
+import Todo from './Todo.astro';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<figure class:list={['loc', className]}>
+  <div class="loc-plate bp-grid">
+    <svg class="loc-mark" viewBox="0 0 120 120" aria-hidden="true">
+      <circle cx="60" cy="60" r="44" class="ring"></circle>
+      <circle cx="60" cy="60" r="22" class="ring"></circle>
+      <path d="M60 4V40M60 80V116M4 60H40M80 60H116" class="hair"></path>
+      <circle cx="60" cy="60" r="4" class="dot"></circle>
+    </svg>
+    <p class="loc-label">
+      <span class="eyebrow">Factory</span>
+      <span class="loc-place">
+        {site.address.locality}, {site.address.city} {site.address.postalCode}
+      </span>
+    </p>
+  </div>
+  <figcaption class="loc-cap">
+    <span>{fullAddress}</span>
+    <Button
+      href={mapUrl}
+      variant="secondary"
+      size="sm"
+      icon="map-pin"
+      iconRight="arrow-up-right"
+      target="_blank"
+      rel="noopener"
+      data-event="outbound_click"
+    >
+      Open in Google Maps
+    </Button>
+    {site.geo === null && <Todo text="map pin from the factory gate." />}
+  </figcaption>
+</figure>
+
+<style>
+  .loc-plate {
+    position: relative;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--color-grid);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+  }
+
+  .loc-mark {
+    width: 120px;
+    height: 120px;
+  }
+
+  .ring,
+  .hair {
+    fill: none;
+    stroke: var(--color-action-600);
+    stroke-width: 1;
+  }
+
+  .ring {
+    stroke-dasharray: 3 3;
+  }
+
+  .dot {
+    fill: var(--color-action-600);
+  }
+
+  .loc-label {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    display: grid;
+    gap: 2px;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-control);
+    padding: 8px 12px;
+  }
+
+  .loc-label .eyebrow {
+    color: var(--color-blue-700);
+  }
+
+  .loc-place {
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+    color: var(--color-navy-900);
+  }
+
+  .loc-cap {
+    display: grid;
+    justify-items: start;
+    gap: 12px;
+    margin-top: 14px;
+    font-size: 0.9375rem;
+    color: var(--color-ink);
+  }
+</style>

@@ -1,0 +1,172 @@
+---
+import HeroDrawing from '@/components/diagrams/HeroDrawing.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import TrustBar from '@/components/ui/TrustBar.astro';
+import { site } from '@/data/site';
+import { quoteHref, whatsappHref } from '@/lib/contact';
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-bg bp-grid bp-grid-fade" aria-hidden="true"></div>
+  <div class="container-page hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow hero-eyebrow">
+        <span>Precision springs</span>
+        <span class="hero-dot" aria-hidden="true">
+          ·
+        </span>
+        <span class="hero-wire">Wire {site.capability.wireRangeLabel}</span>
+      </p>
+      <h1 id="hero-title" class="text-h1">
+        Precision spring and wire-form manufacturer in Pune
+      </h1>
+      <p class="hero-sub text-lead">
+        Torsion and double torsion specialists. Every spring made to your drawing or sample.
+      </p>
+      <div class="hero-ctas">
+        <Button href={quoteHref()} size="lg" iconRight="arrow-right">
+          Get a quote in 24 hours
+        </Button>
+        <Button
+          href={whatsappHref()}
+          variant="whatsapp"
+          size="lg"
+          icon="message-circle"
+          data-event="whatsapp_click"
+          target="_blank"
+          rel="noopener"
+        >
+          WhatsApp us
+        </Button>
+      </div>
+      <a href={quoteHref('#drawing', 'a quote for my drawing')} class="hero-upload">
+        <Icon name="upload" size={18} />
+        Upload a drawing
+      </a>
+      <TrustBar class="hero-trust" />
+    </div>
+    <div class="hero-art">
+      <HeroDrawing />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .hero-inner {
+    display: grid;
+    gap: 32px;
+    padding-block: 48px 40px;
+    min-width: 0;
+  }
+
+  .hero-copy {
+    min-width: 0;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4em 0.55em;
+    color: var(--color-blue-700);
+    margin-bottom: 16px;
+  }
+
+  .hero-wire {
+    white-space: nowrap;
+  }
+
+  .hero-copy h1 {
+    max-width: 19ch;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-sub {
+    margin-top: 18px;
+    max-width: 36rem;
+    color: var(--color-slate);
+  }
+
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+
+  .hero-upload {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin-top: 8px;
+    font-weight: 500;
+    color: var(--color-blue-700);
+    text-decoration: underline;
+    text-underline-offset: 0.22em;
+  }
+
+  .hero-upload:hover {
+    color: var(--color-action-700);
+  }
+
+  .hero-copy :global(.hero-trust) {
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-grid);
+    max-width: 34rem;
+  }
+
+  .hero-copy :global(.hero-trust .trustbar-list) {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px 24px;
+  }
+
+  @media (min-width: 480px) {
+    .hero-copy :global(.hero-trust .trustbar-list) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .hero-art {
+    max-width: 560px;
+    width: 100%;
+    justify-self: center;
+  }
+
+  @media (max-width: 479.98px) {
+    .hero-ctas > :global(*) {
+      width: 100%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-inner {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      align-items: center;
+      gap: 48px;
+      padding-block: 72px 64px;
+      min-height: min(640px, calc(100svh - var(--header-h)));
+    }
+
+    .hero-art {
+      justify-self: end;
+    }
+  }
+</style>

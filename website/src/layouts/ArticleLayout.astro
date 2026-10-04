@@ -1,0 +1,116 @@
+---
+/** Resource article: header with meta, optional takeaways and contents list, prose body, CTA. */
+import type { FaqItem } from '@/components/ui/FAQ.astro';
+import type { RelatedLink } from '@/components/ui/RelatedLinks.astro';
+import ArticleMeta from '@/components/ui/ArticleMeta.astro';
+import CTASection from '@/components/ui/CTASection.astro';
+import FAQ from '@/components/ui/FAQ.astro';
+import KeyTakeaways from '@/components/ui/KeyTakeaways.astro';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
+import TableOfContents, { type TocItem } from '@/components/ui/TableOfContents.astro';
+import type { RouteId } from '@/data/routes';
+import PageLayout from './PageLayout.astro';
+
+interface Props {
+  route: RouteId;
+  title: string;
+  description: string;
+  h1: string;
+  lede?: string;
+  published: Date;
+  updated?: Date;
+  reviewer?: string;
+  takeaways?: string[];
+  toc?: TocItem[];
+  context?: string;
+  faqs?: readonly FaqItem[];
+  related?: readonly RelatedLink[];
+}
+
+const {
+  route,
+  title,
+  description,
+  h1,
+  lede,
+  published,
+  updated,
+  reviewer,
+  takeaways = [],
+  toc = [],
+  context,
+  faqs,
+  related = [],
+} = Astro.props;
+---
+
+<PageLayout
+  route={route}
+  title={title}
+  description={description}
+  ogType="article"
+  pageKind="TechArticle"
+  context={context}
+  {...(faqs ? { faqs } : {})}
+>
+  <article class="container-page pb-16">
+    <header class="max-w-[46rem] pt-6 pb-8">
+      <p class="eyebrow mb-3 text-blue-700">Resource</p>
+      <h1 class="text-h1">{h1}</h1>
+      {lede && <p class="mt-4 text-lead text-slate">{lede}</p>}
+      <ArticleMeta
+        published={published}
+        {...(updated ? { updated } : {})}
+        {...(reviewer ? { reviewer } : {})}
+        class="mt-5"
+      />
+    </header>
+    <div class="article-grid">
+      <div class="min-w-0">
+        {takeaways.length > 0 && <KeyTakeaways items={takeaways} class="mb-8" />}
+        <div class="prose">
+          <slot />
+        </div>
+        {faqs && faqs.length > 0 && (
+          <div class="mt-12">
+            <h2 id="questions">Questions</h2>
+            <FAQ items={faqs} class="mt-6" />
+          </div>
+        )}
+        {related.length > 0 && <RelatedLinks class="mt-12" links={related} />}
+      </div>
+      {toc.length > 2 && (
+        <aside class="article-aside">
+          <TableOfContents items={toc} />
+        </aside>
+      )}
+    </div>
+  </article>
+  <CTASection context={context} />
+</PageLayout>
+
+<style>
+  .article-grid {
+    display: grid;
+    gap: 40px;
+  }
+
+  .article-aside {
+    order: -1;
+  }
+
+  @media (min-width: 1024px) {
+    .article-grid {
+      grid-template-columns: minmax(0, 46rem) 16rem;
+      justify-content: space-between;
+      gap: 64px;
+    }
+
+    .article-aside {
+      order: 0;
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+      align-self: start;
+    }
+  }
+</style>

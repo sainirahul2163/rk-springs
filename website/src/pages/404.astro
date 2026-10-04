@@ -1,0 +1,40 @@
+---
+import Button from '@/components/ui/Button.astro';
+import { linkTo } from '@/data/routes';
+import { site } from '@/data/site';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const home = linkTo('home') ?? '/';
+const springs = linkTo('springs');
+const contact = linkTo('contact');
+---
+
+<BaseLayout
+  title="Page not found"
+  description={`That address is not a page on the ${site.brand} website. Try the springs list or contact the shop.`}
+  noindex
+>
+  <section class="container-page section-y">
+    <p class="eyebrow mb-3 text-blue-700">404</p>
+    <h1 class="text-h1">This page is not here</h1>
+    <p class="mt-4 max-w-[36rem] text-lead text-slate">
+      The link may be old, or the page is not published yet. The springs we make and the factory
+      address are a click away.
+    </p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <Button href={home} iconRight="arrow-right">
+        Back to home
+      </Button>
+      {springs && (
+        <Button href={springs} variant="secondary">
+          Springs we make
+        </Button>
+      )}
+      {contact && (
+        <Button href={contact} variant="ghost">
+          Contact
+        </Button>
+      )}
+    </div>
+  </section>
+</BaseLayout>

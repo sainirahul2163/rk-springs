@@ -1,0 +1,82 @@
+---
+import Drawing from './Drawing.astro';
+import DimensionLine from './DimensionLine.astro';
+import Leader from './Leader.astro';
+import { fmt, helix } from './geometry';
+
+export type CompressionEnd = 'closed-ground' | 'closed' | 'open' | 'open-ground';
+
+interface Props {
+  ends?: CompressionEnd;
+  annotated?: boolean;
+  decorative?: boolean;
+  class?: string;
+}
+
+const { ends = 'closed-ground', annotated = false, decorative = false, class: cls } = Astro.props;
+
+const yc = 74;
+const R = 30;
+const tilt = 0.3;
+const x0 = 46;
+const turns = 8;
+const L = 146;
+const closed = ends === 'closed' || ends === 'closed-ground';
+const ground = ends === 'closed-ground' || ends === 'open-ground';
+const endPitch = 4;
+const midPitch = closed ? (L - 2 * endPitch) / (turns - 2) : L / turns;
+const pitch = (u: number) => (closed && (u < 1 || u > turns - 1) ? endPitch : midPitch);
+const h = helix({ x0, yc, turns, pitch, radius: R, tilt });
+
+const left = x0 - tilt * R;
+const right = x0 + h.length + tilt * R;
+const flats = ground
+  ? `M${fmt(left)} ${yc - R * 0.7}L${fmt(left)} ${yc + R * 0.7}M${fmt(right)} ${yc - R * 0.7}L${fmt(right)} ${yc + R * 0.7}`
+  : '';
+
+const labels: Record<CompressionEnd, string> = {
+  'closed-ground': 'closed and ground ends',
+  closed: 'closed ends',
+  open: 'open ends',
+  'open-ground': 'open and ground ends',
+};
+---
+
+<Drawing
+  viewBox="0 0 240 150"
+  title={`Compression spring with ${labels[ends]}`}
+  decorative={decorative}
+  class={cls}
+>
+  <path class="c" d={`M${fmt(left - 10)} ${yc}L${fmt(right + 10)} ${yc}`}></path>
+  <path class="w w-back" d={h.back}></path>
+  <path class="w" d={h.front}></path>
+  {ground && <path class="w" d={flats} />}
+  {annotated && (
+    <>
+      <DimensionLine
+        x1={left}
+        y1={yc + R + 22}
+        x2={right}
+        y2={yc + R + 22}
+        label="FREE LENGTH"
+        extend={-16}
+      />
+      <DimensionLine
+        x1={right + 16}
+        y1={yc - R}
+        x2={right + 16}
+        y2={yc + R}
+        label="OD"
+        extend={0}
+      />
+      <Leader
+        x={x0 + h.length * 0.42}
+        y={yc - R}
+        ex={x0 + h.length * 0.42 + 14}
+        ey={12}
+        label="d"
+      />
+    </>
+  )}
+</Drawing>

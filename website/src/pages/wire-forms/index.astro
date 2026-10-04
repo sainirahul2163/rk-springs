@@ -1,0 +1,142 @@
+---
+import MaterialsTable from '@/components/ui/MaterialsTable.astro';
+import WireForm from '@/components/diagrams/WireForm.astro';
+import Todo from '@/components/ui/Todo.astro';
+import type { ProductPage } from '@/data/products';
+import { site } from '@/data/site';
+import ProductLayout from '@/layouts/ProductLayout.astro';
+
+const product: ProductPage = {
+  route: 'wireForms',
+  title: 'Wire Forms in Pune',
+  description:
+    'Custom wire forms — clips, hooks and pins — from Ø 0.40–2.50 mm wire, made to your drawing in Talawade, Pune. Quote within 24 hours.',
+  h1: 'Wire forms',
+  lede: 'Clips, hooks and pins bent from the same wire we coil springs from. If it is not a plain helix, it is a wire form.',
+  context: 'wire forms',
+  rfqQuery: '?type=wire-form',
+  diagram: 'wireForm',
+  photoCaption: 'Wire forms on the bench: R-clips, hooks and pins',
+  specs: [
+    { label: 'Wire diameter', value: site.capability.wireRangeLabel },
+    { label: 'Forms', value: 'Clips, hooks and pins, to your drawing' },
+    { label: 'Materials', value: [...site.capability.materials] },
+    { label: 'Finishes', value: 'Plating and other finishing through partners' },
+    { label: 'Minimum order', value: site.terms.moq, note: site.terms.moqNote },
+    { label: 'Quotation', value: site.terms.quote },
+    { label: 'Delivery', value: site.terms.delivery },
+  ],
+  drawingNotes: [
+    'A drawing with bend angles, bend radii and lengths',
+    'Wire diameter',
+    'Material',
+    'Critical tolerances (the fits that actually matter)',
+    'End treatment if any (chamfer, flatten)',
+    'Finish, if the part is plated',
+    'Quantity',
+  ],
+  processNote:
+    'The wire is bent to the drawing, then the batch is stress-relieved when the part needs it. Finishing goes through partners. Dispatch is ex-works Talawade.',
+  faqs: [
+    {
+      q: 'What is a wire form?',
+      a: 'Any bent-wire part that is not a plain helical spring: a clip, a hook, a pin, a retainer. Same wire range as our springs.',
+    },
+    {
+      q: 'Do I need a full drawing?',
+      a: 'A dimensioned sketch is enough to quote. Bend radii matter — a sharp bend on hard-drawn wire can crack. If you only have the old part, send it.',
+    },
+    {
+      q: 'What is the minimum order?',
+      a: `Usually ${site.terms.moq}. ${site.terms.moqNote}`,
+    },
+    {
+      q: 'Can you match a sample clip from a vehicle or a machine?',
+      a: 'Yes. That is the same reverse-engineering job we do on springs. Say where it fits so we know which dimensions are critical.',
+    },
+  ],
+  related: [
+    { to: 'torsion', label: 'Torsion springs', description: 'When the wire has to store torque.' },
+    { to: 'extension', label: 'Extension springs', description: 'When the wire has to pull.' },
+    { to: 'springs', label: 'All spring types', description: 'Helical parts from the same shop.' },
+  ],
+};
+---
+
+<ProductLayout product={product}>
+  <Fragment slot="about">
+    <p>
+      A wire form is a <strong>bent-wire part</strong> that is not a plain coil. The families we are
+      asked for most are clips, hooks and pins. They come off the same 0.40–2.50 mm wire as the
+      springs, in the same materials.
+    </p>
+    <p>
+      The drawing is the product. Bend angles, bend radii and the lengths between bends decide
+      whether the clip snaps onto a pin or sits loose. A radius that is too tight for the grade will
+      crack on the outside of the bend — hard-drawn wire is less forgiving than stainless here.
+    </p>
+    <p>
+      We do not publish a catalogue of standard R-clips or hitch pins. Send the drawing or the
+      sample.
+      <Todo text="typical wire-form families and example parts you actually run." />
+    </p>
+  </Fragment>
+
+  <Fragment slot="types">
+    <figure class="type-fig max-w-[32rem]">
+      <div class="bp-grid type-draw">
+        <WireForm annotated />
+      </div>
+      <figcaption>
+        An R-clip and an S-hook — two common bent-wire parts in this size range.
+      </figcaption>
+    </figure>
+    <ul class="prose mt-6 max-w-[46rem]">
+      <li>
+        <strong>Clips</strong> — R-clips, retaining clips, small spring clips.
+      </li>
+      <li>
+        <strong>Hooks</strong> — S-hooks, J-hooks, and hooks that are part of a longer form.
+      </li>
+      <li>
+        <strong>Pins</strong> — straight or bent pins that locate or retain.
+      </li>
+    </ul>
+  </Fragment>
+
+  <MaterialsTable slot="materials" />
+
+  <Fragment slot="tips">
+    <p>
+      Put a <strong>radius on every bend</strong> and mark the lengths that actually mate with
+      something. Cosmetic legs can be “as formed”. The pin diameter a clip has to snap over is a
+      real number — give it.
+    </p>
+  </Fragment>
+
+  <Fragment slot="applications">
+    <p>
+      Automotive retainers and harness clips, switchgear links, furniture hardware, instrumentation
+      brackets, appliance hooks. Same industries as the springs, because they often ship together.
+    </p>
+  </Fragment>
+</ProductLayout>
+
+<style>
+  .type-fig {
+    margin: 0;
+  }
+
+  .type-draw {
+    padding: 16px;
+    border: 1px solid var(--color-grid);
+    border-radius: var(--radius-card);
+    color: var(--color-navy-900);
+  }
+
+  figcaption {
+    margin-top: 10px;
+    font-size: 0.9375rem;
+    color: var(--color-ink);
+  }
+</style>

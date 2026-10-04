@@ -1,0 +1,84 @@
+---
+/**
+ * Per-page head tags: title, description, canonical, robots, Open Graph, JSON-LD.
+ */
+import type { FaqItem } from '@/components/ui/FAQ.astro';
+import { site } from '@/data/site';
+import type { RouteId } from '@/data/routes';
+import { absoluteUrl, INDEXABLE } from '@/lib/env';
+import type { GlossaryTermLd, PageKind } from '@/lib/jsonld';
+import { formatTitle, seoWarnings } from '@/lib/seo';
+import JsonLd from './JsonLd.astro';
+
+export interface SEOProps {
+  title: string;
+  description: string;
+  /** Use the title as-is, without the brand suffix. */
+  absoluteTitle?: boolean;
+  /** Path for the canonical URL. Defaults to the current path. */
+  canonicalPath?: string;
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
+  route?: RouteId;
+  pageKind?: PageKind;
+  faqs?: readonly FaqItem[];
+  product?: { name: string; description: string };
+  glossary?: readonly GlossaryTermLd[];
+}
+
+const {
+  title,
+  description,
+  absoluteTitle = false,
+  canonicalPath,
+  noindex = false,
+  ogType = 'website',
+  route,
+  pageKind,
+  faqs,
+  product,
+  glossary,
+} = Astro.props as SEOProps;
+
+const fullTitle = formatTitle(title, absoluteTitle);
+const path = canonicalPath ?? Astro.url.pathname;
+const canonical = absoluteUrl(path);
+const robots =
+  noindex || !INDEXABLE ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+const ogImage = absoluteUrl('/og-default.png');
+
+for (const w of seoWarnings(Astro.url.pathname, fullTitle, description)) console.warn(w);
+
+const jsonldProps = {
+  path,
+  title: fullTitle,
+  description,
+  ...(route ? { route } : {}),
+  ...(pageKind ? { kind: pageKind } : {}),
+  ...(faqs && faqs.length > 0 ? { faqs } : {}),
+  ...(product ? { product } : {}),
+  ...(glossary && glossary.length > 0 ? { glossary } : {}),
+};
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta name="robots" content={robots} />
+
+<meta property="og:type" content={ogType} />
+<meta property="og:site_name" content={site.brand} />
+<meta property="og:locale" content="en_IN" />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={`${site.brand} — precision springs, Talawade, Pune`} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+{!noindex && <JsonLd {...jsonldProps} />}

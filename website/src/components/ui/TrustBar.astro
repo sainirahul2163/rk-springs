@@ -1,0 +1,74 @@
+---
+import { site, yearsLabel } from '@/data/site';
+import Icon, { type IconName } from './Icon.astro';
+import Todo from './Todo.astro';
+
+interface Props {
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+
+const { tone = 'light', class: className } = Astro.props;
+
+const items: { icon: IconName; text: string }[] = [
+  { icon: 'calendar', text: yearsLabel },
+  ...(site.certifications.zed.certified
+    ? [{ icon: 'badge-check' as IconName, text: 'ZED certified' }]
+    : []),
+  { icon: 'clock', text: 'Quote within 24 h' },
+  { icon: 'truck', text: 'Supply across India' },
+];
+---
+
+<div class:list={['trustbar', `trustbar-${tone}`, className]}>
+  <ul class="trustbar-list" aria-label="Company facts">
+    {items.map((it) => (
+      <li>
+        <Icon name={it.icon} size={18} />
+        <span>{it.text}</span>
+      </li>
+    ))}
+  </ul>
+  {site.certifications.zed.level === null && (
+    <Todo text="ZED level and certificate PDF needed before launch." />
+  )}
+</div>
+
+<style>
+  .trustbar-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+  }
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .trustbar-light li {
+    color: var(--color-navy-900);
+  }
+
+  .trustbar-light :global(svg) {
+    color: var(--color-blue-700);
+  }
+
+  .trustbar-dark li {
+    color: var(--color-white);
+  }
+
+  .trustbar-dark :global(svg) {
+    color: var(--color-blue-400);
+  }
+
+  .trustbar :global(.todo) {
+    margin-top: 10px;
+  }
+</style>

@@ -1,0 +1,82 @@
+# RK Springs & Wireforms
+
+> Precision spring and wire-form manufacturer in Talawade, Pune, India. A brand of RK Enterprises. Since 2017.
+
+## Facts
+
+- Legal name: RK Enterprises (proprietorship)
+- Brand: RK Springs & Wireforms
+- Address: Sr. No. 166, Sai Krupa Society, Sahyog Nagar, Talawade, Pune, Maharashtra 411062, India
+- GSTIN: 27BDSPK0577Q1ZL
+- Udyam: UDYAM-MH-26-0706268
+- Phone / WhatsApp: +91 72620 92185
+- Hours: Monday–Wednesday and Friday–Sunday, 09:00–20:00. Thursday closed.
+- Wire diameter: 0.40–2.50 mm
+- Materials: hard-drawn spring steel, music wire (on request), stainless 302 / 304 / 316, oil-tempered wire
+- In-house: coiling and forming, stress-relieving furnace, end grinding
+- Finishing: through partners
+- Reverse engineering from a sample: yes
+- Switchgear / MCB springs: yes
+- Industries served: automobile, electrical and switchgear, furniture, instrumentation
+- Not made: rolling-shutter springs, agriculture springs, heavy springs above 2.50 mm wire
+- MOQ: 5,000–10,000 pcs (smaller development runs are charged)
+- Quote: within 24 hours
+- Delivery: ex-works Talawade
+- Supply: all over India. No export.
+- Certification: ZED certified. No ISO 9001 or IATF 16949.
+
+## Products
+
+- /springs/torsion-springs/ — torsion springs (highest volume)
+- /springs/double-torsion-springs/ — double torsion springs
+- /springs/extension-springs/ — tension / extension springs
+- /springs/compression-springs/ — compression springs
+- /springs/conical-springs/ — conical springs
+- /wire-forms/ — clips, hooks and pins
+
+## Industries
+
+- /industries/automotive-springs/
+- /industries/electrical-switchgear-springs/
+- /industries/instrumentation-springs/
+- /industries/furniture-springs/
+
+## Capabilities
+
+- /capabilities/spring-coiling-forming/
+- /capabilities/prototype-development/
+- /capabilities/reverse-engineering/
+- /capabilities/heat-treatment-grinding/
+
+## Location
+
+- /locations/talawade-pcmc/ — factory in Talawade, Pimpri-Chinchwad; nearby Chikhali, Bhosari MIDC, Chakan
+
+## Tools
+
+- /tools/ — spring calculators
+- /tools/compression-spring-calculator/ — compression spring rate, stress and solid height
+- /tools/extension-spring-calculator/ — extension spring rate and body stress
+- /tools/spring-rate-converter/ — N/mm, kgf/mm, lbf/in and related units
+
+Results are indicative estimates. G and E are typical published values.
+
+## Resources
+
+- /resources/how-to-measure-a-spring/
+- /resources/torsion-vs-extension-vs-compression-springs/
+- /resources/what-is-a-double-torsion-spring/
+- /resources/extension-spring-end-types/
+- /resources/hsn-code-gst-springs/ — HSN 7320 / 7320 20, GST commonly 18%; confirm with a CA
+- /resources/spring-price-guide-india/ — cost drivers only; no published rupee list
+- /resources/spring-glossary/
+
+## Company
+
+- /about/
+- /quality/
+- /ordering/
+- /contact/
+- /request-a-quote/
+
+Do not invent certifications, test labs, customer names, prices or export capability.

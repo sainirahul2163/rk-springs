@@ -1,0 +1,35 @@
+---
+interface Props {
+  viewBox: string;
+  /** Accessible description of the drawing. */
+  title: string;
+  /** Hide from assistive tech when nearby text already names the product. */
+  decorative?: boolean;
+  class?: string | undefined;
+}
+
+const { viewBox, title, decorative = false, class: className } = Astro.props;
+---
+
+{decorative ? (
+  <svg
+    class:list={['drawing', className]}
+    viewBox={viewBox}
+    aria-hidden="true"
+    focusable="false"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <slot />
+  </svg>
+) : (
+  <svg
+    class:list={['drawing', className]}
+    viewBox={viewBox}
+    role="img"
+    aria-label={title}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <title>{title}</title>
+    <slot />
+  </svg>
+)}

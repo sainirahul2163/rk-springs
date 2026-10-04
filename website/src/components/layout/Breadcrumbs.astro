@@ -1,0 +1,72 @@
+---
+/** Visible breadcrumbs. BreadcrumbList JSON-LD is generated from the same trail (Phase 3). */
+import { linkTo, trail, type RouteId } from '@/data/routes';
+
+interface Props {
+  route: RouteId;
+  class?: string;
+}
+
+const { route, class: className } = Astro.props;
+const items = trail(route);
+---
+
+<nav aria-label="Breadcrumb" class:list={['bc', className]}>
+  <ol>
+    {items.map((it, i) => {
+      const last = i === items.length - 1;
+      const href = linkTo(it.id);
+      return (
+        <li>
+          {last || !href ? (
+            <span aria-current={last ? 'page' : undefined}>{it.label}</span>
+          ) : (
+            <a href={href}>{it.label}</a>
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<style>
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 0;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    letter-spacing: 0.02em;
+    color: var(--color-slate);
+  }
+
+  li {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  li + li::before {
+    content: '/';
+    margin-inline: 10px;
+    color: var(--color-border-strong);
+  }
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    color: var(--color-blue-700);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    color: var(--color-action-700);
+  }
+
+  [aria-current='page'] {
+    color: var(--color-ink);
+  }
+</style>

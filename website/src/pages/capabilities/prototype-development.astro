@@ -1,0 +1,74 @@
+---
+import Todo from '@/components/ui/Todo.astro';
+import { site } from '@/data/site';
+import CapabilityLayout from '@/layouts/CapabilityLayout.astro';
+
+const faqs = [
+  {
+    q: 'Can I order fewer than 5,000 pieces?',
+    a: `Yes, with development or setup charges. The usual minimum is ${site.terms.moq}.`,
+  },
+  {
+    q: 'Do I have to approve a sample before production?',
+    a: 'For a new part we make a development sample so you can try it in the assembly. The bulk quantity waits on that check.',
+  },
+];
+---
+
+<CapabilityLayout
+  route="prototype"
+  title="Prototype Development"
+  description="Development samples for a new spring, then your approval, then the bulk lot. Usual MOQ 5,000–10,000 pcs. Quote within 24 hours."
+  h1="Prototype development"
+  lede="A new part starts with a development sample. You try it in the assembly. Production of the bulk quantity waits on that check."
+  context="a development spring"
+  faqs={faqs}
+  related={[
+    {
+      to: 'reverseEngineering',
+      label: 'Reverse engineering',
+      description: 'When the starting point is a sample, not a drawing.',
+    },
+    {
+      to: 'ordering',
+      label: 'Ordering with us',
+      description: 'MOQ, charges, quote time, ex-works.',
+    },
+    {
+      to: 'rfq',
+      label: 'Request a quote',
+      description: 'Send the drawing. Quote within 24 hours.',
+    },
+  ]}
+>
+  <h2>What it is</h2>
+  <p>
+    A first piece, or a short development run, so you can fit the spring before we coil thousands.
+    This is charged. It is how a shop of this size takes a new part without guessing the assembly.
+  </p>
+  <p>
+    <Todo text="typical sample lead time, and how development charges are calculated." />
+  </p>
+
+  <h2>How it works</h2>
+  <p>
+    You send a drawing or an unused sample. We quote within 24 hours, including any development
+    charge. We coil the sample, stress-relieve it, grind ends if specified, and send it for you to
+    try. When you approve it, we run the bulk quantity.
+  </p>
+  <p>
+    <Todo text="confirm that sample approval is always a step." />
+  </p>
+
+  <h2>When to use it</h2>
+  <p>
+    A new design, a copy from a worn sample, or a quantity below {site.terms.moq}. Do not skip the
+    sample if the spring is critical or tight-tolerance — that is the reason buyers come here.
+  </p>
+
+  <h2>Limits</h2>
+  <p>
+    We do not advertise “low MOQ” or free prototypes. Smaller runs are possible; they are charged.
+    Wire stays {site.capability.wireRangeLabel}.
+  </p>
+</CapabilityLayout>

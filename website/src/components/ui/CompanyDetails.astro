@@ -1,0 +1,138 @@
+---
+/** Full company details (name, address, phone) rendered from site.ts, identical everywhere. */
+import { site } from '@/data/site';
+import { mailHref, telHref, whatsappHref } from '@/lib/contact';
+import Todo from './Todo.astro';
+
+interface Props {
+  class?: string;
+  showTaxIds?: boolean;
+}
+
+const { class: className, showTaxIds = true } = Astro.props;
+const a = site.address;
+---
+
+<address class:list={['cd not-italic', className]}>
+  <p class="cd-name">{site.brand}</p>
+  <p class="cd-sub">{site.brandLine}</p>
+  <p class="cd-addr">
+    {a.street},<br />
+    {a.locality}, {a.city},<br />
+    {a.region} {a.postalCode}, {a.country}
+  </p>
+  <dl class="cd-list">
+    <div>
+      <dt>Phone</dt>
+      <dd>
+        {site.phones.map((p, i) => (
+          <>
+            {i > 0 && <span aria-hidden="true"> · </span>}
+            <a href={telHref(p.e164)} class="link tabular" data-event="call_click">
+              {p.display}
+            </a>
+          </>
+        ))}
+        <Todo text="confirm the main number." />
+      </dd>
+    </div>
+    <div>
+      <dt>WhatsApp</dt>
+      <dd>
+        <a
+          href={whatsappHref()}
+          class="link tabular"
+          data-event="whatsapp_click"
+          target="_blank"
+          rel="noopener"
+        >
+          {site.phones.find((p) => p.whatsapp)?.display}
+        </a>
+      </dd>
+    </div>
+    <div>
+      <dt>Email</dt>
+      <dd>
+        {site.emails.map((e, i) => (
+          <>
+            {i > 0 && <br />}
+            <a href={mailHref(e)} class="link" data-event="email_click">
+              {e}
+            </a>
+          </>
+        ))}
+        <Todo text="pick the main email." />
+      </dd>
+    </div>
+    <div>
+      <dt>Hours</dt>
+      <dd>{site.hours.summary}</dd>
+    </div>
+    {showTaxIds && (
+      <>
+        <div>
+          <dt>GSTIN</dt>
+          <dd class="mono">{site.gstin}</dd>
+        </div>
+        <div>
+          <dt>Udyam</dt>
+          <dd class="mono">{site.udyam}</dd>
+        </div>
+      </>
+    )}
+  </dl>
+</address>
+
+<style>
+  .cd {
+    min-width: 0;
+  }
+
+  .cd-name {
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: var(--color-navy-900);
+  }
+
+  .cd-sub {
+    font-size: var(--text-small);
+    color: var(--color-slate);
+  }
+
+  .cd-addr {
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+
+  .cd-list {
+    margin-top: 16px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .cd-list > div {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    gap: 12px;
+    min-width: 0;
+  }
+
+  dd {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  dt {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-slate);
+    padding-top: 3px;
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-size: 0.9375rem;
+  }
+</style>

@@ -1,0 +1,96 @@
+---
+/** Sticky bottom bar under 768 px: Call / WhatsApp / Get quote. Not rendered on the RFQ page. */
+import { quoteHref, telHref, whatsappHref } from '@/lib/contact';
+import Icon from '../ui/Icon.astro';
+
+interface Props {
+  context?: string | undefined;
+}
+
+const { context } = Astro.props;
+---
+
+<nav class="mab" aria-label="Quick contact">
+  <a href={telHref()} class="mab-btn mab-call" data-event="call_click">
+    <Icon name="phone" size={20} />
+    <span>Call</span>
+  </a>
+  <a
+    href={whatsappHref(context)}
+    class="mab-btn mab-wa"
+    data-event="whatsapp_click"
+    target="_blank"
+    rel="noopener"
+  >
+    <Icon name="message-circle" size={20} />
+    <span>WhatsApp</span>
+  </a>
+  <a href={quoteHref('', context)} class="mab-btn mab-quote">
+    <Icon name="file-text" size={20} />
+    <span>Get quote</span>
+  </a>
+</nav>
+
+<style>
+  .mab {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 8px var(--page-pad) calc(8px + env(safe-area-inset-bottom));
+    background: var(--color-white);
+    border-top: 1px solid var(--color-border);
+    box-shadow: var(--shadow-header);
+  }
+
+  .mab-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 48px;
+    border-radius: var(--radius-control);
+    font-weight: 500;
+    font-size: 0.9375rem;
+    transition:
+      background-color 150ms var(--ease-out),
+      filter 150ms var(--ease-out);
+  }
+
+  .mab-call {
+    border: 1px solid var(--color-blue-700);
+    color: var(--color-blue-700);
+    background: var(--color-white);
+  }
+
+  .mab-call:active {
+    background: var(--color-blue-100);
+  }
+
+  .mab-wa {
+    background: var(--color-whatsapp);
+    color: var(--color-navy-900);
+  }
+
+  .mab-wa:active {
+    filter: brightness(0.92);
+  }
+
+  .mab-quote {
+    background: var(--color-action-600);
+    color: var(--color-white);
+  }
+
+  .mab-quote:active {
+    background: var(--color-action-700);
+  }
+
+  @media (min-width: 768px) {
+    .mab {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,86 @@
+---
+import ConicalSpring from '@/components/diagrams/ConicalSpring.astro';
+import MaterialsTable from '@/components/ui/MaterialsTable.astro';
+import { conical } from '@/data/products';
+import { linkTo } from '@/data/routes';
+import ProductLayout from '@/layouts/ProductLayout.astro';
+
+const compression = linkTo('compression');
+---
+
+<ProductLayout product={conical}>
+  <Fragment slot="about">
+    <p>
+      A conical spring is a compression spring whose coil diameter <strong>tapers</strong> from a
+      large end to a small end. As it is pressed, the larger coils can seat over the smaller ones,
+      so the solid height can be only a few wire diameters plus the closed ends.
+    </p>
+    <p>
+      The rate is not a single number. It usually rises as more of the large coils go solid. That is
+      useful on a battery contact or a push-button, where you want a soft start and a firmer finish.
+      It is a poor choice if you need a linear rate over a long stroke — use a
+      {compression ? (
+        <a href={compression}>cylindrical compression spring</a>
+      ) : (
+        'cylindrical compression spring'
+      )}
+      for that.
+    </p>
+    <p>
+      Same wire range as the rest of the shop: 0.40–2.50 mm. Same materials. Ends can be open,
+      closed or ground, independently at each end if the drawing says so.
+    </p>
+  </Fragment>
+
+  <Fragment slot="types">
+    <figure class="type-fig max-w-[28rem]">
+      <div class="bp-grid type-draw">
+        <ConicalSpring annotated />
+      </div>
+      <figcaption>Large OD, small OD and free length — the three numbers we quote from.</figcaption>
+    </figure>
+    <div class="prose mt-6 max-w-[46rem]">
+      <p>
+        A barrel (convex) or hourglass (concave) is a cousin of the cone. Send the drawing. If the
+        part is a simple taper in our wire range, that is a regular job.
+      </p>
+    </div>
+  </Fragment>
+
+  <MaterialsTable slot="materials" />
+
+  <Fragment slot="tips">
+    <p>
+      Give <strong>both outer diameters</strong> and the free length. Say which end sits in the
+      pocket and which end sits on the pin. If the large end must not pass through a hole, say so —
+      that is a go / no-go dimension, not a decoration.
+    </p>
+  </Fragment>
+
+  <Fragment slot="applications">
+    <p>
+      Battery contacts, push-buttons, light switchgear, and any pocket that is wide at one end and
+      tight at the other. Instrumentation and small automotive switches use this shape when a
+      straight spring would stack too tall.
+    </p>
+  </Fragment>
+</ProductLayout>
+
+<style>
+  .type-fig {
+    margin: 0;
+  }
+
+  .type-draw {
+    padding: 16px;
+    border: 1px solid var(--color-grid);
+    border-radius: var(--radius-card);
+    color: var(--color-navy-900);
+  }
+
+  figcaption {
+    margin-top: 10px;
+    font-size: 0.9375rem;
+    color: var(--color-ink);
+  }
+</style>

@@ -1,0 +1,116 @@
+---
+import CompressionSpring from '@/components/diagrams/CompressionSpring.astro';
+import MaterialsTable from '@/components/ui/MaterialsTable.astro';
+import Todo from '@/components/ui/Todo.astro';
+import { compression } from '@/data/products';
+import ProductLayout from '@/layouts/ProductLayout.astro';
+
+const ends = [
+  {
+    key: 'closed-ground' as const,
+    label: 'Closed and ground',
+    note: 'Stands flat. The usual precision end.',
+  },
+  {
+    key: 'closed' as const,
+    label: 'Closed (squared)',
+    note: 'Last coil sits against the next. Not ground.',
+  },
+  { key: 'open' as const, label: 'Open', note: 'Plain end. Cheap, and it leans.' },
+  {
+    key: 'open-ground' as const,
+    label: 'Open and ground',
+    note: 'Ground for a flatter seat without closing the end.',
+  },
+];
+---
+
+<ProductLayout product={compression}>
+  <Fragment slot="about">
+    <p>
+      A compression spring is an <strong>open-coiled helix</strong> that pushes back when you
+      shorten it. It is the most common spring type, and the one whose drawing is easiest to get
+      wrong: people forget solid height, end type, or the hole the spring has to live in.
+    </p>
+    <p>
+      Three numbers decide most of the fit: <strong>wire diameter</strong>,{' '}
+      <strong>outer diameter</strong>
+      and <strong>free length</strong>. The rate follows from those plus the number of active coils
+      and the material. If you also give a load at a working length, we can see whether the spring
+      will bind before it does the job.
+    </p>
+    <p>
+      Keep the spring index (mean diameter ÷ wire) between about 4 and 12. Below 4 the wire is hard
+      to coil; above 12 the coil wanders. A free length of four times the mean diameter or more will
+      buckle unless the spring is guided on a rod or in a bore.
+    </p>
+    <p>
+      We grind ends when the drawing asks for it. Grinding is often skipped on the finest wire in
+      our range.
+      <Todo text="smallest wire diameter you will grind." />
+    </p>
+  </Fragment>
+
+  <Fragment slot="types">
+    <ul class="grid gap-5 sm:grid-cols-2">
+      {ends.map((e) => (
+        <li class="type-fig">
+          <div class="bp-grid type-draw">
+            <CompressionSpring ends={e.key} decorative />
+          </div>
+          <p>
+            <strong>{e.label}.</strong> {e.note}
+          </p>
+        </li>
+      ))}
+    </ul>
+    <p class="mt-6 max-w-[46rem]">
+      Cylindrical is the default. If the coils have to nest, that is a
+      <a class="link" href="/springs/conical-springs/">
+        conical spring
+      </a>
+      .
+    </p>
+  </Fragment>
+
+  <MaterialsTable slot="materials" />
+
+  <Fragment slot="tips">
+    <p>
+      Say whether the spring <strong>works in a hole or over a rod</strong>, and give that diameter.
+      An OD that looked fine on the desk can jam in a 0.2 mm-tight bore once the coil expands under
+      load.
+    </p>
+    <p>
+      Closed-and-ground ends are the right default when the spring must stand square. If the wire is
+      near 0.40 mm, ask us before you dimension a grind.
+    </p>
+  </Fragment>
+
+  <Fragment slot="applications">
+    <p>
+      Switchgear and MCB contact stacks, small valves and buttons, battery contacts, furniture
+      seats, instrumentation, pens and other light mechanisms. Automotive work in this wire range is
+      usually a detent, a return or a seat spring — not a suspension coil.
+    </p>
+    <p>We do not make die springs, heavy valve springs or anything above 2.50 mm wire.</p>
+  </Fragment>
+</ProductLayout>
+
+<style>
+  .type-fig {
+    margin: 0;
+  }
+
+  .type-draw {
+    padding: 16px;
+    border: 1px solid var(--color-grid);
+    border-radius: var(--radius-card);
+    color: var(--color-navy-900);
+  }
+
+  .type-fig p {
+    margin-top: 10px;
+    font-size: 0.9375rem;
+  }
+</style>

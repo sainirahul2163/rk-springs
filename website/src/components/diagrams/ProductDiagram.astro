@@ -1,0 +1,31 @@
+---
+import type { DiagramKey } from '@/data/navigation';
+import TorsionSpring from './TorsionSpring.astro';
+import DoubleTorsionSpring from './DoubleTorsionSpring.astro';
+import ExtensionSpring from './ExtensionSpring.astro';
+import CompressionSpring from './CompressionSpring.astro';
+import ConicalSpring from './ConicalSpring.astro';
+import SpiralSpring from './SpiralSpring.astro';
+import WireForm from './WireForm.astro';
+
+interface Props {
+  name: DiagramKey;
+  annotated?: boolean;
+  decorative?: boolean;
+  class?: string;
+}
+
+const { name, ...rest } = Astro.props;
+const map = {
+  torsion: TorsionSpring,
+  doubleTorsion: DoubleTorsionSpring,
+  extension: ExtensionSpring,
+  compression: CompressionSpring,
+  conical: ConicalSpring,
+  spiral: SpiralSpring,
+  wireForm: WireForm,
+} as const;
+const Cmp = map[name];
+---
+
+<Cmp {...rest} />

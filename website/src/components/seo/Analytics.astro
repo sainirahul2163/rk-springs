@@ -1,0 +1,48 @@
+---
+import { clarityId, ga4Id } from '@/lib/analytics';
+---
+
+{ga4Id && <script is:inline define:vars={{ ga4Id }}>
+  window.addEventListener(
+    'load',
+    function () {
+      var run = function () {
+        var s = document.createElement('script');
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4Id;
+        s.async = true;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.dataLayer.push(arguments);
+        }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', ga4Id);
+      };
+      if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 4000 });
+      else setTimeout(run, 2000);
+    },
+    { once: true },
+  );
+</script>}
+{clarityId && <script is:inline define:vars={{ clarityId }}>
+  window.addEventListener(
+    'load',
+    function () {
+      var run = function () {
+        window.clarity =
+          window.clarity ||
+          function () {
+            (window.clarity.q = window.clarity.q || []).push(arguments);
+          };
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.clarity.ms/tag/' + clarityId;
+        document.head.appendChild(s);
+      };
+      if ('requestIdleCallback' in window) requestIdleCallback(run, { timeout: 4000 });
+      else setTimeout(run, 2000);
+    },
+    { once: true },
+  );
+</script>}

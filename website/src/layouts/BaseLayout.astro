@@ -1,0 +1,80 @@
+---
+import '@/styles/global.css';
+import extraFonts from '@/styles/fonts-extra.css?url';
+import plexSans600 from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-600-normal.woff2?url';
+import Footer from '@/components/layout/Footer.astro';
+import Header from '@/components/layout/Header.astro';
+import MobileActionBar from '@/components/layout/MobileActionBar.astro';
+import SkipLink from '@/components/layout/SkipLink.astro';
+import Analytics from '@/components/seo/Analytics.astro';
+import SEO, { type SEOProps } from '@/components/seo/SEO.astro';
+
+export type BaseProps = SEOProps & {
+  /** Page context for pre-filled WhatsApp messages, e.g. "torsion springs". */
+  context?: string | undefined;
+  /** Hide the mobile action bar (the RFQ page has its own submit). */
+  hideActionBar?: boolean | undefined;
+};
+
+const { context, hideActionBar = false, ...seo } = Astro.props as BaseProps;
+---
+
+<!doctype html>
+<html lang="en-IN" class:list={[hideActionBar && 'no-mab']}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEO {...seo} />
+    <Analytics />
+    <link rel="preload" href={plexSans600} as="font" type="font/woff2" crossorigin />
+    <noscript>
+      <link rel="stylesheet" href={extraFonts} />
+    </noscript>
+    <script
+      is:inline
+      set:html={`
+      (function () {
+        var href = ${JSON.stringify(extraFonts)};
+        var add = function () {
+          var link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = href;
+          document.head.appendChild(link);
+        };
+        var schedule = function () {
+          if ('requestIdleCallback' in window) {
+            requestIdleCallback(add, { timeout: 4000 });
+          } else {
+            setTimeout(add, 2500);
+          }
+        };
+        if (document.readyState === 'complete') schedule();
+        else window.addEventListener('load', schedule, { once: true });
+      })();
+    `}
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="white" />
+    <meta name="format-detection" content="telephone=no" />
+    <slot name="head" />
+  </head>
+  <body>
+    <SkipLink />
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    {!hideActionBar && <MobileActionBar context={context} />}
+  </body>
+</html>
+
+<style is:global>
+  html.no-mab {
+    --mobile-bar-h: 0px;
+  }
+
+  main:focus {
+    outline: none;
+  }
+</style>

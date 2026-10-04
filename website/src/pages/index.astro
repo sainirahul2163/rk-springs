@@ -1,0 +1,338 @@
+---
+import HomeHero from '@/components/home/HomeHero.astro';
+import Card from '@/components/ui/Card.astro';
+import CompanyDetails from '@/components/ui/CompanyDetails.astro';
+import ContactLinks from '@/components/ui/ContactLinks.astro';
+import CTASection from '@/components/ui/CTASection.astro';
+import FAQ from '@/components/ui/FAQ.astro';
+import HoursTable from '@/components/ui/HoursTable.astro';
+import LocationMap from '@/components/ui/LocationMap.astro';
+import ProcessSteps from '@/components/ui/ProcessSteps.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import SpecTable from '@/components/ui/SpecTable.astro';
+import { homeFaqs } from '@/data/faqs';
+import { products, wireFormsItem } from '@/data/navigation';
+import { linkTo } from '@/data/routes';
+import { site } from '@/data/site';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const catalogue = [...products, wireFormsItem].filter((p) => linkTo(p.route));
+const capabilitiesHref = linkTo('capabilities');
+const talawadeHref = linkTo('talawade');
+
+const proofs = [
+  {
+    n: '01',
+    title: 'Quote within 24 hours',
+    text: 'Send a drawing, a photo with dimensions, or the old spring. You get a price and a lead time the next working day.',
+  },
+  {
+    n: '02',
+    title: 'Critical, tight-tolerance parts',
+    text: 'Buyers come to us when the spring has to fit first time in a switch, an instrument or a small assembly — not for a catalogue part.',
+  },
+  {
+    n: '03',
+    title: 'Reverse engineering from a sample',
+    text: 'No drawing is fine. Send the unused spring if you have it, and say where it lives. We measure it and quote.',
+  },
+  {
+    n: '04',
+    title: 'Since 2017, ZED certified',
+    text: `RK Enterprises has made springs in ${site.address.locality} since ${site.foundingYear}. The unit is ZED certified.`,
+  },
+];
+
+const steps = [
+  {
+    title: 'Send drawing or sample',
+    text: 'A drawing, a dimensioned photo, or the old spring, plus quantity and material if you know it.',
+  },
+  {
+    title: 'Quote in 24 hours',
+    text: 'Price, development charges if the run is below our usual minimum, and a lead time.',
+  },
+  {
+    title: 'Development sample',
+    text: 'For a new part we make samples so you can try them in the assembly.',
+  },
+  { title: 'Approval', text: 'You approve the sample. Production does not start until you do.' },
+  {
+    title: 'Production',
+    text: 'Coiling and forming, stress relieving, and end grinding where the drawing asks for it.',
+  },
+  { title: 'Dispatch', text: `${site.terms.delivery}.` },
+];
+
+const capRows = [
+  { label: 'Wire diameter', value: site.capability.wireRangeLabel },
+  { label: 'Outer diameter and length', value: site.capability.sizeNote },
+  { label: 'Materials', value: [...site.capability.materials] },
+  { label: 'In-house', value: [...site.capability.inHouse] },
+  { label: 'Through partners', value: [...site.capability.viaPartners] },
+  { label: 'Minimum order', value: site.terms.moq, note: site.terms.moqNote },
+  { label: 'Quotation', value: site.terms.quote },
+  { label: 'Supply', value: site.terms.supplyArea },
+];
+
+const industries = [
+  {
+    to: 'automotive' as const,
+    title: 'Automotive',
+    icon: 'car' as const,
+    description: 'Springs and wire forms for vehicle assemblies, made to your drawing.',
+  },
+  {
+    to: 'switchgear' as const,
+    title: 'Electrical and switchgear',
+    icon: 'zap' as const,
+    description: 'MCB and switch mechanisms — a regular job in this shop.',
+  },
+  {
+    to: 'instrumentation' as const,
+    title: 'Instrumentation',
+    icon: 'gauge' as const,
+    description: 'Light, precise springs for instruments and control gear.',
+  },
+  {
+    to: 'furniture' as const,
+    title: 'Furniture',
+    icon: 'armchair' as const,
+    description: 'Torsion and extension springs for seating and fold mechanisms.',
+  },
+];
+
+const tools = [
+  {
+    to: 'compressionCalc' as const,
+    title: 'Compression spring calculator',
+    icon: 'calculator' as const,
+    description: 'Rate, stress and solid height from wire, OD, coils and free length.',
+  },
+  {
+    to: 'extensionCalc' as const,
+    title: 'Extension spring calculator',
+    icon: 'calculator' as const,
+    description: 'Rate and hook stress from your dimensions.',
+  },
+  {
+    to: 'rateConverter' as const,
+    title: 'Spring rate converter',
+    icon: 'calculator' as const,
+    description: 'N/mm, kgf/mm and lbf/in in one place.',
+  },
+];
+
+const guides = [
+  {
+    to: 'measure' as const,
+    title: 'How to measure a spring',
+    eyebrow: 'Guide',
+    description: 'What to measure, and what to send us if you have no drawing.',
+  },
+  {
+    to: 'whatIsDoubleTorsion' as const,
+    title: 'What is a double torsion spring?',
+    eyebrow: 'Guide',
+    description: 'Two coils, one centre loop, and when that layout is the right one.',
+  },
+  {
+    to: 'hsnGst' as const,
+    title: 'HSN code and GST for springs',
+    eyebrow: 'Guide',
+    description: 'The code buyers put on the purchase order, and the GST rate.',
+  },
+];
+---
+
+<BaseLayout
+  title="Spring Manufacturer in Pune | RK Springs & Wireforms"
+  absoluteTitle
+  description="Torsion, double torsion, extension and compression springs and wire forms, made to your drawing or sample in Talawade, Pune. Quote within 24 hours."
+  route="home"
+  pageKind="WebPage"
+  faqs={homeFaqs}
+>
+  <HomeHero />
+
+  <Section tone="white" labelledby="products-title">
+    <SectionHeader
+      id="products-title"
+      index={1}
+      eyebrow="Products"
+      title="Springs and wire forms we make"
+      lede={`Wire ${site.capability.wireRangeLabel}, coiled and formed in-house in ${site.address.locality}.`}
+    />
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {catalogue.map((p) => (
+        <li>
+          <Card
+            variant="product"
+            title={p.name}
+            description={p.blurb}
+            to={p.route}
+            diagram={p.diagram}
+            chips={p.chips}
+            headingLevel="h3"
+          />
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section tone="surface" labelledby="why-title">
+    <SectionHeader
+      id="why-title"
+      index={2}
+      eyebrow="Why this shop"
+      title={`Why buyers choose ${site.brand}`}
+      lede="The reasons customers give us, not a slogan."
+    />
+    <ol class="proof">
+      {proofs.map((item) => (
+        <li>
+          <p class="eyebrow text-blue-700">{item.n}</p>
+          <h3 class="mt-2 text-h3">{item.title}</h3>
+          <p class="mt-2 text-slate">{item.text}</p>
+        </li>
+      ))}
+    </ol>
+  </Section>
+
+  <Section labelledby="how-title">
+    <SectionHeader id="how-title" index={3} eyebrow="Process" title="How it works" />
+    <ProcessSteps steps={steps} class="mt-10" />
+  </Section>
+
+  <Section tone="tint" labelledby="cap-title">
+    <SectionHeader id="cap-title" index={4} eyebrow="Capability" title="What this shop can do" />
+    <SpecTable rows={capRows} caption="Capability snapshot" class="mt-8" />
+    {capabilitiesHref && (
+      <p class="mt-6">
+        <a href={capabilitiesHref}>Coiling, samples, reverse engineering and finishing</a>
+      </p>
+    )}
+  </Section>
+
+  <Section labelledby="ind-title">
+    <SectionHeader
+      id="ind-title"
+      index={5}
+      eyebrow="Industries"
+      title="Where the springs go"
+      lede="Automobile, electrical and switchgear, instrumentation, furniture, and other light assemblies."
+    />
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {industries.map((it) => (
+        <li>
+          <Card
+            variant="industry"
+            title={it.title}
+            description={it.description}
+            to={it.to}
+            icon={it.icon}
+            headingLevel="h3"
+          />
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section tone="surface" labelledby="tools-title">
+    <SectionHeader
+      id="tools-title"
+      index={6}
+      eyebrow="Engineering"
+      title="Tools and resources"
+      lede="Rate, stress and unit conversions from your dimensions. Results are estimates; we confirm the design on the quote."
+    />
+    <ul class="mt-10 grid gap-5 lg:grid-cols-3">
+      {tools.map((it) => (
+        <li>
+          <Card
+            variant="tool"
+            title={it.title}
+            description={it.description}
+            to={it.to}
+            icon={it.icon}
+            headingLevel="h3"
+          />
+        </li>
+      ))}
+    </ul>
+    <ul class="mt-5 grid gap-5 lg:grid-cols-3">
+      {guides.map((it) => (
+        <li>
+          <Card
+            variant="article"
+            title={it.title}
+            description={it.description}
+            to={it.to}
+            eyebrow={it.eyebrow}
+            headingLevel="h3"
+          />
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section labelledby="faq-title">
+    <SectionHeader id="faq-title" index={7} eyebrow="Questions" title="FAQ" />
+    <FAQ items={homeFaqs} class="mt-8" />
+  </Section>
+
+  <Section tone="grid" labelledby="loc-title">
+    <SectionHeader
+      id="loc-title"
+      index={8}
+      eyebrow="Factory"
+      title={`${site.address.locality}, ${site.address.city}`}
+      lede={site.areaContext}
+    />
+    <div class="loc-grid">
+      <CompanyDetails />
+      <div>
+        <h3 class="mb-2 text-h3">Working hours</h3>
+        <HoursTable />
+        <ContactLinks class="mt-8" />
+      </div>
+    </div>
+    <LocationMap class="mt-10" />
+    {talawadeHref && (
+      <p class="mt-6">
+        <a href={talawadeHref}>Talawade and PCMC — address, hours and nearby industrial areas</a>
+      </p>
+    )}
+  </Section>
+
+  <CTASection />
+</BaseLayout>
+
+<style>
+  .proof {
+    display: grid;
+    gap: 28px;
+    margin-top: 40px;
+  }
+
+  @media (min-width: 768px) {
+    .proof {
+      grid-template-columns: 1fr 1fr;
+      gap: 32px 40px;
+    }
+  }
+
+  .loc-grid {
+    display: grid;
+    gap: 40px;
+    margin-top: 40px;
+  }
+
+  @media (min-width: 900px) {
+    .loc-grid {
+      grid-template-columns: 1.2fr 1fr;
+      gap: 64px;
+    }
+  }
+</style>

@@ -1,0 +1,9 @@
+dist
+.vercel
+.astro
+node_modules
+package-lock.json
+.rfq-dev
+test-results
+playwright-report
+.lighthouseci

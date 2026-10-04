@@ -1,0 +1,59 @@
+---
+/**
+ * Marks unconfirmed content: TODO(client): …
+ * Visible in development (and client-review builds); renders nothing in production.
+ * `npm run todo` lists every occurrence in the source.
+ */
+import { SHOW_TODOS } from '@/lib/env';
+
+interface Props {
+  /** What the client still needs to confirm. */
+  text?: string;
+  block?: boolean;
+}
+
+const { text, block = false } = Astro.props;
+const Tag = block ? 'div' : 'span';
+---
+
+{SHOW_TODOS && (
+  <Tag class:list={['todo', block && 'todo-block']} data-todo>
+    <span class="todo-tag">TODO(client)</span>
+    <span>
+      {text}
+      <slot />
+    </span>
+  </Tag>
+)}
+
+<style>
+  .todo {
+    display: inline-flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    gap: 0.4em;
+    align-items: baseline;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--color-warning);
+    background: var(--color-white);
+    border: 1px dashed var(--color-warning);
+    border-radius: var(--radius-control);
+    padding: 0.15em 0.5em;
+    text-align: left;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .todo-block {
+    display: flex;
+    margin-block: 0.5rem;
+    padding: 0.5em 0.75em;
+  }
+
+  .todo-tag {
+    font-weight: 600;
+  }
+</style>

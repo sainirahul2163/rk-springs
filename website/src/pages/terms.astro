@@ -1,0 +1,49 @@
+---
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import Todo from '@/components/ui/Todo.astro';
+import { site } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout
+  route="terms"
+  title="Terms of Use"
+  description="Terms for using the RK Springs & Wireforms website. Quotes are not an order until both sides agree in writing."
+>
+  <Section tone="grid" labelledby="terms-h1">
+    <SectionHeader as="h1" id="terms-h1" eyebrow="Legal" title="Terms of use" />
+    <p class="mt-4 text-small text-slate">
+      Last updated 4 October 2026. This page will be reviewed by a lawyer before launch.
+    </p>
+    <Todo block text="legal review of these terms." />
+  </Section>
+
+  <Section>
+    <div class="prose max-w-[46rem]">
+      <h2>The website</h2>
+      <p>
+        This site describes springs and wire forms made by {site.legalName} ({site.brand}) in
+        {site.address.locality}, {site.address.city}. It is information, not an offer to the public
+        at a published price.
+      </p>
+      <h2>Quotes</h2>
+      <p>
+        A quotation is valid only for the drawing or sample it refers to, and only for the time
+        written on it. An order exists when both sides have agreed in writing (including email or
+        WhatsApp) to price, quantity and delivery.
+      </p>
+      <h2>Commercial terms</h2>
+      <p>
+        Usual minimum order {site.terms.moq}. {site.terms.moqNote} Delivery {site.terms.delivery}.
+        Supply {site.terms.supplyArea}; no export. Payment {site.terms.payment}, confirmed on the
+        quotation.
+      </p>
+      <h2>Drawings</h2>
+      <p>
+        Drawings and samples you send are treated as confidential to the job. We do not put them on
+        the website.
+      </p>
+    </div>
+  </Section>
+</PageLayout>

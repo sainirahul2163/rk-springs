@@ -1,0 +1,26 @@
+---
+/** Standard inner page: breadcrumbs, then the page content. Home and 404 use BaseLayout directly. */
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import { getRoute, type RouteId } from '@/data/routes';
+import BaseLayout, { type BaseProps } from './BaseLayout.astro';
+
+type Props = Omit<BaseProps, 'canonicalPath'> & {
+  route: RouteId;
+};
+
+const { route, noindex, ...rest } = Astro.props;
+const def = getRoute(route);
+---
+
+<BaseLayout
+  {...rest}
+  route={route}
+  canonicalPath={def.path}
+  noindex={noindex ?? def.noindex ?? false}
+>
+  <slot name="head" slot="head" />
+  <div class="container-page pt-4">
+    <Breadcrumbs route={route} />
+  </div>
+  <slot />
+</BaseLayout>

@@ -1,0 +1,39 @@
+---
+interface Props {
+  tone?: 'white' | 'surface' | 'tint' | 'dark' | 'grid';
+  id?: string;
+  labelledby?: string;
+  class?: string;
+  containerClass?: string;
+  /** Remove the default vertical rhythm. */
+  flush?: boolean;
+}
+
+const {
+  tone = 'white',
+  id,
+  labelledby,
+  class: className,
+  containerClass,
+  flush = false,
+} = Astro.props;
+
+const tones = {
+  white: 'bg-white',
+  surface: 'bg-surface',
+  tint: 'bg-blue-50',
+  dark: 'bp-grid-dark text-white',
+  grid: 'bp-grid',
+} as const;
+---
+
+<section
+  id={id}
+  aria-labelledby={labelledby}
+  data-surface={tone === 'dark' ? 'dark' : undefined}
+  class:list={[!flush && 'section-y', tones[tone], className]}
+>
+  <div class:list={['container-page', containerClass]}>
+    <slot />
+  </div>
+</section>

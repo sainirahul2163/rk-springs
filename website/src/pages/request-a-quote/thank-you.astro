@@ -1,0 +1,86 @@
+---
+import Button from '@/components/ui/Button.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import Todo from '@/components/ui/Todo.astro';
+import { whatsappHref } from '@/lib/contact';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+const wa = whatsappHref('the quote we just requested');
+---
+
+<PageLayout
+  route="rfqThanks"
+  title="Quote received"
+  description="We have your spring enquiry. RK Springs replies within 24 hours. WhatsApp if you need to add a drawing."
+>
+  <Section tone="grid" labelledby="ty-h1">
+    <SectionHeader
+      as="h1"
+      id="ty-h1"
+      eyebrow="Request received"
+      title="We have your enquiry"
+      lede="We will reply within 24 hours. Keep the reference below if you call or WhatsApp us."
+    />
+    <p class="ref">
+      Your reference is <strong id="rfq-code">your request</strong>.
+    </p>
+    <ol class="steps">
+      <li>We read the drawing or wait for the sample.</li>
+      <li>
+        We send a quote with price, quantity and a development note if the run is under the usual
+        MOQ.
+      </li>
+      <li>You confirm, then we make a development sample when the part is new.</li>
+    </ol>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <Button
+        href={wa}
+        variant="whatsapp"
+        icon="message-circle"
+        data-event="whatsapp_click"
+        target="_blank"
+        rel="noopener"
+      >
+        WhatsApp us
+      </Button>
+      <Button href="/springs/" variant="secondary">
+        See the springs we make
+      </Button>
+    </div>
+    <div class="mt-8">
+      <Todo text="company profile PDF for buyers to download from this page." />
+    </div>
+  </Section>
+</PageLayout>
+
+<script is:inline>
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id') || '';
+    if (!/^RFQ-\d{8}-[A-HJ-NP-Z2-9]{4}$/.test(id)) return;
+    const el = document.getElementById('rfq-code');
+    if (el) el.textContent = id;
+  })();
+</script>
+
+<style>
+  .ref {
+    margin-top: 24px;
+    font-size: var(--text-lead);
+  }
+
+  .ref strong {
+    font-family: var(--font-mono);
+    color: var(--color-navy-900);
+  }
+
+  .steps {
+    margin-top: 28px;
+    max-width: 40rem;
+    padding-left: 1.2em;
+    display: grid;
+    gap: 10px;
+    list-style: decimal;
+  }
+</style>

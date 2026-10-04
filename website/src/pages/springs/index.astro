@@ -1,0 +1,90 @@
+---
+import Card from '@/components/ui/Card.astro';
+import CTASection from '@/components/ui/CTASection.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { products, wireFormsItem } from '@/data/navigation';
+import { linkTo } from '@/data/routes';
+import { site } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+const list = [...products, wireFormsItem].filter((p) => linkTo(p.route));
+---
+
+<PageLayout
+  route="springs"
+  title="Industrial Springs in Pune"
+  description="Torsion, double torsion, extension, compression and conical springs, wire Ø 0.40–2.50 mm, made to drawing or sample in Talawade, Pune."
+  context="springs"
+  pageKind="CollectionPage"
+>
+  <Section tone="grid" labelledby="springs-h1">
+    <SectionHeader
+      as="h1"
+      id="springs-h1"
+      eyebrow="Catalogue"
+      title="Industrial springs made in Pune"
+      lede={`Wire ${site.capability.wireRangeLabel}. Torsion and double torsion are the largest share of what leaves this shop. Every part is made to your drawing or sample.`}
+    />
+  </Section>
+
+  <Section labelledby="grid-title">
+    <SectionHeader
+      id="grid-title"
+      index={1}
+      eyebrow="Types"
+      title="Choose by how the spring works"
+    />
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {list.map((p) => (
+        <li>
+          <Card
+            variant="product"
+            title={p.name}
+            description={p.blurb}
+            to={p.route}
+            diagram={p.diagram}
+            chips={p.chips}
+            headingLevel="h3"
+          />
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section tone="surface" labelledby="choose-title">
+    <SectionHeader
+      id="choose-title"
+      index={2}
+      eyebrow="How to choose"
+      title="Push, pull or twist"
+    />
+    <div class="prose mt-8 max-w-[46rem]">
+      <p>
+        If the part <strong>twists</strong> around a pin or shaft, start with a
+        <a href={linkTo('torsion') ?? '#'}>torsion spring</a>. If both sides of a hinge must push
+        together, that is usually a
+        <a href={linkTo('doubleTorsion') ?? '#'}>double torsion spring</a>
+        with a centre loop.
+      </p>
+      <p>
+        If the part <strong>pulls</strong>, you want a
+        <a href={linkTo('extension') ?? '#'}>tension / extension spring</a>
+        and you must specify the hooks. If it <strong>pushes</strong>, you want a
+        <a href={linkTo('compression') ?? '#'}>compression spring</a>— or a{' '}
+        <a href={linkTo('conical') ?? '#'}>conical spring</a> when the solid height has to be very
+        short.
+      </p>
+      <p>
+        Clips, hooks and pins that are not a helix are
+        <a href={linkTo('wireForms') ?? '#'}>wire forms</a>.
+      </p>
+      <p>
+        We do not make rolling-shutter springs, agriculture springs, or anything above 2.50 mm wire.
+        If you are unsure, send the old part. We will tell you what it is.
+      </p>
+    </div>
+  </Section>
+
+  <CTASection context="springs" />
+</PageLayout>

@@ -1,0 +1,37 @@
+---
+/**
+ * Callout leader for use INSIDE a parent <svg>: dot on the feature, line to an elbow,
+ * horizontal shoulder, mono label.
+ */
+interface Props {
+  /** Point on the part. */
+  x: number;
+  y: number;
+  /** Elbow point. */
+  ex: number;
+  ey: number;
+  label: string;
+  /** Which way the shoulder and text run from the elbow. */
+  align?: 'left' | 'right';
+  class?: string;
+}
+
+const { x, y, ex, ey, label, align = 'right', class: className } = Astro.props;
+const shoulder = 14;
+const sx = align === 'right' ? ex + shoulder : ex - shoulder;
+const tx = align === 'right' ? sx + 4 : sx - 4;
+---
+
+<g class={className}>
+  <circle class="dim-head" cx={x} cy={y} r="2.2"></circle>
+  <path class="dim" d={`M${x} ${y}L${ex} ${ey}L${sx} ${ey}`}></path>
+  <text
+    class="dim-label"
+    x={tx}
+    y={ey}
+    text-anchor={align === 'right' ? 'start' : 'end'}
+    dominant-baseline="central"
+  >
+    {label}
+  </text>
+</g>

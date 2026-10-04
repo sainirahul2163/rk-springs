@@ -1,0 +1,91 @@
+---
+import Todo from '@/components/ui/Todo.astro';
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+
+const published = new Date('2026-10-04');
+const faqs = [
+  {
+    q: 'Why do extension springs break at the hook?',
+    a: 'The hook is a tight bend. Stress there is higher than in the body. The hook usually fails first. Treat body stress as a lower bound.',
+  },
+  {
+    q: 'What hook types can you form?',
+    a: 'Machine loops and extended hooks are the usual request. Other eyes and offsets we will confirm from your drawing.',
+  },
+];
+---
+
+<ArticleLayout
+  route="extensionEnds"
+  title="Extension Spring Ends"
+  description="Extension spring hooks and loops: machine hook, extended hook, crossover and side. Why the hook fails first. What we usually form."
+  h1="Extension spring end types"
+  lede="The hook takes the load and usually fails first. Name the type, the orientation, and the length inside the hooks."
+  published={published}
+  context="an extension spring"
+  takeaways={[
+    'Machine loops and extended hooks are the usual request in this shop.',
+    'Hook stress is higher than body stress.',
+    'Give length inside hooks and whether the openings face the same way.',
+  ]}
+  toc={[
+    { id: 'types', text: 'Common ends' },
+    { id: 'fail', text: 'Why the hook fails' },
+    { id: 'drawing', text: 'What to specify' },
+    { id: 'questions', text: 'Questions' },
+  ]}
+  faqs={faqs}
+  related={[
+    { to: 'extension', label: 'Tension / extension springs', description: 'What we make.' },
+    {
+      to: 'extensionCalc',
+      label: 'Extension spring calculator',
+      description: 'Rate and body stress.',
+    },
+    {
+      to: 'glossary',
+      label: 'Spring glossary',
+      description: 'Initial tension, hook stress, body coils.',
+    },
+  ]}
+>
+  <h2 id="types">Common ends</h2>
+  <p>
+    <strong>Machine hook (machine loop).</strong> A simple loop formed on the last coil. The usual,
+    cheapest end. Fine when the attachment is a pin on the spring axis.
+  </p>
+  <p>
+    <strong>Extended hook.</strong> The loop stands out on a short straight. Use it when the
+    attachment is a little away from the body.
+  </p>
+  <p>
+    <strong>Crossover hook.</strong> The opening sits across the coil so the pull stays on the axis.{' '}
+    <strong>Side hook.</strong> The opening sits to the side, for an offset attachment.
+  </p>
+  <p>
+    Machine loops and extended hooks are the usual request here. Other eyes and offsets we confirm
+    from the drawing.
+    <Todo text="hook types actually formed on this floor." />
+  </p>
+
+  <h2 id="fail">Why the hook fails first</h2>
+  <p>
+    The hook is bent to a tighter radius than the body. Stress there is higher. A calculator that
+    only reports body shear stress is a lower bound — see the{' '}
+    <a href="/tools/extension-spring-calculator/">extension spring calculator</a>. Reduce hook
+    stress with a larger bend radius or a crossover if the drawing allows it.
+  </p>
+
+  <h2 id="drawing">What to specify</h2>
+  <ul>
+    <li>Hook type at each end (they can differ)</li>
+    <li>Orientation: openings in line, at 90°, or opposite</li>
+    <li>
+      <a href="/resources/spring-glossary/#length-inside-hooks">Length inside hooks</a>
+    </li>
+    <li>
+      <a href="/resources/spring-glossary/#initial-tension">Initial tension</a> if the hook must not
+      rattle
+    </li>
+  </ul>
+</ArticleLayout>

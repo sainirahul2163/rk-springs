@@ -1,0 +1,103 @@
+---
+import ExtensionSpring from '@/components/diagrams/ExtensionSpring.astro';
+import MaterialsTable from '@/components/ui/MaterialsTable.astro';
+import Todo from '@/components/ui/Todo.astro';
+import { extension } from '@/data/products';
+import ProductLayout from '@/layouts/ProductLayout.astro';
+---
+
+<ProductLayout product={extension}>
+  <Fragment slot="about">
+    <p>
+      An extension spring — also called a tension spring — is a <strong>close-wound helix</strong>
+      with a hook or loop at each end. It resists a pull. Most are made with
+      <strong>initial tension</strong>: a preload that keeps the coils shut until the load exceeds
+      that threshold.
+    </p>
+    <p>
+      Specify <strong>length inside hooks</strong>, not only overall length. Two springs with the
+      same body can fit very differently once the hooks are bent. Also specify the angle between the
+      hooks (in line, or at 90 degrees).
+    </p>
+    <p>
+      The hook is the weak point. Failures start at the inner radius of the bend, not in the body. A
+      machine loop with a generous radius lasts longer than a sharp crossover. If the spring has
+      been breaking in service, send the failed part — the fracture face usually tells us it was the
+      hook.
+    </p>
+    <p>
+      Wire {extension.specs[0]?.value}, same material list as our other springs. We do not grind
+      extension springs; there is nothing to stand flat.
+    </p>
+  </Fragment>
+
+  <Fragment slot="types">
+    <ul class="grid gap-5 sm:grid-cols-2">
+      <li class="type-fig">
+        <div class="bp-grid type-draw">
+          <ExtensionSpring hook="machine-loop" decorative />
+        </div>
+        <p>
+          <strong>Machine loop.</strong> A full loop bent back onto the body. The usual strong end.
+        </p>
+      </li>
+      <li class="type-fig">
+        <div class="bp-grid type-draw">
+          <ExtensionSpring hook="extended-hook" decorative />
+        </div>
+        <p>
+          <strong>Extended hook.</strong> The hook stands off the body so you can reach a distant
+          pin.
+        </p>
+      </li>
+    </ul>
+    <p class="mt-6 max-w-[46rem]">
+      Side loops, reduced eyes and 0°/90° combinations we will read off the drawing.
+      <Todo text="list the hook types you actually form." />
+    </p>
+  </Fragment>
+
+  <MaterialsTable slot="materials" />
+
+  <Fragment slot="tips">
+    <p>
+      Write <strong>length inside hooks</strong> and the hook style on the drawing. If you only have
+      a sample, measure the body length and say “machine loop each end, in line” or attach a photo
+      with a ruler.
+    </p>
+    <p>
+      Initial tension matters when the hook must not rattle at rest. If you do not know the number,
+      describe the job: “must stay shut until the lever moves” is enough for a first pass.
+    </p>
+  </Fragment>
+
+  <Fragment slot="applications">
+    <p>
+      Return springs on levers, latches and small linkages; furniture recliners; switch mechanisms;
+      instrumentation. Automotive assemblies in our wire range — throttle, clutch and stand-return
+      layouts — use this spring constantly.
+    </p>
+    <p>
+      We do not make trampoline, garage-door or rolling-shutter extension springs. Those are a
+      different shop and a different wire.
+    </p>
+  </Fragment>
+</ProductLayout>
+
+<style>
+  .type-fig {
+    margin: 0;
+  }
+
+  .type-draw {
+    padding: 16px;
+    border: 1px solid var(--color-grid);
+    border-radius: var(--radius-card);
+    color: var(--color-navy-900);
+  }
+
+  .type-fig p {
+    margin-top: 10px;
+    font-size: 0.9375rem;
+  }
+</style>

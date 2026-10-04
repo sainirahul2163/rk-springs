@@ -1,0 +1,100 @@
+---
+import Callout from '@/components/ui/Callout.astro';
+import CTASection from '@/components/ui/CTASection.astro';
+import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import Todo from '@/components/ui/Todo.astro';
+import { site } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout
+  route="quality"
+  title="Quality at RK Springs"
+  description="ZED-certified spring shop in Talawade, Pune. In-house stress relieving and end grinding. No ISO or IATF claim. Made to your drawing or sample."
+>
+  <Section tone="grid" labelledby="quality-h1">
+    <SectionHeader
+      as="h1"
+      id="quality-h1"
+      eyebrow="Quality"
+      title="What we can stand behind"
+      lede="A short page, on purpose. We will not list a lab, a PPAP pack or a CPK number we do not have."
+    />
+  </Section>
+
+  <Section labelledby="zed-title">
+    <div class="q-grid">
+      <div class="prose">
+        <h2 id="zed-title">ZED certified</h2>
+        <p>
+          {site.legalName} is ZED certified. That is the certificate we hold.
+          <Todo text="ZED level (Bronze / Silver / Gold) and a PDF of the certificate." />
+        </p>
+        <p>
+          We do <strong>not</strong> hold ISO 9001 or IATF 16949. If a vendor form asks for those,
+          the honest answer is no.
+        </p>
+      </div>
+      <PhotoPlaceholder ratio="4 / 3" caption="ZED certificate on the office wall" />
+    </div>
+  </Section>
+
+  <Section tone="surface" labelledby="shop-title">
+    <SectionHeader
+      id="shop-title"
+      index={1}
+      eyebrow="In-house"
+      title="What happens on this floor"
+    />
+    <div class="prose mt-8 max-w-[46rem]">
+      <p>Three things we do here, not through a vendor:</p>
+      <ul>
+        <li>Spring coiling and forming</li>
+        <li>Stress relieving in our furnace</li>
+        <li>End grinding, when the drawing asks for it</li>
+      </ul>
+      <p>
+        Plating and other finishes go out to partners. We do not claim a hydrogen-embrittlement
+        bake, a salt-spray cabinet or a load tester on this site.
+      </p>
+      <Todo text="machine list, and whether an inspection report or mill certificate can be supplied on request." />
+    </div>
+  </Section>
+
+  <Section labelledby="sample-title">
+    <SectionHeader
+      id="sample-title"
+      index={2}
+      eyebrow="New parts"
+      title="Development sample, then your approval"
+    />
+    <div class="prose mt-8 max-w-[46rem]">
+      <p>
+        For a new part we make a development sample so you can try it in the assembly. Production of
+        the bulk quantity waits on that check.
+      </p>
+      <Todo text="confirm that sample approval is always a step, and typical sample lead time." />
+    </div>
+    <Callout class="mt-8 max-w-[46rem]" variant="warning" title="What we will not write">
+      No “100% inspection”, no CPK, no PPAP level, no testing laboratory. Those words stay off this
+      site until the shop can show the work.
+    </Callout>
+  </Section>
+
+  <CTASection />
+</PageLayout>
+
+<style>
+  .q-grid {
+    display: grid;
+    gap: 40px;
+  }
+
+  @media (min-width: 900px) {
+    .q-grid {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    }
+  }
+</style>

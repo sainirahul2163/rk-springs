@@ -1,0 +1,99 @@
+---
+import DoubleTorsionSpring from '@/components/diagrams/DoubleTorsionSpring.astro';
+import MaterialsTable from '@/components/ui/MaterialsTable.astro';
+import { doubleTorsion } from '@/data/products';
+import ProductLayout from '@/layouts/ProductLayout.astro';
+---
+
+<ProductLayout product={doubleTorsion}>
+  <Fragment slot="about">
+    <p>
+      A double torsion spring is <strong>two torsion bodies wound in opposite directions</strong>
+      and joined by a U-shaped centre loop, from one length of wire. One coil is left-hand, the
+      other right-hand. The loop sits on the hinge pin or bracket and the legs take the load on each
+      side.
+    </p>
+    <p>
+      Because the two bodies act in parallel, the rate is about <strong>twice</strong> that of a
+      single body with the same wire, mean diameter and number of coils. The hinge sees a balanced
+      couple instead of a single sideways pull. That is why lids, latches and switch mechanisms so
+      often use this layout.
+    </p>
+    <p>
+      It is a speciality here. Switchgear and MCB parts in the 0.40–2.50 mm wire range are regular
+      work. The centre loop is the detail that usually decides the fit: width, inside radius and
+      whether the loop is flat or offset.
+    </p>
+    <p>
+      Same materials as our other springs: hard-drawn spring steel, music wire on request, stainless
+      302 / 304 / 316, and oil-tempered wire.
+    </p>
+  </Fragment>
+
+  <Fragment slot="types">
+    <div class="grid gap-5 lg:grid-cols-2">
+      <figure class="type-fig">
+        <div class="bp-grid type-draw">
+          <DoubleTorsionSpring annotated />
+        </div>
+        <figcaption>Left-hand coil, right-hand coil, centre loop and two legs.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>
+          Variants we see on drawings: a wide centre loop that sits over a long pin; a tight loop
+          that clips onto a bracket; legs of equal length; or one short leg and one long one when
+          the two sides of the hinge are not the same.
+        </p>
+        <p>
+          If you already have a single torsion spring and it keeps walking off the pin, a double
+          torsion with a centre loop is often the cleaner fix — one part, no pair to match.
+        </p>
+      </div>
+    </div>
+  </Fragment>
+
+  <MaterialsTable slot="materials" />
+
+  <Fragment slot="tips">
+    <p>
+      Dimension the <strong>centre loop</strong> the way you would a clip: inside width, radius and
+      height off the coil axis. Then the two bodies: ID, coils, wire. Then each leg.
+    </p>
+    <p>
+      If the two sides must open to different angles, say so. A photo of the hinge, even without a
+      drawing, is enough for a first quote.
+    </p>
+  </Fragment>
+
+  <Fragment slot="applications">
+    <p>
+      On this shop floor the usual jobs are{' '}
+      <strong>electrical switchgear and MCB mechanisms</strong>, small automotive latches and lids,
+      furniture hinges, and instrumentation covers. The same geometry turns up on appliance lids and
+      tool handles.
+    </p>
+    <p>
+      Agricultural tines and heavy tail-gate springs are often double torsion as well. Those are
+      usually above our 2.50 mm wire limit, so we do not take them.
+    </p>
+  </Fragment>
+</ProductLayout>
+
+<style>
+  .type-fig {
+    margin: 0;
+  }
+
+  .type-draw {
+    padding: 16px;
+    border: 1px solid var(--color-grid);
+    border-radius: var(--radius-card);
+    color: var(--color-navy-900);
+  }
+
+  figcaption {
+    margin-top: 10px;
+    font-size: 0.9375rem;
+    color: var(--color-ink);
+  }
+</style>

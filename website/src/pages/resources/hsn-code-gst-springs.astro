@@ -1,0 +1,102 @@
+---
+import Todo from '@/components/ui/Todo.astro';
+import { site } from '@/data/site';
+import ArticleLayout from '@/layouts/ArticleLayout.astro';
+
+const published = new Date('2026-10-04');
+const faqs = [
+  {
+    q: 'What is the HSN code for a compression spring?',
+    a: 'Helical springs of iron or steel are commonly classified under HSN 7320 20. GST is commonly 18%. Confirm the code for your part with your CA.',
+  },
+  {
+    q: 'Is a wire form the same HSN?',
+    a: 'Not always. A clip or pin that is not a helix may sit under 7326 (articles of iron or steel) rather than 7320. Flag that uncertainty on the PO.',
+  },
+];
+---
+
+<ArticleLayout
+  route="hsnGst"
+  title="HSN Code and GST Springs"
+  description="HSN 7320 covers springs of iron or steel; 7320 20 covers helical springs. GST is commonly 18%. Confirm with your CA. Wire forms may be 7326."
+  h1="HSN code and GST for springs"
+  lede="The code buyers put on the purchase order, and the tax rate that usually sits next to it. This is a reading of public tariff pages, not advice from our CA."
+  published={published}
+  context="a GST invoice"
+  takeaways={[
+    'HSN 7320 covers springs of iron or steel; 7320 20 covers helical springs.',
+    'GST on those headings is commonly 18%.',
+    'Wire forms may sit under 7326. Confirm every part with your CA.',
+  ]}
+  toc={[
+    { id: 'codes', text: 'The codes' },
+    { id: 'gst', text: 'GST rate' },
+    { id: 'wire-forms', text: 'Wire forms' },
+    { id: 'sources', text: 'Sources' },
+    { id: 'questions', text: 'Questions' },
+  ]}
+  faqs={faqs}
+  related={[
+    { to: 'ordering', label: 'Ordering with us', description: 'GST invoice, MOQ, ex-works.' },
+    {
+      to: 'priceGuide',
+      label: 'Spring price guide (India)',
+      description: 'What drives cost, not rupee guesses.',
+    },
+    { to: 'rfq', label: 'Request a quote', description: 'We invoice as RK Enterprises.' },
+  ]}
+>
+  <h2 id="codes">The codes</h2>
+  <p>
+    <strong>HSN 7320</strong> covers springs of iron or steel. <strong>7320 20</strong> covers
+    helical springs — the compression, extension and torsion springs that leave this shop. Stainless
+    springs of iron or steel still sit in this family; they are not a separate “SS spring” heading.
+  </p>
+  <p>
+    We invoice as {site.legalName}, GSTIN {site.gstin}. The HSN we print on a given invoice follows
+    the part.
+    <Todo text="CA confirmation of the HSN we actually print for springs and for wire forms." />
+  </p>
+
+  <h2 id="gst">GST rate</h2>
+  <p>
+    Public guides for HSN 7320 list <strong>GST at 18%</strong>. Treat that as the usual rate, not a
+    promise for every part or every year. A concessional or different rate can apply if the
+    classification changes.
+  </p>
+
+  <h2 id="wire-forms">Wire forms</h2>
+  <p>
+    A clip, hook or pin that is not a helix may be classified as an article of iron or steel under{' '}
+    <strong>HSN 7326</strong>, not 7320. That is uncertain. Do not copy the spring code onto a wire
+    form without asking your CA.
+  </p>
+
+  <h2 id="sources">Sources</h2>
+  <p>Read on 4 Oct 2026, and to be confirmed with a CA:</p>
+  <ul>
+    <li>
+      <a href="https://cleartax.in/s/springs-gst-rates-hsn-code-7320" rel="noopener noreferrer">
+        ClearTax: Springs GST rates and HSN 7320
+      </a>
+    </li>
+    <li>
+      <a href="https://www.credlix.com/hsn-code/73202000" rel="noopener noreferrer">
+        Credlix: HSN 73202000
+      </a>
+    </li>
+    <li>
+      <a
+        href="https://getswipe.in/blog/article/springs-gst-rate-hsn-code-7320-explained-guide-2026"
+        rel="noopener noreferrer"
+      >
+        Swipe: Springs GST guide 2026
+      </a>
+    </li>
+  </ul>
+  <p>
+    This page is not tax advice. Confirm the final classification of each product with your
+    chartered accountant.
+  </p>
+</ArticleLayout>

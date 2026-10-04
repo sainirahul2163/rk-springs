@@ -1,0 +1,117 @@
+---
+import { headerNav, products, wireFormsItem } from '@/data/navigation';
+import { linkTo } from '@/data/routes';
+import { primaryPhone } from '@/data/site';
+import { quoteHref, telHref, whatsappHref } from '@/lib/contact';
+import Button from '../ui/Button.astro';
+import SmartLink from '../ui/SmartLink.astro';
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const productItems = [...products, wireFormsItem].filter((p) => linkTo(p.route));
+---
+
+<div id={id} class="mnav" hidden>
+  <nav aria-label="Main" class="container-page mnav-inner">
+    <p class="eyebrow mnav-group">Products</p>
+    <ul class="mnav-products">
+      {productItems.map((p) => (
+        <li>
+          <SmartLink to={p.route} class="mnav-link">
+            {p.name}
+          </SmartLink>
+        </li>
+      ))}
+    </ul>
+    <p class="eyebrow mnav-group">Company</p>
+    <ul>
+      {headerNav
+        .filter((n) => !n.mega && linkTo(n.route))
+        .map((n) => (
+          <li>
+            <SmartLink to={n.route} class="mnav-link">
+              {n.label}
+            </SmartLink>
+          </li>
+        ))}
+    </ul>
+    <div class="mnav-actions">
+      <Button href={quoteHref()} variant="primary" block iconRight="arrow-right">
+        Get a quote in 24 hours
+      </Button>
+      <Button
+        href={whatsappHref()}
+        variant="whatsapp"
+        block
+        icon="message-circle"
+        data-event="whatsapp_click"
+        target="_blank"
+        rel="noopener"
+      >
+        WhatsApp us
+      </Button>
+      <Button href={telHref()} variant="secondary" block icon="phone" data-event="call_click">
+        <span class="tabular">{primaryPhone.display}</span>
+      </Button>
+    </div>
+  </nav>
+</div>
+
+<style>
+  .mnav {
+    position: fixed;
+    inset: var(--header-h) 0 0 0;
+    z-index: 45;
+    background: var(--color-white);
+    border-top: 1px solid var(--color-border);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .mnav-inner {
+    padding-block: 20px 40px;
+  }
+
+  .mnav-group {
+    color: var(--color-slate);
+    margin: 16px 0 4px;
+  }
+
+  .mnav-products {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 560px) {
+    .mnav-products {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 24px;
+    }
+  }
+
+  .mnav-link {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--color-navy-900);
+  }
+
+  a.mnav-link:hover,
+  a.mnav-link[aria-current='page'] {
+    color: var(--color-action-700);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .mnav-actions {
+    display: grid;
+    gap: 10px;
+    margin-top: 28px;
+  }
+</style>

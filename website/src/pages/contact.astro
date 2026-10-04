@@ -1,0 +1,107 @@
+---
+import Button from '@/components/ui/Button.astro';
+import CompanyDetails from '@/components/ui/CompanyDetails.astro';
+import ContactLinks from '@/components/ui/ContactLinks.astro';
+import CTASection from '@/components/ui/CTASection.astro';
+import HoursTable from '@/components/ui/HoursTable.astro';
+import LocationMap from '@/components/ui/LocationMap.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { EnquiryForm } from '@/components/rfq/EnquiryForm';
+import { linkTo } from '@/data/routes';
+import { primaryEmail } from '@/data/site';
+import { mailHref, quoteHref, whatsappHref } from '@/lib/contact';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+const talawadeHref = linkTo('talawade');
+---
+
+<PageLayout
+  route="contact"
+  title="Contact RK Springs, Pune"
+  description="RK Springs & Wireforms, Talawade, Pune 411062. Call +91 72620 92185, WhatsApp, or email. Mon–Wed and Fri–Sun, 9:00 AM – 8:00 PM. Thursday closed."
+  context="an enquiry"
+  pageKind="ContactPage"
+>
+  <Section tone="grid" labelledby="contact-h1">
+    <SectionHeader
+      as="h1"
+      id="contact-h1"
+      eyebrow="Contact"
+      title="Talk to the shop"
+      lede="A phone call or a WhatsApp with the drawing attached is the fastest path. Thursday is closed."
+    />
+    <ContactLinks class="mt-8" />
+  </Section>
+
+  <Section labelledby="details-title">
+    <div class="c-grid">
+      <div>
+        <h2 id="details-title" class="text-h3 mb-4">
+          Company details
+        </h2>
+        <CompanyDetails />
+      </div>
+      <div>
+        <h2 class="text-h3 mb-2">Working hours</h2>
+        <HoursTable />
+      </div>
+    </div>
+    <LocationMap class="mt-10" />
+    {talawadeHref && (
+      <p class="mt-6">
+        <a href={talawadeHref}>Talawade and PCMC — address, hours and nearby industrial areas</a>
+      </p>
+    )}
+  </Section>
+
+  <Section tone="surface" labelledby="enquiry-title">
+    <SectionHeader
+      id="enquiry-title"
+      index={1}
+      eyebrow="Message"
+      title="A short general enquiry"
+      lede="For a priced quote with a drawing, use the quote form. This box is for a quick question."
+    />
+    <div class="enq mt-8">
+      <EnquiryForm
+        client:idle
+        sourcePage={Astro.url.pathname}
+        turnstileSiteKey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? ''}
+        whatsappHref={whatsappHref('a general enquiry')}
+      />
+      <div class="mt-6 flex flex-wrap gap-3">
+        <Button href={quoteHref()} iconRight="arrow-right">
+          Request a quote
+        </Button>
+        <Button
+          href={mailHref(primaryEmail, 'Enquiry from the website')}
+          variant="secondary"
+          icon="mail"
+        >
+          Email {primaryEmail}
+        </Button>
+      </div>
+    </div>
+  </Section>
+
+  <CTASection context="a quote" />
+</PageLayout>
+
+<style>
+  .c-grid {
+    display: grid;
+    gap: 40px;
+  }
+
+  @media (min-width: 900px) {
+    .c-grid {
+      grid-template-columns: 1.2fr 1fr;
+    }
+  }
+
+  .enq {
+    margin-top: 32px;
+    max-width: 36rem;
+  }
+</style>

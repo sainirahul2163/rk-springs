@@ -1,0 +1,64 @@
+---
+import { site } from '@/data/site';
+import IndustryLayout from '@/layouts/IndustryLayout.astro';
+
+const faqs = [
+  {
+    q: 'What furniture springs do you make?',
+    a: 'Torsion and extension springs for seating and fold mechanisms, plus small compression springs and wire-form clips, in 0.40–2.50 mm wire. Not zig-zag or heavy seating coils.',
+  },
+  {
+    q: 'Can the spring be plated?',
+    a: 'Yes, through partners. Say the finish on the drawing. We do not plate in-house.',
+  },
+  {
+    q: 'What is the minimum order?',
+    a: `Usually ${site.terms.moq}. Smaller development runs are charged.`,
+  },
+];
+---
+
+<IndustryLayout
+  route="furniture"
+  title="Furniture Springs, Pune"
+  description="Torsion and extension springs for seating and fold mechanisms, wire Ø 0.40–2.50 mm. Made to drawing or sample in Talawade."
+  h1="Furniture springs"
+  lede="Torsion and extension springs for seating and fold mechanisms, in the 0.40–2.50 mm wire range. Not zig-zag upholstery coils."
+  context="furniture springs"
+  faqs={faqs}
+  related={[
+    { to: 'torsion', label: 'Torsion springs', description: 'Folds, lids and ratchets.' },
+    { to: 'extension', label: 'Tension / extension springs', description: 'Returns on a linkage.' },
+    { to: 'wireForms', label: 'Wire forms', description: 'Clips and retainers.' },
+  ]}
+>
+  <h2>Seating and fold mechanisms</h2>
+  <p>
+    Furniture is one of the industries we serve. In this shop that means{' '}
+    <strong>torsion springs on a fold or a ratchet</strong>, extension springs on a return, and the
+    odd compression spring or wire-form clip. It does not mean zig-zag sofa springs or anything
+    above 2.50 mm wire.
+  </p>
+  <p>
+    The spring is often visible, or it sits just under a cover, so finish and rust matter.
+    Hard-drawn wire with a partner-applied finish is common. Stainless if the piece will live in a
+    damp room.
+  </p>
+
+  <h2>What the drawing must say</h2>
+  <p>
+    For a torsion spring: wire, coil diameter, free angle, working angle, torque if you have it,
+    both leg shapes, and wind direction. For an extension spring: wire, OD, length inside hooks,
+    hook type, and a load at one working length.
+  </p>
+  <p>
+    If you have only the old spring, send an unused one. A furniture spring that has sat loaded for
+    years has often taken set.
+  </p>
+
+  <h2>Limits</h2>
+  <p>
+    Wire {site.capability.wireRangeLabel}. Usual minimum {site.terms.moq}. Quote within 24 hours.
+    Dispatch ex-works Talawade. We supply across India.
+  </p>
+</IndustryLayout>

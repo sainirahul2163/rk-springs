@@ -1,0 +1,179 @@
+---
+/**
+ * Home hero: large double torsion spring with dimension callouts and a drawing-style title
+ * block. The wire is revealed once from the centre outwards; skipped under reduced motion.
+ */
+import { site } from '@/data/site';
+import DimensionLine from './DimensionLine.astro';
+import Leader from './Leader.astro';
+import { fmt, helix } from './geometry';
+
+const yc = 150;
+const R = 54;
+const tilt = 0.4;
+const turns = 5.5;
+const pitch = 11.5;
+const L = helix({ x0: 128, yc, turns, pitch, radius: R, tilt, dir: 1, samplesPerTurn: 24 });
+const Rt = helix({ x0: 432, yc, turns, pitch, radius: R, tilt, dir: -1, samplesPerTurn: 24 });
+
+const loopY = yc + R + 78;
+const rr = 14;
+const loop =
+  `M${fmt(L.end.x)} ${fmt(L.end.y)}L${fmt(L.end.x)} ${fmt(loopY - rr)}` +
+  `Q${fmt(L.end.x)} ${fmt(loopY)} ${fmt(L.end.x + rr)} ${fmt(loopY)}` +
+  `L${fmt(Rt.end.x - rr)} ${fmt(loopY)}` +
+  `Q${fmt(Rt.end.x)} ${fmt(loopY)} ${fmt(Rt.end.x)} ${fmt(loopY - rr)}` +
+  `L${fmt(Rt.end.x)} ${fmt(Rt.end.y)}`;
+
+const legDx = 74;
+const legDy = 62;
+const lt = { x: L.start.x - legDx, y: L.start.y - legDy };
+const rt = { x: Rt.start.x + legDx, y: Rt.start.y - legDy };
+const legs =
+  `M${fmt(L.start.x)} ${fmt(L.start.y)}L${fmt(lt.x)} ${fmt(lt.y)}L${fmt(lt.x - 4)} ${fmt(lt.y + 16)}` +
+  `M${fmt(Rt.start.x)} ${fmt(Rt.start.y)}L${fmt(rt.x)} ${fmt(rt.y)}L${fmt(rt.x + 4)} ${fmt(rt.y + 16)}`;
+
+const wireLabel = `WIRE ${site.capability.wireRangeLabel.toUpperCase()}`;
+---
+
+<svg
+  class="drawing hero-drawing"
+  viewBox="0 0 560 420"
+  role="img"
+  aria-label="Technical drawing of a double torsion spring with callouts for the wire diameter range, the left- and right-hand coils and the centre loop"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <title>Double torsion spring, technical drawing</title>
+  <g class="hero-wire">
+    <path class="c" d={`M${fmt(L.start.x - 40)} ${yc}L${fmt(Rt.start.x + 40)} ${yc}`}></path>
+    <path class="w w-back" d={L.back + Rt.back}></path>
+    <path class="w" d={L.front + Rt.front}></path>
+    <path class="w" d={loop + legs}></path>
+  </g>
+
+  <g class="hero-dims">
+    <DimensionLine
+      x1={lt.x}
+      y1={lt.y - 26}
+      x2={rt.x}
+      y2={rt.y - 26}
+      label="LEG SPAN · TO YOUR DRAWING"
+      extend={20}
+      size={12.5}
+    />
+    <Leader
+      x={L.start.x + 26}
+      y={yc - R + 2}
+      ex={L.start.x + 66}
+      ey={yc - R - 30}
+      label={wireLabel}
+    />
+    <Leader
+      x={L.end.x - 30}
+      y={yc + R - 6}
+      ex={L.end.x - 70}
+      ey={yc + R + 36}
+      label="LH COIL"
+      align="left"
+    />
+    <Leader x={Rt.end.x + 30} y={yc + R - 6} ex={Rt.end.x + 70} ey={yc + R + 36} label="RH COIL" />
+    <DimensionLine
+      x1={L.end.x}
+      y1={loopY + 22}
+      x2={Rt.end.x}
+      y2={loopY + 22}
+      label="CENTRE LOOP"
+      extend={-18}
+      size={12.5}
+    />
+
+    <g class="hero-block" transform="translate(318 348)">
+      <rect class="tb" x="0" y="0" width="232" height="64"></rect>
+      <path class="tb" d="M0 32H232M132 0V64"></path>
+      <text class="tb-k" x="8" y="12">
+        PART
+      </text>
+      <text class="tb-v" x="8" y="26">
+        DOUBLE TORSION
+      </text>
+      <text class="tb-k" x="140" y="12">
+        QUOTE
+      </text>
+      <text class="tb-v" x="140" y="26">
+        IN 24 H
+      </text>
+      <text class="tb-k" x="8" y="44">
+        EST.
+      </text>
+      <text class="tb-v" x="8" y="58">
+        {site.foundingYear} · PUNE
+      </text>
+      <text class="tb-k" x="140" y="44">
+        SCALE
+      </text>
+      <text class="tb-v" x="140" y="58">
+        NTS
+      </text>
+    </g>
+  </g>
+</svg>
+
+<style>
+  .hero-drawing {
+    color: var(--color-navy-900);
+  }
+
+  .hero-drawing :global(.dim-label) {
+    font-size: 12.5px;
+  }
+
+  .hero-drawing .tb {
+    fill: none;
+    stroke: var(--color-navy-900);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.7;
+  }
+
+  .hero-drawing .tb-k {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    fill: var(--color-slate);
+  }
+
+  .hero-drawing .tb-v {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    fill: var(--color-navy-900);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-wire {
+      animation: hero-reveal 1.7s cubic-bezier(0.45, 0, 0.2, 1) both;
+    }
+
+    .hero-dims {
+      animation: hero-fade 0.6s ease-out 1.3s both;
+    }
+
+    @keyframes hero-reveal {
+      from {
+        clip-path: inset(0 50% 0 50%);
+      }
+      to {
+        clip-path: inset(0 0 0 0);
+      }
+    }
+
+    @keyframes hero-fade {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+</style>

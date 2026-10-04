@@ -1,0 +1,106 @@
+---
+/**
+ * Engineering dimension line for use INSIDE a parent <svg>.
+ * Thin line, arrow or tick ends, mono label on a knock-out background.
+ */
+interface Props {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  label: string;
+  ends?: 'arrow' | 'tick';
+  /** Label offset perpendicular to the line (negative = above/left). */
+  labelOffset?: number;
+  /**
+   * Extension-line length back toward the part. Positive points "down" (right-hand side of the
+   * line direction), negative points "up".
+   */
+  extend?: number;
+  /** Label font size in viewBox units; the knockout is sized to match. */
+  size?: number;
+  class?: string;
+}
+
+const {
+  x1,
+  y1,
+  x2,
+  y2,
+  label,
+  ends = 'arrow',
+  labelOffset = 0,
+  extend = 0,
+  size = 11,
+  class: className,
+} = Astro.props;
+
+const r = (n: number) => Math.round(n * 100) / 100;
+const dx = x2 - x1;
+const dy = y2 - y1;
+const len = Math.hypot(dx, dy) || 1;
+const ux = dx / len;
+const uy = dy / len;
+// Perpendicular (pointing "up" for a left-to-right line).
+const px = uy;
+const py = -ux;
+
+const head = (x: number, y: number, sx: number, sy: number) => {
+  const L = 6;
+  const W = 2.4;
+  const bx = x + sx * L;
+  const by = y + sy * L;
+  return `M${r(x)} ${r(y)}L${r(bx + px * W)} ${r(by + py * W)}L${r(bx - px * W)} ${r(by - py * W)}Z`;
+};
+const tick = (x: number, y: number) => {
+  const s = 4.5;
+  const tx = (ux + px) * s * 0.7071;
+  const ty = (uy + py) * s * 0.7071;
+  return `M${r(x - tx)} ${r(y - ty)}L${r(x + tx)} ${r(y + ty)}`;
+};
+
+const mx = (x1 + x2) / 2 + px * -labelOffset;
+const my = (y1 + y2) / 2 + py * -labelOffset;
+const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+const textAngle = angle > 90 || angle < -90 ? angle + 180 : angle;
+// IBM Plex Mono advance width is 0.6 em.
+const boxW = label.length * size * 0.6 + size * 1.1;
+const boxH = size + 5;
+---
+
+<g class={className}>
+  {extend !== 0 && (
+    <path
+      class="dim"
+      d={`M${r(x1)} ${r(y1)}L${r(x1 - px * extend)} ${r(y1 - py * extend)}M${r(x2)} ${r(y2)}L${r(x2 - px * extend)} ${r(y2 - py * extend)}`}
+      opacity="0.6"
+    />
+  )}
+  <path class="dim" d={`M${r(x1)} ${r(y1)}L${r(x2)} ${r(y2)}`} />
+  {ends === 'arrow' ? (
+    <>
+      <path class="dim-head" d={head(x1, y1, ux, uy)} />
+      <path class="dim-head" d={head(x2, y2, -ux, -uy)} />
+    </>
+  ) : (
+    <path class="dim" d={`${tick(x1, y1)}${tick(x2, y2)}`} />
+  )}
+  <g transform={`translate(${r(mx)} ${r(my)}) rotate(${r(textAngle)})`}>
+    <rect
+      class="dim-label-bg"
+      x={r(-boxW / 2)}
+      y={r(-boxH / 2)}
+      width={r(boxW)}
+      height={boxH}
+      rx="2"
+    ></rect>
+    <text
+      class="dim-label"
+      text-anchor="middle"
+      dominant-baseline="central"
+      style={size === 11 ? undefined : `font-size:${size}px`}
+    >
+      {label}
+    </text>
+  </g>
+</g>

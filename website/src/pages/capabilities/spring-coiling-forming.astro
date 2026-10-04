@@ -1,0 +1,72 @@
+---
+import Todo from '@/components/ui/Todo.astro';
+import { site } from '@/data/site';
+import CapabilityLayout from '@/layouts/CapabilityLayout.astro';
+
+const faqs = [
+  {
+    q: 'What wire sizes can you coil?',
+    a: `${site.capability.wireRangeLabel}. Outer diameter and length follow the drawing. Above 2.50 mm wire is outside this shop.`,
+  },
+  {
+    q: 'Do you form wire forms as well as springs?',
+    a: 'Yes. Clips, hooks and pins from the same wire range, to your drawing.',
+  },
+];
+---
+
+<CapabilityLayout
+  route="coilingForming"
+  title="Spring Coiling and Forming"
+  description="Spring coiling and wire forming, wire Ø 0.40–2.50 mm, to drawing or sample in Talawade, Pune. Quote within 24 hours."
+  h1="Spring coiling and forming"
+  lede="Helices and bends from 0.40–2.50 mm wire. This is the work the shop is built around."
+  context="a coiled spring"
+  faqs={faqs}
+  related={[
+    {
+      to: 'heatTreatment',
+      label: 'Stress relieving and grinding',
+      description: 'What happens after the coil.',
+    },
+    {
+      to: 'prototype',
+      label: 'Prototype development',
+      description: 'Sample first, then the bulk lot.',
+    },
+    {
+      to: 'springs',
+      label: 'Springs we make',
+      description: 'Torsion through conical, plus wire forms.',
+    },
+  ]}
+>
+  <h2>What it is</h2>
+  <p>
+    We coil torsion, double torsion, extension, compression, conical and spiral springs, and we form
+    clips, hooks and pins. Wire {site.capability.wireRangeLabel}. Outer diameter and free length
+    follow the drawing.
+  </p>
+  <p>
+    <Todo text="machine list and name-plate photos, before we name any machine." />
+  </p>
+
+  <h2>How it works</h2>
+  <p>
+    The wire is formed into the helix or the bend on the drawing. Ends, hooks and legs are formed to
+    the specified type. The batch then goes through our stress-relieving furnace. Ends are ground
+    when the drawing asks. Plating and other finishes leave the building.
+  </p>
+
+  <h2>When to use us</h2>
+  <p>
+    When the part is in our wire range, the quantity is in the {site.terms.moq} band (or you will
+    pay development charges), and you have a drawing or a sample. We quote within 24 hours.
+  </p>
+
+  <h2>Limits</h2>
+  <p>
+    No rolling-shutter, agriculture or heavy springs. No export. We will not invent a CNC list or a
+    capacity figure we have not measured.
+  </p>
+</CapabilityLayout>

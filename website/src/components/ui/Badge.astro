@@ -1,0 +1,37 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  variant?: 'default' | 'outline' | 'success' | 'warning' | 'error' | 'dark';
+  class?: string;
+}
+
+const { variant = 'default', class: className } = Astro.props;
+
+const styles = {
+  default: 'bg-blue-100 text-navy-900 border-blue-100',
+  outline: 'bg-white text-blue-700 border-blue-700',
+  success: 'bg-white text-success border-success',
+  warning: 'bg-white text-warning border-warning',
+  error: 'bg-white text-error border-error',
+  dark: 'bg-transparent text-blue-300 border-blue-300',
+} as const;
+
+const icon = {
+  success: 'check',
+  warning: 'triangle-alert',
+  error: 'circle-alert',
+} as const;
+const iconName = variant in icon ? icon[variant as keyof typeof icon] : undefined;
+---
+
+<span
+  class:list={[
+    'inline-flex min-h-6 items-center gap-1.5 rounded-[var(--radius-control)] border px-2 py-0.5 font-mono text-[0.75rem] font-medium uppercase tracking-[0.06em]',
+    styles[variant],
+    className,
+  ]}
+>
+  {iconName && <Icon name={iconName} size={14} />}
+  <slot />
+</span>

@@ -1,0 +1,81 @@
+---
+import Todo from '@/components/ui/Todo.astro';
+import { site } from '@/data/site';
+import CapabilityLayout from '@/layouts/CapabilityLayout.astro';
+
+const faqs = [
+  {
+    q: 'Do you stress-relieve every batch?',
+    a: 'Yes. The furnace is in-house. Coiled springs go through it before dispatch.',
+  },
+  {
+    q: 'Do you grind every compression spring?',
+    a: 'Only when the drawing asks for ground ends. Grinding is often skipped on the finest wire in our range.',
+  },
+];
+---
+
+<CapabilityLayout
+  route="heatTreatment"
+  title="Stress Relief and Grinding"
+  description="In-house stress-relieving furnace and end grinding. Plating and other finishes through partners. Talawade, Pune."
+  h1="Stress relieving and end grinding"
+  lede="Two in-house steps after the coil: the furnace, and the grinder when the drawing asks for flat ends. We do not plate here."
+  context="a ground or stress-relieved spring"
+  faqs={faqs}
+  related={[
+    {
+      to: 'coilingForming',
+      label: 'Spring coiling and forming',
+      description: 'What happens before the furnace.',
+    },
+    {
+      to: 'compression',
+      label: 'Compression springs',
+      description: 'Where ground ends are most often specified.',
+    },
+    {
+      to: 'quality',
+      label: 'Quality',
+      description: 'What we can stand behind — and what we will not write.',
+    },
+  ]}
+>
+  <h2>What it is</h2>
+  <p>
+    After coiling, residual stress sits in the wire. We take the batch through our{' '}
+    <strong>stress-relieving furnace</strong>. That is a heat to relax the coil, not a
+    quench-and-temper of the steel.
+  </p>
+  <p>
+    <strong>End grinding</strong> flattens the last coil of a compression spring so it stands
+    square. We have the machine. We use it when the drawing says closed-and-ground or
+    open-and-ground.
+  </p>
+  <p>
+    <Todo text="furnace and grinder details, and the smallest wire diameter you will grind." />
+  </p>
+
+  <h2>How it works</h2>
+  <p>
+    Coil and form → stress-relieve → grind ends if specified → finish through partners if specified
+    → pack and dispatch ex-works Talawade.
+  </p>
+  <p>
+    Plating, passivation and other coatings leave the building. We do not claim a
+    hydrogen-embrittlement bake or a salt-spray cabinet.
+  </p>
+
+  <h2>When to specify a grind</h2>
+  <p>
+    When the spring must sit flat and share the load around the last coil. Skip it on very fine wire
+    unless you have checked with us — {site.capability.wireMinMm.toFixed(2)} mm is the bottom of the
+    range, and a grind there is often more trouble than it is worth.
+  </p>
+
+  <h2>Limits</h2>
+  <p>
+    Wire {site.capability.wireRangeLabel}. No in-house plating. No lab numbers attached to the
+    furnace cycle until we publish them.
+  </p>
+</CapabilityLayout>

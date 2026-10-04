@@ -1,0 +1,52 @@
+---
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import Todo from '@/components/ui/Todo.astro';
+import { primaryEmail, primaryPhone, site } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+---
+
+<PageLayout
+  route="privacy"
+  title="Privacy Policy"
+  description="How RK Springs & Wireforms (RK Enterprises) handles the contact details you send by phone, WhatsApp or email."
+>
+  <Section tone="grid" labelledby="priv-h1">
+    <SectionHeader as="h1" id="priv-h1" eyebrow="Legal" title="Privacy policy" />
+    <p class="mt-4 text-small text-slate">
+      Last updated 4 October 2026. This page will be reviewed by a lawyer before launch.
+    </p>
+    <Todo block text="legal review, and a grievance contact if one is required." />
+  </Section>
+
+  <Section>
+    <div class="prose max-w-[46rem]">
+      <h2>Who we are</h2>
+      <p>
+        {site.brand} is a brand of {site.legalName}, a proprietorship in {site.address.locality},
+        {site.address.city}. GSTIN {site.gstin}.
+      </p>
+      <h2>What we collect</h2>
+      <p>
+        If you phone, WhatsApp, email us or use the quote form, we see the number or address you
+        used and whatever you sent — name, company, city, spring type, quantity, notes, drawings and
+        photos. We use that to quote and to supply the parts. We do not sell it.
+      </p>
+      <p>
+        The quote form is hosted on Vercel. Files and enquiry rows are stored in Supabase (when
+        those keys are configured). Notification mail is sent with Resend. The form check
+        (Turnstile) is run by Cloudflare. Until those keys are added, a local copy of the enquiry is
+        written on the server for testing only.
+      </p>
+      <h2>How long we keep it</h2>
+      <p>
+        Enquiry mail and drawings stay as long as we need them to quote, make the part or handle a
+        later repeat order. Say if you want a drawing deleted after the job.
+      </p>
+      <h2>Contact</h2>
+      <p>
+        Questions: {primaryEmail} or {primaryPhone.display}.
+      </p>
+    </div>
+  </Section>
+</PageLayout>

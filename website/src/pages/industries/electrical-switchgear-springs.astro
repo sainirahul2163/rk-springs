@@ -1,0 +1,68 @@
+---
+import { site } from '@/data/site';
+import IndustryLayout from '@/layouts/IndustryLayout.astro';
+
+const faqs = [
+  {
+    q: 'Do you make MCB springs?',
+    a: 'Yes. Switchgear and MCB springs are a regular job, inside our 0.40–2.50 mm wire range, to your drawing or sample.',
+  },
+  {
+    q: 'What material do switch springs usually use?',
+    a: 'Hard-drawn spring steel when the mechanism stays dry. Stainless 302 / 304 if the housing can damp or if the spec names stainless.',
+  },
+  {
+    q: 'What is the minimum order?',
+    a: `Usually ${site.terms.moq}. Smaller development runs are charged.`,
+  },
+];
+---
+
+<IndustryLayout
+  route="switchgear"
+  title="Switchgear Springs, Pune"
+  description="MCB and switchgear springs, wire Ø 0.40–2.50 mm, made to drawing or sample in Talawade, Pune. Quote within 24 hours."
+  h1="Electrical and switchgear springs"
+  lede="MCB and switch-mechanism springs are a regular job in this shop. Wire 0.40–2.50 mm, to your drawing or an unused sample."
+  context="switchgear springs"
+  faqs={faqs}
+  related={[
+    { to: 'torsion', label: 'Torsion springs', description: 'Common in switch levers.' },
+    {
+      to: 'doubleTorsion',
+      label: 'Double torsion springs',
+      description: 'Balanced torque on a hinge.',
+    },
+    { to: 'extension', label: 'Tension / extension springs', description: 'Returns and trips.' },
+  ]}
+>
+  <h2>MCB and switch mechanisms</h2>
+  <p>
+    We make springs for <strong>electrical and switchgear</strong> assemblies, including MCB
+    mechanisms. That is confirmed work, not a guess from a keyword list.
+  </p>
+  <p>
+    Typical parts in this wire range are torsion springs on a lever, double torsion springs on a
+    small hinge, extension springs on a trip or return, and short compression springs under a
+    contact or a button. Wire forms show up as clips and retainers.
+  </p>
+
+  <h2>What matters on a switch spring</h2>
+  <p>
+    The spring has to fit a tight pocket and hold a load after many operations. Give us the hole or
+    the pin, the free and working positions, and the load or torque at those positions. Wind
+    direction on a torsion spring is not optional — the mechanism will fight you if it is wrong.
+  </p>
+  <p>
+    Hard-drawn spring steel is the everyday material when the box stays dry. Stainless 302 / 304 if
+    the housing can take moisture. We do not plate in-house; say the finish on the drawing and we
+    send it out.
+  </p>
+
+  <h2>How we work</h2>
+  <p>
+    Send the drawing or the old spring. We quote within 24 hours. Usual minimum {site.terms.moq}.
+    For a new part we make a development sample so you can try it in the mechanism. Dispatch is
+    ex-works Talawade.
+  </p>
+</IndustryLayout>

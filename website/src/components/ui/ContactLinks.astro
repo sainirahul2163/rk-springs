@@ -1,0 +1,35 @@
+---
+import { primaryEmail, primaryPhone } from '@/data/site';
+import { mailHref, telHref, whatsappHref } from '@/lib/contact';
+import Button from './Button.astro';
+
+interface Props {
+  /** Page context for the WhatsApp message, e.g. "torsion springs". */
+  context?: string;
+  showEmail?: boolean;
+  class?: string;
+}
+
+const { context, showEmail = true, class: className } = Astro.props;
+---
+
+<div class:list={['flex flex-wrap items-center gap-3', className]}>
+  <Button
+    href={whatsappHref(context)}
+    variant="whatsapp"
+    icon="message-circle"
+    data-event="whatsapp_click"
+    target="_blank"
+    rel="noopener"
+  >
+    WhatsApp us
+  </Button>
+  <Button href={telHref()} variant="secondary" icon="phone" data-event="call_click">
+    <span class="tabular">{primaryPhone.display}</span>
+  </Button>
+  {showEmail && (
+    <Button href={mailHref()} variant="ghost" icon="mail" data-event="email_click">
+      {primaryEmail}
+    </Button>
+  )}
+</div>

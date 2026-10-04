@@ -1,0 +1,95 @@
+---
+import { materials } from '@/data/materials';
+---
+
+<table class="mat">
+  <caption class="sr-only">Spring wire materials we buy</caption>
+  <thead>
+    <tr>
+      <th scope="col">Material</th>
+      <th scope="col">Typical standard</th>
+      <th scope="col">When to choose it</th>
+    </tr>
+  </thead>
+  <tbody>
+    {materials.map((m) => (
+      <tr>
+        <th scope="row">{m.name}</th>
+        <td>{m.standard}</td>
+        <td>{m.when}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  .mat {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  th,
+  td {
+    padding: 12px 14px;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  thead th {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-slate);
+    background: var(--color-white);
+  }
+
+  tbody th {
+    font-weight: 600;
+    color: var(--color-navy-900);
+    width: 28%;
+  }
+
+  tbody td {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-ink);
+  }
+
+  tbody td + td {
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+  }
+
+  tbody tr:nth-child(even) {
+    background: var(--color-blue-50);
+  }
+
+  @media (max-width: 639.98px) {
+    .mat,
+    .mat tbody,
+    .mat tr,
+    .mat th,
+    .mat td {
+      display: block;
+      width: 100%;
+    }
+
+    thead {
+      display: none;
+    }
+
+    tbody tr {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    tbody th,
+    tbody td {
+      border: 0;
+      padding: 4px 0;
+    }
+  }
+</style>

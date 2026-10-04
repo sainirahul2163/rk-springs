@@ -1,0 +1,106 @@
+---
+import CTASection from '@/components/ui/CTASection.astro';
+import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import SpecTable from '@/components/ui/SpecTable.astro';
+import Todo from '@/components/ui/Todo.astro';
+import { site, yearsLabel } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+const rows = [
+  { label: 'Brand', value: site.brand },
+  { label: 'Legal name', value: `${site.legalName} (${site.legalForm})` },
+  { label: 'Established', value: yearsLabel },
+  {
+    label: 'Factory',
+    value: `${site.address.locality}, ${site.address.city} ${site.address.postalCode}`,
+  },
+  { label: 'GSTIN', value: site.gstin },
+  { label: 'Udyam', value: site.udyam },
+  { label: 'Wire', value: site.capability.wireRangeLabel },
+];
+---
+
+<PageLayout
+  route="about"
+  title="About RK Springs"
+  description="RK Springs & Wireforms is a brand of RK Enterprises. Precision springs and wire forms from Talawade, Pune, since 2017."
+  context="RK Springs"
+  pageKind="AboutPage"
+>
+  <Section tone="grid" labelledby="about-h1">
+    <SectionHeader
+      as="h1"
+      id="about-h1"
+      eyebrow="Company"
+      title={`${site.brand}, since ${site.foundingYear}`}
+      lede={`${site.brandLine}. A small spring shop in ${site.address.locality}, ${site.address.city}, making parts to your drawing or sample.`}
+    />
+  </Section>
+
+  <Section labelledby="who-title">
+    <div class="about-grid">
+      <div class="prose">
+        <h2 id="who-title">Who we are</h2>
+        <p>
+          {site.legalName} is a proprietorship, established in {site.foundingYear}. The public name
+          of the spring business is {site.brand}. The proprietor is {site.founder.givenName}.
+          <Todo text="confirm surname, and a short founder story if he wants it on the site." />
+        </p>
+        <p>
+          We make torsion and double torsion springs first, then tension / extension, compression,
+          conical and spiral springs, and wire forms. Wire {site.capability.wireRangeLabel}. We do
+          not make rolling-shutter, agriculture or heavy springs.
+        </p>
+        <p>
+          Enquiries today come from referrals. The site is here so an engineer or a purchase officer
+          can see the wire range, the terms and the address before they call.
+        </p>
+        <Todo text="team size, and a simple timeline since 2017." />
+      </div>
+      <PhotoPlaceholder ratio="4 / 3" caption="Shop floor in Talawade, with the coiling machines" />
+    </div>
+  </Section>
+
+  <Section tone="surface" labelledby="facts-title">
+    <SectionHeader id="facts-title" index={1} eyebrow="Facts" title="On the record" />
+    <SpecTable rows={rows} class="mt-8" />
+  </Section>
+
+  <Section labelledby="work-title">
+    <SectionHeader
+      id="work-title"
+      index={2}
+      eyebrow="How we work"
+      title="Drawing or sample, then a quote"
+    />
+    <div class="prose mt-8 max-w-[46rem]">
+      <p>
+        Send the drawing or the old spring. We quote within 24 hours. The usual minimum order is
+        {site.terms.moq}; smaller development runs are charged. Dispatch is {site.terms.delivery}.
+        We supply across India. We do not export.
+      </p>
+      <p>
+        In-house we coil and form, stress-relieve, and grind ends when the part needs it. Plating
+        and other finishes go through partners.
+      </p>
+    </div>
+  </Section>
+
+  <CTASection />
+</PageLayout>
+
+<style>
+  .about-grid {
+    display: grid;
+    gap: 40px;
+  }
+
+  @media (min-width: 900px) {
+    .about-grid {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+      align-items: start;
+    }
+  }
+</style>

@@ -1,0 +1,74 @@
+---
+import Drawing from './Drawing.astro';
+import DimensionLine from './DimensionLine.astro';
+import Leader from './Leader.astro';
+import { fmt, helix } from './geometry';
+
+interface Props {
+  annotated?: boolean;
+  decorative?: boolean;
+  class?: string;
+}
+
+const { annotated = false, decorative = false, class: cls } = Astro.props;
+
+const yc = 100;
+const R = 26;
+const x0 = 104;
+const h = helix({ x0, yc, turns: 6, pitch: 5, radius: R, tilt: 0.32 });
+
+// Straight legs leave the top of the first and last coil; each ends in a short 90° bend.
+const a = h.start;
+const b = h.end;
+const legL = { x: a.x - 66, y: a.y - 40 };
+const legR = { x: b.x + 66, y: b.y - 40 };
+const legs =
+  `M${fmt(a.x)} ${fmt(a.y)}L${fmt(legL.x)} ${fmt(legL.y)}L${fmt(legL.x - 8)} ${fmt(legL.y + 12)}` +
+  `M${fmt(b.x)} ${fmt(b.y)}L${fmt(legR.x)} ${fmt(legR.y)}L${fmt(legR.x + 8)} ${fmt(legR.y + 12)}`;
+
+const mid = (a.x + b.x) / 2;
+const t = 0.62;
+const pL = { x: a.x + (legL.x - a.x) * t, y: a.y + (legL.y - a.y) * t };
+const pR = { x: b.x + (legR.x - b.x) * t, y: b.y + (legR.y - b.y) * t };
+const arcR = Math.hypot(pR.x - mid, pR.y - yc);
+---
+
+<Drawing
+  viewBox="0 0 240 150"
+  title="Torsion spring with straight legs and bent leg ends"
+  decorative={decorative}
+  class={cls}
+>
+  <path class="c" d={`M${fmt(x0 - 22)} ${yc}L${fmt(b.x + 22)} ${yc}`}></path>
+  <path class="w w-back" d={h.back}></path>
+  <path class="w" d={h.front}></path>
+  <path class="w" d={legs}></path>
+  {annotated && (
+    <>
+      <path
+        class="dim"
+        d={`M${fmt(pL.x)} ${fmt(pL.y)}A${fmt(arcR)} ${fmt(arcR)} 0 0 1 ${fmt(pR.x)} ${fmt(pR.y)}`}
+      />
+      <text class="dim-label" x={fmt(mid)} y={fmt(pL.y - 14)} text-anchor="middle">
+        FREE ANGLE
+      </text>
+      <DimensionLine
+        x1={b.x + 8}
+        y1={b.y + 13}
+        x2={legR.x + 8}
+        y2={legR.y + 13}
+        label="LEG"
+        extend={0}
+      />
+      <DimensionLine
+        x1={x0 - 9}
+        y1={yc + R + 18}
+        x2={b.x + 9}
+        y2={yc + R + 18}
+        label="BODY"
+        ends="tick"
+      />
+      <Leader x={x0 - 8} y={yc + 12} ex={x0 - 34} ey={yc + 34} label="ID" align="left" />
+    </>
+  )}
+</Drawing>

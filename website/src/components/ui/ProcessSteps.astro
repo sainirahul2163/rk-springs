@@ -1,0 +1,111 @@
+---
+/** Numbered steps (01, 02, …) joined by a dimension line: horizontal on desktop, vertical on mobile. */
+export interface Step {
+  title: string;
+  text: string;
+}
+
+interface Props {
+  steps: readonly Step[];
+  class?: string;
+}
+
+const { steps, class: className } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+
+<ol class:list={['steps', className]} style={`--n: ${steps.length}`}>
+  {steps.map((s, i) => (
+    <li class="step">
+      <span class="step-no" aria-hidden="true">
+        {pad(i + 1)}
+      </span>
+      <h3 class="step-title">
+        <span class="sr-only">Step {i + 1}: </span>
+        {s.title}
+      </h3>
+      <p class="step-text">{s.text}</p>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .steps {
+    position: relative;
+    display: grid;
+    gap: 28px;
+    padding-left: 56px;
+  }
+
+  /* Vertical dimension line with end ticks (mobile). */
+  .steps::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    bottom: 20px;
+    border-left: 1px solid var(--color-action-600);
+  }
+
+  .step {
+    position: relative;
+  }
+
+  .step-no {
+    position: absolute;
+    left: -56px;
+    top: -2px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-navy-900);
+    background: var(--color-white);
+    border: 1px solid var(--color-action-600);
+    border-radius: var(--radius-control);
+  }
+
+  .step-title {
+    font-size: 1.0625rem;
+    line-height: 1.35;
+    color: var(--color-navy-900);
+    margin-bottom: 4px;
+    padding-top: 7px;
+  }
+
+  .step-text {
+    font-size: 0.9375rem;
+    color: var(--color-slate);
+    line-height: 1.55;
+  }
+
+  @media (min-width: 1024px) {
+    .steps {
+      grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+      gap: 24px;
+      padding-left: 0;
+      padding-top: 60px;
+    }
+
+    .steps::before {
+      left: 20px;
+      right: 20px;
+      top: 20px;
+      bottom: auto;
+      border-left: 0;
+      border-top: 1px solid var(--color-action-600);
+    }
+
+    .step-no {
+      left: 0;
+      top: -60px;
+    }
+
+    .step-title {
+      padding-top: 0;
+    }
+  }
+</style>

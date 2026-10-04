@@ -1,0 +1,89 @@
+---
+import Card from '@/components/ui/Card.astro';
+import CTASection from '@/components/ui/CTASection.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { site } from '@/data/site';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+const caps = [
+  {
+    to: 'coilingForming' as const,
+    title: 'Spring coiling and forming',
+    icon: 'wrench' as const,
+    description: 'Helices and bends from 0.40–2.50 mm wire, to your drawing or sample.',
+  },
+  {
+    to: 'prototype' as const,
+    title: 'Prototype development',
+    icon: 'ruler' as const,
+    description: 'A development sample, then your approval, then the bulk quantity.',
+  },
+  {
+    to: 'reverseEngineering' as const,
+    title: 'Reverse engineering',
+    icon: 'factory' as const,
+    description: 'No drawing? Send an unused spring. We measure it and quote within 24 hours.',
+  },
+  {
+    to: 'heatTreatment' as const,
+    title: 'Stress relieving and grinding',
+    icon: 'thermometer' as const,
+    description: 'In-house furnace and end grinding. Plating goes through partners.',
+  },
+];
+---
+
+<PageLayout
+  route="capabilities"
+  title="Spring Capabilities"
+  description="Coiling and forming, development samples, reverse engineering from a sample, in-house stress relieving and end grinding. Talawade, Pune."
+  context="a custom spring"
+  pageKind="CollectionPage"
+>
+  <Section tone="grid" labelledby="cap-h1">
+    <SectionHeader
+      as="h1"
+      id="cap-h1"
+      eyebrow="Capabilities"
+      title="What this shop can do"
+      lede={`Wire ${site.capability.wireRangeLabel}. Coiling and forming, a stress-relieving furnace and end grinding in-house. Plating and other finishes through partners.`}
+    />
+  </Section>
+
+  <Section labelledby="grid-title">
+    <SectionHeader
+      id="grid-title"
+      index={1}
+      eyebrow="On this floor"
+      title="Four things we actually do"
+    />
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2">
+      {caps.map((it) => (
+        <li>
+          <Card
+            variant="industry"
+            title={it.title}
+            description={it.description}
+            to={it.to}
+            icon={it.icon}
+            headingLevel="h3"
+          />
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section tone="surface" labelledby="not-title">
+    <SectionHeader id="not-title" index={2} eyebrow="Limits" title="What we will not list" />
+    <div class="prose mt-8 max-w-[46rem]">
+      <p>
+        No CNC machine list until the plates are photographed. No load tester, no lab, no PPAP pack.
+        Usual minimum order is {site.terms.moq}. Smaller runs carry development charges. Quote
+        within 24 hours. Dispatch is ex-works Talawade.
+      </p>
+    </div>
+  </Section>
+
+  <CTASection context="a custom spring" />
+</PageLayout>

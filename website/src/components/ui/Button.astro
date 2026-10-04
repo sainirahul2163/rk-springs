@@ -1,0 +1,84 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import Icon, { type IconName } from './Icon.astro';
+
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'inverse' | 'whatsapp';
+export type ButtonSize = 'sm' | 'md' | 'lg';
+
+type Props = {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  href?: string | null;
+  type?: 'button' | 'submit' | 'reset';
+  icon?: IconName;
+  iconRight?: IconName;
+  /** Visually and semantically unavailable; prefer validating on submit instead. */
+  unavailable?: boolean;
+  block?: boolean;
+  class?: string;
+} & Omit<HTMLAttributes<'a'>, 'type' | 'href'>;
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  icon,
+  iconRight,
+  unavailable = false,
+  block = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const base =
+  'btn inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] font-medium leading-tight text-center no-underline select-none transition-[background-color,border-color,color,filter] duration-200 ease-out';
+
+const sizes: Record<ButtonSize, string> = {
+  sm: 'min-h-11 px-4 text-[0.9375rem]',
+  md: 'min-h-12 px-5 text-base',
+  lg: 'min-h-14 px-6 text-[1.0625rem]',
+};
+
+const variants: Record<ButtonVariant, string> = {
+  primary: 'bg-action-600 text-white hover:bg-action-700 active:bg-blue-800',
+  secondary:
+    'border border-blue-700 bg-white text-blue-700 hover:bg-blue-50 hover:border-action-700 hover:text-action-700 active:bg-blue-100',
+  ghost: 'text-blue-700 hover:bg-blue-50 hover:text-action-700 active:bg-blue-100',
+  inverse: 'bg-white text-navy-900 hover:bg-blue-100 active:bg-blue-300',
+  whatsapp: 'bg-whatsapp text-navy-900 hover:brightness-95 active:brightness-90',
+};
+
+const classes = [
+  base,
+  sizes[size],
+  variants[variant],
+  block && 'w-full',
+  unavailable && 'pointer-events-none opacity-55',
+  className,
+];
+const iconSize = size === 'lg' ? 22 : 20;
+---
+
+{href && !unavailable ? (
+  <a href={href} class:list={classes} {...rest}>
+    {icon && <Icon name={icon} size={iconSize} />}
+    <span>
+      <slot />
+    </span>
+    {iconRight && <Icon name={iconRight} size={iconSize} />}
+  </a>
+) : (
+  <button
+    type={type}
+    class:list={classes}
+    aria-disabled={unavailable ? 'true' : undefined}
+    {...(rest as HTMLAttributes<'button'>)}
+  >
+    {icon && <Icon name={icon} size={iconSize} />}
+    <span>
+      <slot />
+    </span>
+    {iconRight && <Icon name={iconRight} size={iconSize} />}
+  </button>
+)}

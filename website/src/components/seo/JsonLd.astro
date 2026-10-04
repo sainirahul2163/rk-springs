@@ -1,0 +1,9 @@
+---
+import { buildGraph, type JsonLdPage } from '@/lib/jsonld';
+
+type Props = JsonLdPage;
+
+const graph = buildGraph(Astro.props);
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(graph)} />

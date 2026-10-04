@@ -1,0 +1,102 @@
+---
+import { getRoute, linkTo, type RouteId } from '@/data/routes';
+import Icon from './Icon.astro';
+
+export interface RelatedLink {
+  label: string;
+  to?: RouteId;
+  href?: string;
+  description?: string;
+}
+
+interface Props {
+  title?: string;
+  links: readonly RelatedLink[];
+  class?: string;
+}
+
+const { title = 'Related', links, class: className } = Astro.props;
+const resolved = links
+  .map((l) => {
+    const live = l.href ?? (l.to && getRoute(l.to).status === 'live' ? linkTo(l.to) : null);
+    return { ...l, url: live };
+  })
+  .filter((l) => l.url);
+const headingId = `rel-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+---
+
+{resolved.length > 0 && (
+  <nav class:list={['related', className]} aria-labelledby={headingId}>
+    <p id={headingId} class="eyebrow related-title">
+      {title}
+    </p>
+    <ul>
+      {resolved.map((l) => (
+        <li>
+          <a href={l.url!} class="related-link">
+            <span class="related-label">{l.label}</span>
+            {l.description && <span class="related-desc">{l.description}</span>}
+            <Icon name="arrow-right" size={18} class="related-arrow" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<style>
+  .related-title {
+    color: var(--color-slate);
+    margin-bottom: 8px;
+  }
+
+  ul {
+    border-top: 1px solid var(--color-border);
+  }
+
+  li {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .related-link {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2px 16px;
+    align-items: center;
+    min-height: 52px;
+    padding: 12px 4px;
+    color: var(--color-blue-700);
+    transition: color 150ms var(--ease-out);
+  }
+
+  .related-label {
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .related-desc {
+    grid-column: 1;
+    font-size: var(--text-small);
+    color: var(--color-slate);
+  }
+
+  .related-link :global(.related-arrow) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    transition: transform 200ms var(--ease-out);
+  }
+
+  .related-link:hover {
+    color: var(--color-action-700);
+  }
+
+  .related-link:hover .related-label {
+    text-decoration-thickness: 2px;
+  }
+
+  .related-link:hover :global(.related-arrow) {
+    transform: translateX(3px);
+  }
+</style>

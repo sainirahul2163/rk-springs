@@ -1,0 +1,61 @@
+---
+import { ExtensionCalculator } from '@/components/tools/ExtensionCalculator';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
+import { extensionCalcFaqs } from '@/data/faqs';
+import { site } from '@/data/site';
+import ToolLayout from '@/layouts/ToolLayout.astro';
+---
+
+<ToolLayout
+  route="extensionCalc"
+  title="Extension Spring Calculator"
+  description="Rate and body stress from wire, OD, body coils and initial tension. Hook stress is higher. Metric estimate."
+  h1="Extension spring calculator"
+  lede="Rate and body stress for a close-wound tension spring. Hooks add a little flexibility; they also fail first."
+  context="an extension spring"
+  faqs={extensionCalcFaqs}
+>
+  <ExtensionCalculator client:idle search={Astro.url.search} />
+
+  <Fragment slot="method">
+    <h2>Method</h2>
+    <p>
+      Mean diameter <strong>D = OD − d</strong>. Active coils <strong>Na = Nb + G / E</strong>,
+      which credits the hooks with a little extra flexibility. Rate uses the same formula as
+      compression:
+      <strong>k = G · d⁴ / (8 · D³ · Na)</strong>.
+    </p>
+    <p>
+      Load at extension x is <strong>F = Fi + k · x</strong>. Body length is (Nb + 1) · d. Body
+      shear stress uses the Wahl factor. Hook stress is higher than body stress — the hook usually
+      fails first — so treat the body figure as a lower bound.
+    </p>
+    <p>
+      G and E are typical published values, not measured here. Wire outside{' '}
+      {site.capability.wireRangeLabel} is flagged because that is our standard range.
+    </p>
+  </Fragment>
+
+  <RelatedLinks
+    slot="related"
+    class="mt-12"
+    title="Related"
+    links={[
+      {
+        to: 'extension',
+        label: 'Tension / extension springs',
+        description: 'Hooks, initial tension and what we make.',
+      },
+      {
+        to: 'compressionCalc',
+        label: 'Compression spring calculator',
+        description: 'Rate for an open-coiled push spring.',
+      },
+      {
+        to: 'rateConverter',
+        label: 'Spring rate converter',
+        description: 'N/mm, kgf/mm and lbf/in.',
+      },
+    ]}
+  />
+</ToolLayout>

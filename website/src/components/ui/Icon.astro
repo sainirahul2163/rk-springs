@@ -1,0 +1,96 @@
+---
+/**
+ * Lucide icons at the site-wide 1.5 px stroke. Decorative by default (aria-hidden);
+ * pass `label` when the icon conveys meaning on its own.
+ */
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import Camera from '@lucide/astro/icons/camera';
+import Check from '@lucide/astro/icons/check';
+import ChevronDown from '@lucide/astro/icons/chevron-down';
+import ChevronRight from '@lucide/astro/icons/chevron-right';
+import CircleAlert from '@lucide/astro/icons/circle-alert';
+import Clock from '@lucide/astro/icons/clock';
+import Copy from '@lucide/astro/icons/copy';
+import FileText from '@lucide/astro/icons/file-text';
+import Factory from '@lucide/astro/icons/factory';
+import Gauge from '@lucide/astro/icons/gauge';
+import Info from '@lucide/astro/icons/info';
+import Mail from '@lucide/astro/icons/mail';
+import MapPin from '@lucide/astro/icons/map-pin';
+import Menu from '@lucide/astro/icons/menu';
+import MessageCircle from '@lucide/astro/icons/message-circle';
+import Phone from '@lucide/astro/icons/phone';
+import Plus from '@lucide/astro/icons/plus';
+import Ruler from '@lucide/astro/icons/ruler';
+import ShieldCheck from '@lucide/astro/icons/shield-check';
+import TriangleAlert from '@lucide/astro/icons/triangle-alert';
+import Truck from '@lucide/astro/icons/truck';
+import Upload from '@lucide/astro/icons/upload';
+import Wrench from '@lucide/astro/icons/wrench';
+import X from '@lucide/astro/icons/x';
+import Calculator from '@lucide/astro/icons/calculator';
+import BookOpen from '@lucide/astro/icons/book-open';
+import CalendarDays from '@lucide/astro/icons/calendar-days';
+import BadgeCheck from '@lucide/astro/icons/badge-check';
+import Zap from '@lucide/astro/icons/zap';
+import Car from '@lucide/astro/icons/car';
+import Armchair from '@lucide/astro/icons/armchair';
+import Thermometer from '@lucide/astro/icons/thermometer';
+
+const icons = {
+  'arrow-right': ArrowRight,
+  'arrow-up-right': ArrowUpRight,
+  camera: Camera,
+  check: Check,
+  'chevron-down': ChevronDown,
+  'chevron-right': ChevronRight,
+  'circle-alert': CircleAlert,
+  clock: Clock,
+  copy: Copy,
+  'file-text': FileText,
+  factory: Factory,
+  gauge: Gauge,
+  info: Info,
+  mail: Mail,
+  'map-pin': MapPin,
+  menu: Menu,
+  'message-circle': MessageCircle,
+  phone: Phone,
+  plus: Plus,
+  ruler: Ruler,
+  'shield-check': ShieldCheck,
+  'triangle-alert': TriangleAlert,
+  truck: Truck,
+  upload: Upload,
+  wrench: Wrench,
+  x: X,
+  calculator: Calculator,
+  'book-open': BookOpen,
+  calendar: CalendarDays,
+  'badge-check': BadgeCheck,
+  zap: Zap,
+  car: Car,
+  armchair: Armchair,
+  thermometer: Thermometer,
+} as const;
+
+export type IconName = keyof typeof icons;
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+  label?: string;
+}
+
+const { name, size = 20, class: className, label } = Astro.props;
+const Cmp = icons[name];
+const cls = className ? { class: className } : {};
+---
+
+{label ? (
+  <Cmp size={size} stroke-width={1.5} {...cls} role="img" aria-label={label} />
+) : (
+  <Cmp size={size} stroke-width={1.5} {...cls} aria-hidden="true" focusable="false" />
+)}

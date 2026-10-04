@@ -1,0 +1,56 @@
+---
+import Todo from './Todo.astro';
+
+interface Props {
+  published: Date;
+  updated?: Date | undefined;
+  /** Technical reviewer's name; leave empty until the client confirms. */
+  reviewer?: string | null | undefined;
+  class?: string | undefined;
+}
+
+const { published, updated, reviewer = null, class: className } = Astro.props;
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+---
+
+<div class:list={['meta', className]}>
+  <p>
+    <span class="k">Published</span>
+    <time datetime={iso(published)}>{fmt(published)}</time>
+  </p>
+  {updated && (
+    <p>
+      <span class="k">Updated</span>
+      <time datetime={iso(updated)}>{fmt(updated)}</time>
+    </p>
+  )}
+  {reviewer ? (
+    <p>
+      <span class="k">Reviewed by</span>
+      <span>{reviewer}</span>
+    </p>
+  ) : (
+    <Todo text="add 'Reviewed by' once Rutvik has reviewed this page." />
+  )}
+</div>
+
+<style>
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 24px;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--color-ink);
+  }
+
+  .k {
+    color: var(--color-slate);
+    margin-right: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+</style>

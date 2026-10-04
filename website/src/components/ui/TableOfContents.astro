@@ -1,0 +1,72 @@
+---
+export interface TocItem {
+  id: string;
+  text: string;
+  depth?: 2 | 3;
+}
+
+interface Props {
+  items: readonly TocItem[];
+  class?: string;
+}
+
+const { items, class: className } = Astro.props;
+---
+
+<nav class:list={['toc', className]} aria-labelledby="toc-title">
+  <p id="toc-title" class="eyebrow toc-title">
+    On this page
+  </p>
+  <ol>
+    {items.map((it) => (
+      <li class:list={[it.depth === 3 && 'toc-sub']}>
+        <a href={`#${it.id}`}>{it.text}</a>
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .toc {
+    border-left: 1px solid var(--color-grid);
+    padding-left: 16px;
+  }
+
+  .toc-title {
+    color: var(--color-slate);
+    margin-bottom: 10px;
+  }
+
+  ol {
+    display: grid;
+    gap: 2px;
+    counter-reset: toc;
+  }
+
+  li > a {
+    display: block;
+    padding: 6px 0;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: var(--color-blue-700);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.2em;
+    transition:
+      color 150ms var(--ease-out),
+      text-decoration-color 150ms var(--ease-out);
+  }
+
+  li > a:hover {
+    color: var(--color-action-700);
+    text-decoration-color: currentColor;
+  }
+
+  .toc-sub {
+    padding-left: 14px;
+  }
+
+  .toc-sub > a {
+    font-size: 0.875rem;
+  }
+</style>

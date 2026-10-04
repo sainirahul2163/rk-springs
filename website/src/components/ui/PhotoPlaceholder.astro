@@ -1,0 +1,64 @@
+---
+/**
+ * Stand-in for a real photo until the factory shoot. No stock or AI images, ever.
+ * Hidden in production builds, so layouts must still work without it.
+ */
+import { SHOW_TODOS } from '@/lib/env';
+import Icon from './Icon.astro';
+import Todo from './Todo.astro';
+
+interface Props {
+  /** CSS aspect ratio, e.g. "4 / 3". */
+  ratio?: string;
+  /** What the final photo should show. */
+  caption: string;
+  class?: string;
+}
+
+const { ratio = '4 / 3', caption, class: className } = Astro.props;
+---
+
+{SHOW_TODOS && (
+  <figure class:list={['photo-ph', className]}>
+    <div class="photo-ph-box bp-grid" style={`aspect-ratio: ${ratio}`}>
+      <div class="photo-ph-inner">
+        <Icon name="camera" size={28} />
+        <span class="eyebrow">Photo placeholder</span>
+      </div>
+    </div>
+    <figcaption>
+      <span class="photo-ph-cap">Photo: {caption}</span>
+      <Todo text="replace with a real photo from the factory shoot." />
+    </figcaption>
+  </figure>
+)}
+
+<style>
+  .photo-ph-box {
+    position: relative;
+    border: 1px solid var(--color-grid);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background-color: var(--color-blue-50);
+  }
+
+  .photo-ph-inner {
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    color: var(--color-blue-700);
+    background: var(--color-blue-50);
+    padding: 10px 14px;
+    border-radius: var(--radius-control);
+  }
+
+  figcaption {
+    display: grid;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: var(--text-small);
+    color: var(--color-slate);
+  }
+</style>

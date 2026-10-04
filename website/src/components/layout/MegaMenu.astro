@@ -1,0 +1,150 @@
+---
+import { products, wireFormsItem } from '@/data/navigation';
+import { linkTo } from '@/data/routes';
+import { quoteHref } from '@/lib/contact';
+import ProductDiagram from '../diagrams/ProductDiagram.astro';
+import Icon from '../ui/Icon.astro';
+import SmartLink from '../ui/SmartLink.astro';
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const items = [...products, wireFormsItem].filter((p) => linkTo(p.route));
+---
+
+<div id={id} class="mega" hidden>
+  <div class="container-page mega-inner">
+    <ul class="mega-grid">
+      {items.map((p) => (
+        <li>
+          <SmartLink to={p.route} class="mega-item">
+            <span class="mega-fig">
+              <ProductDiagram name={p.diagram} decorative />
+            </span>
+            <span class="mega-text">
+              <span class="mega-name">{p.name}</span>
+              <span class="mega-blurb">{p.blurb}</span>
+            </span>
+          </SmartLink>
+        </li>
+      ))}
+    </ul>
+    <div class="mega-side">
+      <p class="eyebrow text-blue-700">Not sure which spring?</p>
+      <p class="mega-side-text">
+        Send us your drawing, a photo or the old spring. We will tell you what it is and quote
+        within 24 hours.
+      </p>
+      <a href={quoteHref()} class="mega-side-link">
+        Request a quote <Icon name="arrow-right" size={18} />
+      </a>
+      <SmartLink to="springs" class="mega-side-link">
+        All spring types <Icon name="arrow-right" size={18} />
+      </SmartLink>
+    </div>
+  </div>
+</div>
+
+<style>
+  .mega {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    background: var(--color-white);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-menu);
+  }
+
+  .mega-inner {
+    display: grid;
+    grid-template-columns: 1fr 260px;
+    gap: 32px;
+    padding-block: 24px 28px;
+  }
+
+  .mega-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .mega-item {
+    display: grid;
+    gap: 8px;
+    height: 100%;
+    padding: 12px;
+    border: 1px solid transparent;
+    border-radius: var(--radius-card);
+    color: var(--color-navy-900);
+    transition:
+      border-color 150ms var(--ease-out),
+      background-color 150ms var(--ease-out);
+  }
+
+  a.mega-item:hover {
+    border-color: var(--color-grid);
+    background: var(--color-blue-50);
+  }
+
+  a.mega-item:hover .mega-name {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .mega-fig {
+    display: block;
+    color: var(--color-navy-900);
+    padding: 6px 8px;
+  }
+
+  .mega-fig :global(svg) {
+    max-height: 72px;
+  }
+
+  .mega-text {
+    display: grid;
+    gap: 2px;
+  }
+
+  .mega-name {
+    font-weight: 600;
+    font-size: 0.9688rem;
+  }
+
+  .mega-blurb {
+    font-size: 0.8438rem;
+    line-height: 1.45;
+    color: var(--color-slate);
+  }
+
+  .mega-side {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    padding: 16px 0 16px 24px;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .mega-side-text {
+    font-size: 0.9375rem;
+    color: var(--color-ink);
+  }
+
+  .mega-side-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    font-weight: 500;
+    color: var(--color-blue-700);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .mega-side-link:hover {
+    color: var(--color-action-700);
+  }
+</style>

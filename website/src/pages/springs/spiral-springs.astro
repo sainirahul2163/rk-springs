@@ -1,0 +1,78 @@
+---
+import MaterialsTable from '@/components/ui/MaterialsTable.astro';
+import SpiralSpring from '@/components/diagrams/SpiralSpring.astro';
+import Todo from '@/components/ui/Todo.astro';
+import { spiral } from '@/data/products';
+import { allowDraft } from '@/lib/draft';
+import ProductLayout from '@/layouts/ProductLayout.astro';
+
+if (!allowDraft) {
+  return Astro.rewrite('/404/');
+}
+---
+
+<ProductLayout product={spiral}>
+  <Fragment slot="about">
+    <p>
+      This page is a <strong>draft</strong>. The client lists spiral springs among the parts they
+      make, together with conical springs. What “spiral” means in this shop is not yet confirmed: a
+      wire wound in a flat spiral, or a flat-strip power / clock spring.
+    </p>
+    <Todo
+      block
+      text="confirm whether spiral means wire spiral or flat-strip power spring, then rewrite this page."
+    />
+    <p>
+      Until then: send the drawing or the old part. If it is in our 0.40–2.50 mm wire range we can
+      usually help. A wide flat strip may be outside what the machines here do.
+    </p>
+    <p>
+      The drawing on this page is a generic wire spiral with an arbor tab and an outer hook. It is
+      there so the layout is honest, not so we can pretend we have a finished product story.
+    </p>
+  </Fragment>
+
+  <Fragment slot="types">
+    <figure class="type-fig max-w-[28rem]">
+      <div class="bp-grid type-draw">
+        <SpiralSpring annotated />
+      </div>
+      <figcaption>Generic spiral — replace once the part family is confirmed.</figcaption>
+    </figure>
+  </Fragment>
+
+  <MaterialsTable slot="materials" />
+
+  <Fragment slot="tips">
+    <p>
+      A photo of the part, a ruler in the frame, and the quantity are enough for a first reply. Mark
+      the arbor and the outer hook if they have to fit existing pins.
+    </p>
+  </Fragment>
+
+  <Fragment slot="applications">
+    <p>
+      We will list typical uses once we know which spiral we make. Do not assume clock springs,
+      brush springs or constant-force strip from this page.
+    </p>
+  </Fragment>
+</ProductLayout>
+
+<style>
+  .type-fig {
+    margin: 0;
+  }
+
+  .type-draw {
+    padding: 16px;
+    border: 1px solid var(--color-grid);
+    border-radius: var(--radius-card);
+    color: var(--color-navy-900);
+  }
+
+  figcaption {
+    margin-top: 10px;
+    font-size: 0.9375rem;
+    color: var(--color-ink);
+  }
+</style>

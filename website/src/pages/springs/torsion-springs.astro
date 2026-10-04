@@ -1,0 +1,107 @@
+---
+import MaterialsTable from '@/components/ui/MaterialsTable.astro';
+import Todo from '@/components/ui/Todo.astro';
+import TorsionSpring from '@/components/diagrams/TorsionSpring.astro';
+import { torsion } from '@/data/products';
+import ProductLayout from '@/layouts/ProductLayout.astro';
+---
+
+<ProductLayout product={torsion}>
+  <Fragment slot="about">
+    <p>
+      A torsion spring is a close-wound helix whose <strong>legs</strong> are rotated around the
+      coil axis. It stores torque, not a push or a pull. That is why the drawing must give a free
+      angle and a wind direction, not only a free length.
+    </p>
+    <p>
+      This is the spring we make most of. Wire is {torsion.specs[0]?.value} from hard-drawn spring
+      steel, music wire, stainless 302 / 304 / 316 or oil-tempered wire. Legs are bent to the
+      drawing — straight, hooked or offset.
+    </p>
+    <p>
+      Load the spring so the coils <strong>wind tighter</strong>. The inside diameter shrinks and
+      the body grows a little along the axis. Put a shaft or mandrel through the ID; a good starting
+      fit is an arbor of about 90 percent of the smallest ID at full deflection. Fatigue cracks
+      usually start where the leg leaves the body, so a generous bend radius there is worth more
+      than an extra coil.
+    </p>
+    <p>
+      We do not publish a standard catalogue. Every torsion spring is a customer part: your wire,
+      your ID, your legs, your angle.
+    </p>
+  </Fragment>
+
+  <Fragment slot="types">
+    <div class="grid gap-5 sm:grid-cols-2">
+      <figure class="type-fig">
+        <div class="bp-grid type-draw">
+          <TorsionSpring decorative />
+        </div>
+        <figcaption>
+          <strong>Single-body torsion.</strong> One helix, two legs. Specify free angle and wind.
+        </figcaption>
+      </figure>
+      <div class="prose">
+        <p>
+          Leg forms we are asked for: straight, a simple hook, a 90-degree bend, or an offset that
+          clears a boss. The shop will form what is on the drawing.
+        </p>
+        <Todo text="list the leg forms you regularly tool for." />
+        <p>
+          Wind is left-hand or right-hand. If the spring sits over a shaft that is already in the
+          assembly, the wind is fixed by that layout — send a photo of the fit if you are unsure.
+        </p>
+      </div>
+    </div>
+  </Fragment>
+
+  <MaterialsTable slot="materials" />
+
+  <Fragment slot="tips">
+    <p>
+      Give us the <strong>inside diameter</strong>, not only the outside. The ID has to clear the
+      shaft at full wind-up. If you only have the old spring, measure the wire with a micrometer if
+      you can; a vernier on the OD is the next best thing.
+    </p>
+    <p>
+      Torque at a working angle is useful but not required. Quantity and material (or “it lives
+      outdoors / next to a switch”) are enough to start a quote.
+    </p>
+  </Fragment>
+
+  <Fragment slot="applications">
+    <p>
+      Typical work from this shop: <strong>switchgear and MCB mechanisms</strong>, small automotive
+      assemblies, furniture recline and fold hinges, and instrumentation. The same layout turns up
+      on appliance lids, clips and stationery — anywhere a light wire has to return a lever.
+    </p>
+    <p>
+      We do not make rolling-shutter counterbalance springs or heavy torsion bars. Those need wire
+      thicker than 2.50 mm.
+    </p>
+    <p>
+      Two-wheeler stands and kick-starts are a common torsion application in Pune. Whether we
+      already make those parts for you is still to confirm.
+    </p>
+    <Todo text="confirm two-wheeler torsion work before we name it as a regular product." />
+  </Fragment>
+</ProductLayout>
+
+<style>
+  .type-fig {
+    margin: 0;
+  }
+
+  .type-draw {
+    padding: 16px;
+    border: 1px solid var(--color-grid);
+    border-radius: var(--radius-card);
+    color: var(--color-navy-900);
+  }
+
+  figcaption {
+    margin-top: 10px;
+    font-size: 0.9375rem;
+    color: var(--color-ink);
+  }
+</style>

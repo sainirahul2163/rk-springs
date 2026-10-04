@@ -1,0 +1,94 @@
+---
+import Card from '@/components/ui/Card.astro';
+import CTASection from '@/components/ui/CTASection.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeader from '@/components/ui/SectionHeader.astro';
+import PageLayout from '@/layouts/PageLayout.astro';
+
+const guides = [
+  {
+    to: 'measure' as const,
+    title: 'How to measure a spring',
+    description: 'Wire, OD, free length, coils, ends. What to send if you have no drawing.',
+  },
+  {
+    to: 'typesCompared' as const,
+    title: 'Torsion vs extension vs compression',
+    description: 'Push, pull or twist — which spring the assembly actually needs.',
+  },
+  {
+    to: 'whatIsDoubleTorsion' as const,
+    title: 'What is a double torsion spring?',
+    description: 'Two coils, one centre loop, and when that layout is the right one.',
+  },
+  {
+    to: 'extensionEnds' as const,
+    title: 'Extension spring end types',
+    description: 'Machine loops, extended hooks, and why the hook fails first.',
+  },
+  {
+    to: 'hsnGst' as const,
+    title: 'HSN code and GST for springs',
+    description: 'HSN 7320, helical 7320 20, GST 18%. Confirm the code with your CA.',
+  },
+  {
+    to: 'priceGuide' as const,
+    title: 'Spring price guide (India)',
+    description: 'What drives cost. No invented rupee figures.',
+  },
+];
+---
+
+<PageLayout
+  route="resources"
+  title="Spring Resources"
+  description="Guides on measuring a spring, torsion vs extension, HSN and GST, price factors, and a 60-term glossary. From a shop in Talawade, Pune."
+  context="a spring"
+  pageKind="CollectionPage"
+>
+  <Section tone="grid" labelledby="res-h1">
+    <SectionHeader
+      as="h1"
+      id="res-h1"
+      eyebrow="Resources"
+      title="Guides for the drawing"
+      lede="Measurement, spring types, HSN and GST, and what decides price. Written from this shop, not scraped from a catalogue."
+    />
+  </Section>
+
+  <Section labelledby="guides-title">
+    <SectionHeader id="guides-title" index={1} eyebrow="Articles" title="Six guides" />
+    <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {guides.map((it) => (
+        <li>
+          <Card
+            variant="article"
+            title={it.title}
+            description={it.description}
+            to={it.to}
+            eyebrow="Guide"
+            headingLevel="h3"
+          />
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <Section tone="surface" labelledby="gloss-title">
+    <SectionHeader id="gloss-title" index={2} eyebrow="Reference" title="Glossary" />
+    <ul class="mt-10 grid gap-5">
+      <li>
+        <Card
+          variant="article"
+          title="Spring glossary"
+          description="Active coils, spring index, rate, initial tension, solid height, wind direction, and 60 other terms, each with an anchor."
+          to="glossary"
+          eyebrow="A–Z"
+          headingLevel="h3"
+        />
+      </li>
+    </ul>
+  </Section>
+
+  <CTASection context="a spring" />
+</PageLayout>

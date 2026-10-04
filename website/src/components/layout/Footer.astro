@@ -1,0 +1,264 @@
+---
+/** Footer with link columns and an engineering-drawing "title block" (brand, legal IDs, address). */
+import { footerNav, legalNav } from '@/data/navigation';
+import { linkTo } from '@/data/routes';
+import { primaryEmail, primaryPhone, site } from '@/data/site';
+import { mailHref, telHref, whatsappHref } from '@/lib/contact';
+import Icon from '../ui/Icon.astro';
+import SmartLink from '../ui/SmartLink.astro';
+import Wordmark from './Wordmark.astro';
+
+const a = site.address;
+const year = new Date().getFullYear();
+const cells: { k: string; v: string; wide?: boolean }[] = [
+  { k: 'Brand', v: site.brand },
+  { k: 'A brand of', v: `${site.legalName} (${site.legalForm})` },
+  { k: 'Est.', v: String(site.foundingYear) },
+  { k: 'GSTIN', v: site.gstin },
+  { k: 'Udyam', v: site.udyam },
+  { k: 'Address', v: `${a.street}, ${a.locality}, ${a.city} ${a.postalCode}`, wide: true },
+];
+---
+
+<footer class="ftr" data-surface="dark">
+  <div class="container-page ftr-top">
+    <div class="ftr-about">
+      <Wordmark tone="dark" />
+      <p class="ftr-desc">
+        Torsion, double torsion, extension, compression, conical and spiral springs and wire forms,
+        made to your drawing or sample in {a.locality}, {a.city}.
+      </p>
+      <ul class="ftr-contact">
+        <li>
+          <Icon name="phone" size={18} />
+          <a href={telHref()} class="tabular" data-event="call_click">
+            {primaryPhone.display}
+          </a>
+        </li>
+        <li>
+          <Icon name="message-circle" size={18} />
+          <a href={whatsappHref()} data-event="whatsapp_click" target="_blank" rel="noopener">
+            WhatsApp us
+          </a>
+        </li>
+        <li>
+          <Icon name="mail" size={18} />
+          <a href={mailHref()} data-event="email_click">
+            {primaryEmail}
+          </a>
+        </li>
+        <li>
+          <Icon name="clock" size={18} />
+          <span>{site.hours.summary}</span>
+        </li>
+      </ul>
+    </div>
+    {footerNav.map((col) => {
+      const items = col.items.filter((it) => linkTo(it.route));
+      return items.length ? (
+        <nav class="ftr-col" aria-label={col.heading}>
+          <p class="eyebrow ftr-head">{col.heading}</p>
+          <ul>
+            {items.map((it) => (
+              <li>
+                <SmartLink to={it.route} class="ftr-link">
+                  {it.label}
+                </SmartLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      ) : null;
+    })}
+  </div>
+
+  <div class="container-page">
+    <dl class="tblock" aria-label="Company details">
+      {cells.map((c) => (
+        <div class:list={['tb-cell', c.wide && 'tb-wide']}>
+          <dt>{c.k}</dt>
+          <dd>{c.v}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+
+  <div class="container-page ftr-bottom">
+    <p>
+      © {year} {site.legalName}. {site.brandLine}.
+    </p>
+    <ul class="ftr-legal">
+      {legalNav.map((l) => (
+        <li>
+          <SmartLink to={l.route} class="ftr-link">
+            {l.label}
+          </SmartLink>
+        </li>
+      ))}
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .ftr {
+    margin-top: auto;
+    background: var(--color-navy-950);
+    color: var(--color-blue-300);
+    padding-top: 64px;
+    padding-bottom: calc(24px + var(--mobile-bar-h));
+  }
+
+  .ftr-top {
+    display: grid;
+    gap: 40px;
+    grid-template-columns: 1fr;
+    padding-bottom: 48px;
+  }
+
+  @media (min-width: 640px) {
+    .ftr-top {
+      grid-template-columns: 1fr 1fr;
+    }
+    .ftr-about {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .ftr-top {
+      grid-template-columns: 1.6fr 1fr 1fr 1fr;
+      gap: 48px;
+    }
+    .ftr-about {
+      grid-column: auto;
+    }
+  }
+
+  .ftr-desc {
+    margin-top: 16px;
+    max-width: 36ch;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .ftr-contact {
+    margin-top: 20px;
+    display: grid;
+    gap: 6px;
+    font-size: 0.9375rem;
+  }
+
+  .ftr-contact li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 32px;
+  }
+
+  .ftr-contact :global(svg) {
+    color: var(--color-blue-400);
+    flex: none;
+  }
+
+  .ftr-contact a {
+    color: var(--color-white);
+    text-decoration: underline;
+    text-decoration-color: var(--color-blue-400);
+    text-underline-offset: 0.2em;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .ftr-contact a:hover {
+    color: var(--color-blue-300);
+  }
+
+  .ftr-head {
+    color: var(--color-white);
+    margin-bottom: 12px;
+  }
+
+  .ftr-col ul {
+    display: grid;
+  }
+
+  .ftr :global(.ftr-link) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    font-size: 0.9375rem;
+    color: var(--color-blue-300);
+  }
+
+  .ftr :global(a.ftr-link:hover) {
+    color: var(--color-white);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* Engineering-drawing title block: ruled mono cells. */
+  .tblock {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid color-mix(in srgb, var(--color-blue-300) 45%, transparent);
+    font-family: var(--font-mono);
+  }
+
+  .tb-cell {
+    padding: 10px 12px;
+    border-right: 1px solid color-mix(in srgb, var(--color-blue-300) 45%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-blue-300) 45%, transparent);
+    margin: 0 -1px -1px 0;
+  }
+
+  .tb-wide {
+    grid-column: 1 / -1;
+  }
+
+  .tb-cell dt {
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-blue-300);
+  }
+
+  .tb-cell dd {
+    margin-top: 2px;
+    font-size: 0.875rem;
+    color: var(--color-white);
+    overflow-wrap: anywhere;
+  }
+
+  @media (min-width: 768px) {
+    .tblock {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+    .tb-wide {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .tblock {
+      grid-template-columns: 1.3fr 1.5fr 0.6fr 1.3fr 1.5fr 2.6fr;
+    }
+    .tb-wide {
+      grid-column: auto;
+    }
+  }
+
+  .ftr-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 20px;
+    font-size: 0.8125rem;
+  }
+
+  .ftr-legal {
+    display: flex;
+    gap: 20px;
+  }
+</style>
