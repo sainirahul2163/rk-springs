@@ -4,3 +4,6 @@ node_modules/
 .env.*
 !.env.example
 .cursor/
+.vercel
+.env*
+!.env.example
