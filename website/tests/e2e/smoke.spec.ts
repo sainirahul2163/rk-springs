@@ -7,6 +7,7 @@ const pages = [
   { path: '/tools/compression-spring-calculator/', title: /Compression/ },
   { path: '/request-a-quote/', title: /quote|RFQ|Request/i },
   { path: '/industries/electrical-switchgear-springs/', title: /Switchgear/ },
+  { path: '/landing/', title: /Pune spring factory preview/ },
 ];
 
 test.describe('smoke', () => {

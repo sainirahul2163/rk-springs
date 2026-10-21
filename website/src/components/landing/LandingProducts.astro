@@ -1,0 +1,41 @@
+---
+import ProductDiagram from '@/components/diagrams/ProductDiagram.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { products, wireFormsItem, type ProductNavItem } from '@/data/navigation';
+import { linkTo } from '@/data/routes';
+
+const catalogue = [...products, wireFormsItem].filter((p) => linkTo(p.route));
+
+const tone = (i: number, slug: ProductNavItem['route']): string => {
+  if (slug === 'wireForms') return 'lp-tile-wide lp-tile-navy';
+  if (i === 0) return 'lp-tile-feature lp-tile-navy';
+  if (i === 1) return 'lp-tile-feature lp-tile-blue';
+  if (i === 2) return 'lp-tile-mid lp-tile-tint';
+  if (i === 3) return 'lp-tile-mid';
+  return 'lp-tile-mid lp-tile-wash';
+};
+---
+
+<ul class="lp-bento">
+  {catalogue.map((p, i) => {
+    const href = linkTo(p.route);
+    if (!href) return null;
+    const n = String(i + 1).padStart(2, '0');
+    return (
+      <li>
+        <a class:list={['lp-tile', tone(i, p.route)]} href={href}>
+          <p class="eyebrow lp-tile-k">{n}</p>
+          <div class="lp-tile-art">
+            <ProductDiagram name={p.diagram} decorative />
+          </div>
+          <h3>{p.name}</h3>
+          <p class="lp-tile-blurb">{p.blurb}</p>
+          <span class="lp-tile-go">
+            View specifications
+            <Icon name="arrow-right" size={16} />
+          </span>
+        </a>
+      </li>
+    );
+  })}
+</ul>

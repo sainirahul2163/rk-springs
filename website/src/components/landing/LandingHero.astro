@@ -1,0 +1,61 @@
+---
+import CompressionSpring from '@/components/diagrams/CompressionSpring.astro';
+import ExtensionSpring from '@/components/diagrams/ExtensionSpring.astro';
+import HeroDrawing from '@/components/diagrams/HeroDrawing.astro';
+import TorsionSpring from '@/components/diagrams/TorsionSpring.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { site } from '@/data/site';
+import { quoteHref, whatsappHref } from '@/lib/contact';
+---
+
+<section class="lp-hero" aria-labelledby="hero-title">
+  <div class="lp-hero-bg bp-grid-dark" aria-hidden="true"></div>
+  <div class="lp-hero-coils" aria-hidden="true">
+    <TorsionSpring decorative />
+    <CompressionSpring decorative />
+    <ExtensionSpring decorative />
+  </div>
+  <div class="container-page lp-hero-inner">
+    <div class="lp-hero-copy">
+      <p class="lp-kicker">
+        <span class="lp-kicker-pill">Spring manufacturer</span>
+        <span class="eyebrow">
+          {site.address.locality}, {site.address.city}
+        </span>
+        <span class="eyebrow">Wire {site.capability.wireRangeLabel}</span>
+      </p>
+      <h1 id="hero-title">Spring manufacturer in Pune, coiled to your drawing</h1>
+      <p class="lp-hero-sub">
+        Torsion and double torsion specialists. Every spring and wire form is made to your drawing
+        or sample in {site.address.locality} — not picked from a catalogue.
+      </p>
+      <div class="lp-hero-ctas">
+        <Button href={quoteHref()} variant="inverse" size="lg" iconRight="arrow-right">
+          Get a quote in 24 hours
+        </Button>
+        <Button
+          href={whatsappHref()}
+          variant="whatsapp"
+          size="lg"
+          icon="message-circle"
+          data-event="whatsapp_click"
+          target="_blank"
+          rel="noopener"
+        >
+          WhatsApp us
+        </Button>
+      </div>
+      <a href={quoteHref('#drawing', 'a quote for my drawing')} class="lp-hero-upload">
+        <Icon name="upload" size={18} />
+        Upload a drawing
+      </a>
+    </div>
+    <div class="lp-sheet">
+      <div class="lp-sheet-grid bp-grid bp-grid-fade" aria-hidden="true"></div>
+      <div class="lp-sheet-art">
+        <HeroDrawing />
+      </div>
+    </div>
+  </div>
+</section>

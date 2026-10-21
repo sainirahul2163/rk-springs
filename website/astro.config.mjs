@@ -26,6 +26,7 @@ const sitemapExclude = new Set([
   '/404/',
   '/request-a-quote/thank-you/',
   '/llms.txt',
+  '/landing/',
 ]);
 
 export default defineConfig({

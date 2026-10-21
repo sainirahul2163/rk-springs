@@ -1,0 +1,304 @@
+---
+/**
+ * Design preview for client review. Not the live homepage.
+ * noindex, excluded from the sitemap so it cannot compete with /.
+ */
+import '@/styles/landing.css';
+import LandingHero from '@/components/landing/LandingHero.astro';
+import LandingProducts from '@/components/landing/LandingProducts.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import CompanyDetails from '@/components/ui/CompanyDetails.astro';
+import ContactLinks from '@/components/ui/ContactLinks.astro';
+import CTASection from '@/components/ui/CTASection.astro';
+import FAQ from '@/components/ui/FAQ.astro';
+import HoursTable from '@/components/ui/HoursTable.astro';
+import Icon from '@/components/ui/Icon.astro';
+import SpecTable from '@/components/ui/SpecTable.astro';
+import { homeFaqs } from '@/data/faqs';
+import { linkTo } from '@/data/routes';
+import { site } from '@/data/site';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const capabilitiesHref = linkTo('capabilities');
+const talawadeHref = linkTo('talawade');
+const homeHref = linkTo('home') ?? '/';
+
+const proofs = [
+  {
+    n: '01',
+    title: 'Quote within 24 hours',
+    text: 'Send a drawing, a photo with dimensions, or the old spring. You get a price and a lead time the next working day.',
+  },
+  {
+    n: '02',
+    title: 'Critical, tight-tolerance parts',
+    text: 'Buyers come to us when the spring has to fit first time in a switch, an instrument or a small assembly — not for a catalogue part.',
+  },
+  {
+    n: '03',
+    title: 'Reverse engineering from a sample',
+    text: 'No drawing is fine. Send the unused spring if you have it, and say where it lives. We measure it and quote.',
+  },
+  {
+    n: '04',
+    title: 'Since 2017, ZED certified',
+    text: `RK Enterprises has made springs in ${site.address.locality} since ${site.foundingYear}. The unit is ZED certified.`,
+  },
+];
+
+const steps = [
+  {
+    title: 'Send drawing or sample',
+    text: 'A drawing, a dimensioned photo, or the old spring, plus quantity and material if you know it.',
+  },
+  {
+    title: 'Quote in 24 hours',
+    text: 'Price, development charges if the run is below our usual minimum, and a lead time.',
+  },
+  {
+    title: 'Development sample',
+    text: 'For a new part we make samples so you can try them in the assembly.',
+  },
+  { title: 'Approval', text: 'You approve the sample. Production does not start until you do.' },
+  {
+    title: 'Production',
+    text: 'Coiling and forming, stress relieving, and end grinding where the drawing asks for it.',
+  },
+  { title: 'Dispatch', text: `${site.terms.delivery}.` },
+];
+
+const capRows = [
+  { label: 'Wire diameter', value: site.capability.wireRangeLabel },
+  { label: 'Outer diameter and length', value: site.capability.sizeNote },
+  { label: 'Materials', value: [...site.capability.materials] },
+  { label: 'In-house', value: [...site.capability.inHouse] },
+  { label: 'Through partners', value: [...site.capability.viaPartners] },
+  { label: 'Minimum order', value: site.terms.moq, note: site.terms.moqNote },
+  { label: 'Quotation', value: site.terms.quote },
+  { label: 'Supply', value: site.terms.supplyArea },
+];
+
+const industries = [
+  {
+    to: 'automotive' as const,
+    title: 'Automotive',
+    icon: 'car' as const,
+    description: 'Springs and wire forms for vehicle assemblies, made to your drawing.',
+  },
+  {
+    to: 'switchgear' as const,
+    title: 'Electrical and switchgear',
+    icon: 'zap' as const,
+    description: 'MCB and switch mechanisms — a regular job in our unit.',
+  },
+  {
+    to: 'instrumentation' as const,
+    title: 'Instrumentation',
+    icon: 'gauge' as const,
+    description: 'Light, precise springs for instruments and control gear.',
+  },
+  {
+    to: 'furniture' as const,
+    title: 'Furniture',
+    icon: 'armchair' as const,
+    description: 'Torsion and extension springs for seating and fold mechanisms.',
+  },
+];
+---
+
+<BaseLayout
+  title="Pune spring factory preview"
+  description="Design preview. Torsion, double torsion, extension and compression springs coiled in Talawade, Pune. Quote within 24 hours."
+  route="landing"
+  pageKind="WebPage"
+  noindex
+  htmlClass="landing-root"
+>
+  <div class="lp">
+    <div class="lp-note">
+      <div class="container-page lp-note-inner">
+        <p class="lp-note-k">Design preview</p>
+        <p class="lp-note-v">
+          A richer theme for review. The live homepage is unchanged —
+          <a href={homeHref}>open the current home page</a>.
+        </p>
+        <Breadcrumbs route="landing" class="lp-note-bc" />
+      </div>
+    </div>
+
+    <LandingHero />
+
+    <ul class="lp-stats">
+      <li class="lp-stat">
+        <span class="lp-stat-k">Wire</span>
+        <span class="lp-stat-v tabular">{site.capability.wireRangeLabel}</span>
+      </li>
+      <li class="lp-stat">
+        <span class="lp-stat-k">Quotation</span>
+        <span class="lp-stat-v">{site.terms.quote}</span>
+      </li>
+      <li class="lp-stat">
+        <span class="lp-stat-k">Usual MOQ</span>
+        <span class="lp-stat-v">{site.terms.moq}</span>
+      </li>
+      <li class="lp-stat">
+        <span class="lp-stat-k">Factory</span>
+        <span class="lp-stat-v">Since {site.foundingYear} · ZED</span>
+      </li>
+    </ul>
+
+    <section class="lp-sec" aria-labelledby="products-title">
+      <div class="container-page">
+        <header class="lp-sec-head">
+          <p class="eyebrow">01 · Products</p>
+          <h2 id="products-title">Springs and wire forms we coil</h2>
+          <p class="lp-sec-lede">
+            Wire {site.capability.wireRangeLabel}, coiled and formed in-house in{' '}
+            {site.address.locality}.
+          </p>
+        </header>
+        <LandingProducts />
+      </div>
+    </section>
+
+    <section class="lp-sec lp-tint" aria-labelledby="why-title">
+      <div class="container-page">
+        <header class="lp-sec-head">
+          <p class="eyebrow">02 · Why this unit</p>
+          <h2 id="why-title">Why buyers choose {site.brand}</h2>
+          <p class="lp-sec-lede">The reasons customers give us, not a slogan.</p>
+        </header>
+        <ol class="lp-proof">
+          {proofs.map((item) => (
+            <li>
+              <p class="lp-proof-n">{item.n}</p>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="lp-sec lp-navy lp-on-dark" data-surface="dark" aria-labelledby="how-title">
+      <div class="container-page">
+        <header class="lp-sec-head">
+          <p class="eyebrow">03 · Process</p>
+          <h2 id="how-title">From sample to dispatch</h2>
+          <p class="lp-sec-lede">
+            Six steps. Production does not start until you approve the sample.
+          </p>
+        </header>
+        <ol class="lp-steps">
+          {steps.map((s) => (
+            <li class="lp-step">
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="lp-sec lp-blue lp-on-dark" data-surface="dark" aria-labelledby="cap-title">
+      <div class="container-page">
+        <header class="lp-sec-head">
+          <p class="eyebrow">04 · Capability</p>
+          <h2 id="cap-title">What this unit can do</h2>
+        </header>
+        <div class="lp-cap">
+          <div class="lp-cap-copy">
+            <p>
+              Light and precision springs. Reverse engineering from a sample when there is no
+              drawing. Switchgear and MCB springs are a regular job.
+            </p>
+            <p>
+              This unit coils light and precision springs — wire {site.capability.wireRangeLabel}.
+              Plating and finishing go through partners.
+            </p>
+            {capabilitiesHref && (
+              <p>
+                <a href={capabilitiesHref}>Coiling, samples, reverse engineering and finishing</a>
+              </p>
+            )}
+          </div>
+          <SpecTable rows={capRows} caption="Capability snapshot" />
+        </div>
+      </div>
+    </section>
+
+    <section class="lp-sec" aria-labelledby="ind-title">
+      <div class="container-page">
+        <header class="lp-sec-head">
+          <p class="eyebrow">05 · Industries</p>
+          <h2 id="ind-title">Where the springs go</h2>
+          <p class="lp-sec-lede">
+            Automobile, electrical and switchgear, instrumentation, furniture, and other light
+            assemblies.
+          </p>
+        </header>
+        <ul class="lp-inds">
+          {industries.map((it) => {
+            const href = linkTo(it.to);
+            if (!href) return null;
+            return (
+              <li>
+                <a class="lp-ind" href={href}>
+                  <span class="lp-ind-icon">
+                    <Icon name={it.icon} size={22} />
+                  </span>
+                  <h3>{it.title}</h3>
+                  <p>{it.description}</p>
+                  <span class="lp-ind-go">See springs for this industry</span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
+
+    <section class="lp-sec lp-tint lp-faq" aria-labelledby="faq-title">
+      <div class="container-page">
+        <header class="lp-sec-head">
+          <p class="eyebrow">06 · Questions</p>
+          <h2 id="faq-title">FAQ</h2>
+        </header>
+        <FAQ items={homeFaqs} class="mt-10" />
+      </div>
+    </section>
+
+    <section class="lp-sec lp-surface" aria-labelledby="loc-title">
+      <div class="container-page">
+        <header class="lp-sec-head">
+          <p class="eyebrow">07 · Factory</p>
+          <h2 id="loc-title">
+            {site.address.locality}, {site.address.city}
+          </h2>
+          <p class="lp-sec-lede">{site.areaContext}</p>
+        </header>
+        <div class="lp-loc">
+          <div class="lp-loc-panel">
+            <CompanyDetails />
+          </div>
+          <div class="lp-loc-panel">
+            <h3>Working hours</h3>
+            <HoursTable />
+            <ContactLinks class="mt-8" />
+          </div>
+        </div>
+        {talawadeHref && (
+          <p class="mt-6">
+            <a href={talawadeHref}>
+              Talawade and PCMC — address, hours and nearby industrial areas
+            </a>
+          </p>
+        )}
+      </div>
+    </section>
+
+    <div class="lp-cta">
+      <CTASection />
+    </div>
+  </div>
+</BaseLayout>

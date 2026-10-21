@@ -22,6 +22,13 @@ export interface RouteDef {
 
 export const routes = {
   home: { path: '/', label: 'Home', status: 'live' },
+  landing: {
+    path: '/landing/',
+    label: 'Design preview',
+    parent: 'home',
+    status: 'live',
+    noindex: true,
+  },
 
   springs: { path: '/springs/', label: 'Springs', parent: 'home', status: 'live' },
   torsion: {

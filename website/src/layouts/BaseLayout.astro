@@ -15,13 +15,15 @@ export type BaseProps = SEOProps & {
   context?: string | undefined;
   /** Hide the mobile action bar (the RFQ page has its own submit). */
   hideActionBar?: boolean | undefined;
+  /** Extra class on <html> (used by /landing so its theme stays isolated). */
+  htmlClass?: string | undefined;
 };
 
-const { context, hideActionBar = false, ...seo } = Astro.props as BaseProps;
+const { context, hideActionBar = false, htmlClass, ...seo } = Astro.props as BaseProps;
 ---
 
 <!doctype html>
-<html lang="en-IN" class:list={[hideActionBar && 'no-mab']}>
+<html lang="en-IN" class:list={[hideActionBar && 'no-mab', htmlClass]}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
