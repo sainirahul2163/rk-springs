@@ -53,6 +53,7 @@ Pages flagged **draft-gated** are built but excluded from the production build, 
 | 40 | `/terms/` | Legal | 2 | draft | Legal review |
 | 41 | `404` | Utility (noindex) | 2 | draft | — |
 | — | `/styleguide/` | Internal (noindex) | 1 | draft | Logo (wordmark and favicon are temporary) |
+| — | `/landing/` | Homepage design preview (noindex, not in sitemap) | — | draft | Client's choice of design; same inputs as `/` plus machine list and factory photo |
 
 ## 2. Open TODO(client) items
 
@@ -184,3 +185,12 @@ Added in Phase 6:
 - Fonts: Latin + Latin-ext only. Heading weight (600) is preloaded with `font-display: optional`. Body, medium, mono and Latin-ext load after `load` / idle so LCP text is not queued behind eight font files.
 - Lighthouse is `npm run lh`: gzip on the preview server (as Vercel does), fresh Chrome per page, median of 3 simulated-mobile runs.
 - No `TODO(client)` is visible in the production HTML. `npm run todo` still lists 49 markers for you.
+
+## 11. `/landing/` homepage redesign (21 Oct 2026)
+
+- The client did not like the original homepage look, so `/landing/` now holds a new homepage layout for review. **The live `/` is untouched.** It's noindex and kept out of the sitemap, so it can't compete with `/` in search.
+- Layout follows a typical industrial-supplier homepage. A dark blueprint hero with the double torsion drawing redrawn white-on-navy. A row of key figures (wire range, 24 h quote, usual batch, since 2017). A registrations strip (ZED, Udyam, GSTIN). Datasheet-style product cards, with torsion and double torsion marked "Specialist". A shop-floor capability block with a to-scale wire-gauge drawing. Then industries, a six-step process, an RFQ checklist with direct contact details, the factory block and the FAQ.
+- Every fact comes from `site.ts`, `navigation.ts` and `faqs.ts`. No new claims. "Our highest-volume parts" is based on CLIENT-PROFILE §2, which ranks products by volume.
+- Zero client JS. Only token colours, no hex values. The hero drawing's reveal animation is turned off on this page because it sometimes left the drawing blank when it ran off-screen on phones.
+- Files: `src/pages/landing.astro`, `src/components/landing/*`, `src/styles/landing.css`.
+- To promote it later, move the markup into `src/pages/index.astro`. Then drop the preview bar, set the homepage title and description, and remove `/landing/` from `routes.ts`, the sitemap exclusions and the smoke test.

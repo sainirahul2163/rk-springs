@@ -1,41 +1,68 @@
 ---
+/**
+ * Product range as datasheet cards. The first two products (highest volume, per
+ * CLIENT-PROFILE §2) get the large "specialist" cards; the rest sit in a compact row.
+ */
 import ProductDiagram from '@/components/diagrams/ProductDiagram.astro';
 import Icon from '@/components/ui/Icon.astro';
-import { products, wireFormsItem, type ProductNavItem } from '@/data/navigation';
+import { products, wireFormsItem } from '@/data/navigation';
 import { linkTo } from '@/data/routes';
 
 const catalogue = [...products, wireFormsItem].filter((p) => linkTo(p.route));
-
-const tone = (i: number, slug: ProductNavItem['route']): string => {
-  if (slug === 'wireForms') return 'lp-tile-wide lp-tile-navy';
-  if (i === 0) return 'lp-tile-feature lp-tile-navy';
-  if (i === 1) return 'lp-tile-feature lp-tile-blue';
-  if (i === 2) return 'lp-tile-mid lp-tile-tint';
-  if (i === 3) return 'lp-tile-mid';
-  return 'lp-tile-mid lp-tile-wash';
-};
+const total = String(catalogue.length).padStart(2, '0');
+const featured = catalogue.slice(0, 2);
+const rest = catalogue.slice(2);
+const index = (i: number) => `${String(i + 1).padStart(2, '0')} / ${total}`;
 ---
 
-<ul class="lp-bento">
-  {catalogue.map((p, i) => {
-    const href = linkTo(p.route);
-    if (!href) return null;
-    const n = String(i + 1).padStart(2, '0');
-    return (
-      <li>
-        <a class:list={['lp-tile', tone(i, p.route)]} href={href}>
-          <p class="eyebrow lp-tile-k">{n}</p>
-          <div class="lp-tile-art">
-            <ProductDiagram name={p.diagram} decorative />
-          </div>
+<ul class="lp-feature-list">
+  {featured.map((p, i) => (
+    <li>
+      <a class="lp-card lp-card-lg" href={linkTo(p.route)}>
+        <span class="lp-card-meta">
+          <span>{index(i)}</span>
+          <span class="lp-card-flag">Specialist</span>
+        </span>
+        <span class="lp-card-art bp-grid">
+          <ProductDiagram name={p.diagram} decorative />
+        </span>
+        <span class="lp-card-body">
           <h3>{p.name}</h3>
-          <p class="lp-tile-blurb">{p.blurb}</p>
-          <span class="lp-tile-go">
+          <span class="lp-card-blurb">{p.blurb}</span>
+          <span class="lp-chips">
+            {p.chips.map((c) => (
+              <span class="lp-chip">{c}</span>
+            ))}
+          </span>
+          <span class="lp-card-go">
             View specifications
+            <Icon name="arrow-right" size={18} />
+          </span>
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<ul class="lp-range-list">
+  {rest.map((p, i) => (
+    <li>
+      <a class="lp-card" href={linkTo(p.route)}>
+        <span class="lp-card-meta">
+          <span>{index(i + featured.length)}</span>
+        </span>
+        <span class="lp-card-art bp-grid">
+          <ProductDiagram name={p.diagram} decorative />
+        </span>
+        <span class="lp-card-body">
+          <h3>{p.name}</h3>
+          <span class="lp-card-blurb">{p.blurb}</span>
+          <span class="lp-card-go">
+            Specifications
             <Icon name="arrow-right" size={16} />
           </span>
-        </a>
-      </li>
-    );
-  })}
+        </span>
+      </a>
+    </li>
+  ))}
 </ul>

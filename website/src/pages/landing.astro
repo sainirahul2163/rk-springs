@@ -2,47 +2,90 @@
 /**
  * Design preview for client review. Not the live homepage.
  * noindex, excluded from the sitemap so it cannot compete with /.
+ * Layout follows the usual industrial-supplier homepage: hero with key figures, product range,
+ * capability, industries, process, RFQ checklist, factory details and FAQ. Zero client JS.
  */
 import '@/styles/landing.css';
 import LandingHero from '@/components/landing/LandingHero.astro';
 import LandingProducts from '@/components/landing/LandingProducts.astro';
+import WireGauge from '@/components/landing/WireGauge.astro';
 import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import Button from '@/components/ui/Button.astro';
 import CompanyDetails from '@/components/ui/CompanyDetails.astro';
-import ContactLinks from '@/components/ui/ContactLinks.astro';
-import CTASection from '@/components/ui/CTASection.astro';
 import FAQ from '@/components/ui/FAQ.astro';
-import HoursTable from '@/components/ui/HoursTable.astro';
-import Icon from '@/components/ui/Icon.astro';
-import SpecTable from '@/components/ui/SpecTable.astro';
+import Icon, { type IconName } from '@/components/ui/Icon.astro';
+import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
+import Todo from '@/components/ui/Todo.astro';
 import { homeFaqs } from '@/data/faqs';
 import { linkTo } from '@/data/routes';
-import { site } from '@/data/site';
+import { mapUrl, phones, site } from '@/data/site';
+import { mailHref, quoteHref, telHref, whatsappHref } from '@/lib/contact';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
-const capabilitiesHref = linkTo('capabilities');
-const talawadeHref = linkTo('talawade');
 const homeHref = linkTo('home') ?? '/';
+const springsHref = linkTo('springs');
+const capabilitiesHref = linkTo('capabilities');
+const industriesHref = linkTo('industries');
+const orderingHref = linkTo('ordering');
+const talawadeHref = linkTo('talawade');
+const aboutHref = linkTo('about');
 
-const proofs = [
+const registrations = [
+  ...(site.certifications.zed.certified ? ['ZED certified MSME'] : []),
+  `Udyam ${site.udyam}`,
+  `GSTIN ${site.gstin}`,
+  'Supply across India',
+];
+
+const proofs: { icon: IconName; title: string; text: string }[] = [
   {
-    n: '01',
+    icon: 'clock',
     title: 'Quote within 24 hours',
     text: 'Send a drawing, a photo with dimensions, or the old spring. You get a price and a lead time the next working day.',
   },
   {
-    n: '02',
+    icon: 'gauge',
     title: 'Critical, tight-tolerance parts',
     text: 'Buyers come to us when the spring has to fit first time in a switch, an instrument or a small assembly — not for a catalogue part.',
   },
   {
-    n: '03',
+    icon: 'ruler',
     title: 'Reverse engineering from a sample',
-    text: 'No drawing is fine. Send the unused spring if you have it, and say where it lives. We measure it and quote.',
+    text: 'Send the unused spring if you have it, and say where it lives. We measure it and quote.',
   },
   {
-    n: '04',
-    title: 'Since 2017, ZED certified',
-    text: `RK Enterprises has made springs in ${site.address.locality} since ${site.foundingYear}. The unit is ZED certified.`,
+    icon: 'badge-check',
+    title: `Since ${site.foundingYear}, ZED certified`,
+    text: `RK Enterprises has coiled springs in ${site.address.locality} since ${site.foundingYear}. The unit is ZED certified.`,
+  },
+];
+
+const inHouseIcons: IconName[] = ['wrench', 'thermometer', 'ruler'];
+
+const industries = [
+  {
+    to: 'switchgear' as const,
+    title: 'Electrical and switchgear',
+    icon: 'zap' as const,
+    text: 'MCB and switch mechanism springs — a regular job in our unit.',
+  },
+  {
+    to: 'automotive' as const,
+    title: 'Automotive',
+    icon: 'car' as const,
+    text: 'Springs and wire forms for vehicle assemblies, made to your drawing.',
+  },
+  {
+    to: 'instrumentation' as const,
+    title: 'Instrumentation',
+    icon: 'gauge' as const,
+    text: 'Light, precise springs for instruments and control gear.',
+  },
+  {
+    to: 'furniture' as const,
+    title: 'Furniture',
+    icon: 'armchair' as const,
+    text: 'Torsion and extension springs for seating and fold mechanisms.',
   },
 ];
 
@@ -59,7 +102,7 @@ const steps = [
     title: 'Development sample',
     text: 'For a new part we make samples so you can try them in the assembly.',
   },
-  { title: 'Approval', text: 'You approve the sample. Production does not start until you do.' },
+  { title: 'Your approval', text: 'Production does not start until you approve the sample.' },
   {
     title: 'Production',
     text: 'Coiling and forming, stress relieving, and end grinding where the drawing asks for it.',
@@ -67,42 +110,14 @@ const steps = [
   { title: 'Dispatch', text: `${site.terms.delivery}.` },
 ];
 
-const capRows = [
-  { label: 'Wire diameter', value: site.capability.wireRangeLabel },
-  { label: 'Outer diameter and length', value: site.capability.sizeNote },
-  { label: 'Materials', value: [...site.capability.materials] },
-  { label: 'In-house', value: [...site.capability.inHouse] },
-  { label: 'Through partners', value: [...site.capability.viaPartners] },
-  { label: 'Minimum order', value: site.terms.moq, note: site.terms.moqNote },
-  { label: 'Quotation', value: site.terms.quote },
-  { label: 'Supply', value: site.terms.supplyArea },
-];
+const [openSummary, closedSummary] = site.hours.summary.split(' · ');
 
-const industries = [
-  {
-    to: 'automotive' as const,
-    title: 'Automotive',
-    icon: 'car' as const,
-    description: 'Springs and wire forms for vehicle assemblies, made to your drawing.',
-  },
-  {
-    to: 'switchgear' as const,
-    title: 'Electrical and switchgear',
-    icon: 'zap' as const,
-    description: 'MCB and switch mechanisms — a regular job in our unit.',
-  },
-  {
-    to: 'instrumentation' as const,
-    title: 'Instrumentation',
-    icon: 'gauge' as const,
-    description: 'Light, precise springs for instruments and control gear.',
-  },
-  {
-    to: 'furniture' as const,
-    title: 'Furniture',
-    icon: 'armchair' as const,
-    description: 'Torsion and extension springs for seating and fold mechanisms.',
-  },
+const rfqChecklist = [
+  { k: 'Drawing', v: 'PDF, DWG, DXF, STEP or IGES — or a photo with dimensions' },
+  { k: 'No drawing?', v: 'Send the old spring as a sample. We measure it.' },
+  { k: 'Quantity', v: `Usually ${site.terms.moq}. Smaller runs carry development charges.` },
+  { k: 'Material', v: 'If you know it: spring steel, stainless, music wire or oil-tempered' },
+  { k: 'Application', v: 'Where the spring sits and what it has to do' },
 ];
 ---
 
@@ -119,7 +134,7 @@ const industries = [
       <div class="container-page lp-note-inner">
         <p class="lp-note-k">Design preview</p>
         <p class="lp-note-v">
-          A richer theme for review. The live homepage is unchanged —
+          A new homepage layout for review. The live homepage is unchanged —
           <a href={homeHref}>open the current home page</a>.
         </p>
         <Breadcrumbs route="landing" class="lp-note-bc" />
@@ -128,114 +143,170 @@ const industries = [
 
     <LandingHero />
 
-    <ul class="lp-stats">
-      <li class="lp-stat">
-        <span class="lp-stat-k">Wire</span>
-        <span class="lp-stat-v tabular">{site.capability.wireRangeLabel}</span>
-      </li>
-      <li class="lp-stat">
-        <span class="lp-stat-k">Quotation</span>
-        <span class="lp-stat-v">{site.terms.quote}</span>
-      </li>
-      <li class="lp-stat">
-        <span class="lp-stat-k">Usual MOQ</span>
-        <span class="lp-stat-v">{site.terms.moq}</span>
-      </li>
-      <li class="lp-stat">
-        <span class="lp-stat-k">Factory</span>
-        <span class="lp-stat-v">Since {site.foundingYear} · ZED</span>
-      </li>
-    </ul>
+    <div class="lp-regs">
+      <ul class="container-page lp-regs-list" aria-label="Registrations">
+        {registrations.map((r) => (
+          <li>
+            <Icon name="badge-check" size={16} />
+            <span>{r}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
 
     <section class="lp-sec" aria-labelledby="products-title">
       <div class="container-page">
-        <header class="lp-sec-head">
-          <p class="eyebrow">01 · Products</p>
-          <h2 id="products-title">Springs and wire forms we coil</h2>
-          <p class="lp-sec-lede">
-            Wire {site.capability.wireRangeLabel}, coiled and formed in-house in{' '}
-            {site.address.locality}.
-          </p>
+        <header class="lp-head lp-head-split">
+          <div>
+            <p class="lp-eyebrow">
+              <span>01</span> Product range
+            </p>
+            <h2 id="products-title">Springs and wire forms we make</h2>
+          </div>
+          <div class="lp-head-aside">
+            <p>
+              Six spring types and wire forms, all in{' '}
+              <span class="lp-nowrap">{site.capability.wireRangeLabel}</span> wire. Every part is
+              made to your drawing or sample — nothing is sold from stock.
+            </p>
+            {springsHref && (
+              <a class="lp-arrow-link" href={springsHref}>
+                All springs <Icon name="arrow-right" size={18} />
+              </a>
+            )}
+          </div>
         </header>
         <LandingProducts />
       </div>
     </section>
 
-    <section class="lp-sec lp-tint" aria-labelledby="why-title">
+    <section class="lp-sec lp-dark" data-surface="dark" aria-labelledby="why-title">
+      <div class="lp-dark-bg bp-grid-dark" aria-hidden="true"></div>
       <div class="container-page">
-        <header class="lp-sec-head">
-          <p class="eyebrow">02 · Why this unit</p>
-          <h2 id="why-title">Why buyers choose {site.brand}</h2>
-          <p class="lp-sec-lede">The reasons customers give us, not a slogan.</p>
-        </header>
-        <ol class="lp-proof">
-          {proofs.map((item) => (
-            <li>
-              <p class="lp-proof-n">{item.n}</p>
-              <h3>{item.title}</h3>
-              <p>{item.text}</p>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
-    <section class="lp-sec lp-navy lp-on-dark" data-surface="dark" aria-labelledby="how-title">
-      <div class="container-page">
-        <header class="lp-sec-head">
-          <p class="eyebrow">03 · Process</p>
-          <h2 id="how-title">From sample to dispatch</h2>
-          <p class="lp-sec-lede">
-            Six steps. Production does not start until you approve the sample.
+        <header class="lp-head">
+          <p class="lp-eyebrow">
+            <span>02</span> Why buyers choose us
           </p>
+          <h2 id="why-title">The reasons customers give us, not a slogan</h2>
         </header>
-        <ol class="lp-steps">
-          {steps.map((s) => (
-            <li class="lp-step">
-              <h3>{s.title}</h3>
-              <p>{s.text}</p>
+        <ol class="lp-proofs">
+          {proofs.map((p) => (
+            <li class="lp-proof">
+              <span class="lp-proof-ico">
+                <Icon name={p.icon} size={26} />
+              </span>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
             </li>
           ))}
         </ol>
       </div>
     </section>
 
-    <section class="lp-sec lp-blue lp-on-dark" data-surface="dark" aria-labelledby="cap-title">
+    <section class="lp-sec lp-surface" aria-labelledby="cap-title">
       <div class="container-page">
-        <header class="lp-sec-head">
-          <p class="eyebrow">04 · Capability</p>
-          <h2 id="cap-title">What this unit can do</h2>
-        </header>
-        <div class="lp-cap">
-          <div class="lp-cap-copy">
-            <p>
-              Light and precision springs. Reverse engineering from a sample when there is no
-              drawing. Switchgear and MCB springs are a regular job.
+        <header class="lp-head lp-head-split">
+          <div>
+            <p class="lp-eyebrow">
+              <span>03</span> Shop-floor capability
             </p>
+            <h2 id="cap-title">Light and precision springs, end to end</h2>
+          </div>
+          <div class="lp-head-aside">
             <p>
-              This unit coils light and precision springs — wire {site.capability.wireRangeLabel}.
-              Plating and finishing go through partners.
+              Coiling, forming, stress relieving and end grinding happen in our unit. Plating and
+              finishing go through partners.
             </p>
             {capabilitiesHref && (
-              <p>
-                <a href={capabilitiesHref}>Coiling, samples, reverse engineering and finishing</a>
-              </p>
+              <a class="lp-arrow-link" href={capabilitiesHref}>
+                Capabilities in detail <Icon name="arrow-right" size={18} />
+              </a>
             )}
           </div>
-          <SpecTable rows={capRows} caption="Capability snapshot" />
+        </header>
+
+        <div class="lp-cap">
+          <div class="lp-gauge" data-surface="dark">
+            <p class="lp-gauge-k">Wire diameter</p>
+            <p class="lp-gauge-v tabular">{site.capability.wireRangeLabel}</p>
+            <div class="lp-gauge-art">
+              <WireGauge />
+            </div>
+            <p class="lp-gauge-note">
+              Outer diameter and length follow your drawing. We do not make rolling-shutter,
+              agriculture or heavy springs above {site.capability.wireMaxMm.toFixed(2)} mm wire.
+            </p>
+          </div>
+
+          <div class="lp-cap-cols">
+            <div class="lp-cap-col">
+              <h3>In-house</h3>
+              <ul class="lp-cap-list">
+                {site.capability.inHouse.map((item, i) => (
+                  <li>
+                    <span class="lp-cap-ico">
+                      <Icon name={inHouseIcons[i] ?? 'wrench'} size={20} />
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <Todo text="machine list and name-plate photos." block />
+            </div>
+            <div class="lp-cap-col">
+              <h3>Materials</h3>
+              <ul class="lp-cap-list lp-cap-list-plain">
+                {site.capability.materials.map((m) => (
+                  <li>{m}</li>
+                ))}
+              </ul>
+            </div>
+            <div class="lp-cap-col">
+              <h3>Through partners</h3>
+              <ul class="lp-cap-list lp-cap-list-plain">
+                {site.capability.viaPartners.map((m) => (
+                  <li>{m}</li>
+                ))}
+              </ul>
+            </div>
+            <div class="lp-cap-col">
+              <h3>Commercial</h3>
+              <dl class="lp-terms">
+                <div>
+                  <dt>Usual minimum order</dt>
+                  <dd class="tabular">{site.terms.moq}</dd>
+                </div>
+                <div>
+                  <dt>Payment</dt>
+                  <dd>{site.terms.payment}</dd>
+                </div>
+                <div>
+                  <dt>Delivery</dt>
+                  <dd>{site.terms.delivery}</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="lp-sec" aria-labelledby="ind-title">
-      <div class="container-page">
-        <header class="lp-sec-head">
-          <p class="eyebrow">05 · Industries</p>
-          <h2 id="ind-title">Where the springs go</h2>
-          <p class="lp-sec-lede">
-            Automobile, electrical and switchgear, instrumentation, furniture, and other light
-            assemblies.
+      <div class="container-page lp-ind-wrap">
+        <header class="lp-head lp-ind-head">
+          <p class="lp-eyebrow">
+            <span>04</span> Industries
           </p>
+          <h2 id="ind-title">Where our springs go</h2>
+          <p class="lp-lede">
+            Switchgear, automotive, instrumentation and furniture assemblies, plus other light
+            mechanisms that need a spring made to drawing.
+          </p>
+          {industriesHref && (
+            <a class="lp-arrow-link" href={industriesHref}>
+              All industries <Icon name="arrow-right" size={18} />
+            </a>
+          )}
         </header>
         <ul class="lp-inds">
           {industries.map((it) => {
@@ -244,12 +315,14 @@ const industries = [
             return (
               <li>
                 <a class="lp-ind" href={href}>
-                  <span class="lp-ind-icon">
-                    <Icon name={it.icon} size={22} />
+                  <span class="lp-ind-ico">
+                    <Icon name={it.icon} size={24} />
                   </span>
-                  <h3>{it.title}</h3>
-                  <p>{it.description}</p>
-                  <span class="lp-ind-go">See springs for this industry</span>
+                  <span class="lp-ind-body">
+                    <h3>{it.title}</h3>
+                    <span>{it.text}</span>
+                  </span>
+                  <Icon name="arrow-right" size={22} class="lp-ind-go" />
                 </a>
               </li>
             );
@@ -258,47 +331,176 @@ const industries = [
       </div>
     </section>
 
-    <section class="lp-sec lp-tint lp-faq" aria-labelledby="faq-title">
+    <section class="lp-sec lp-process" aria-labelledby="how-title">
+      <div class="lp-process-bg bp-grid bp-grid-fade" aria-hidden="true"></div>
       <div class="container-page">
-        <header class="lp-sec-head">
-          <p class="eyebrow">06 · Questions</p>
-          <h2 id="faq-title">FAQ</h2>
+        <header class="lp-head lp-head-split">
+          <div>
+            <p class="lp-eyebrow">
+              <span>05</span> How an order runs
+            </p>
+            <h2 id="how-title">From drawing to dispatch</h2>
+          </div>
+          <div class="lp-head-aside">
+            <p>Six steps. Production does not start until you approve the sample.</p>
+            {orderingHref && (
+              <a class="lp-arrow-link" href={orderingHref}>
+                Ordering, MOQ and payment <Icon name="arrow-right" size={18} />
+              </a>
+            )}
+          </div>
         </header>
-        <FAQ items={homeFaqs} class="mt-10" />
+        <ol class="lp-steps">
+          {steps.map((s, i) => (
+            <li class="lp-step">
+              <span class="lp-step-n" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="lp-sec lp-rfq-sec" aria-labelledby="rfq-title">
+      <div class="container-page">
+        <div class="lp-rfq">
+          <div class="lp-rfq-main" data-surface="dark">
+            <p class="lp-eyebrow">
+              <span>06</span> Request for quotation
+            </p>
+            <h2 id="rfq-title">Send your drawing or sample. Get a quote within 24 hours.</h2>
+            <dl class="lp-rfq-list">
+              {rfqChecklist.map((c) => (
+                <div>
+                  <dt>
+                    <Icon name="check" size={18} />
+                    {c.k}
+                  </dt>
+                  <dd>{c.v}</dd>
+                </div>
+              ))}
+            </dl>
+            <div class="lp-rfq-ctas">
+              <Button href={quoteHref()} variant="inverse" size="lg" iconRight="arrow-right">
+                Open the quote form
+              </Button>
+              <Button
+                href={whatsappHref('a quote')}
+                variant="whatsapp"
+                size="lg"
+                icon="message-circle"
+                data-event="whatsapp_click"
+                target="_blank"
+                rel="noopener"
+              >
+                Send on WhatsApp
+              </Button>
+            </div>
+          </div>
+
+          <div class="lp-rfq-side">
+            <h3>Talk to the factory</h3>
+            <ul class="lp-contact">
+              {phones.map((p) => (
+                <li>
+                  <Icon name="phone" size={20} />
+                  <a href={telHref(p.e164)} class="tabular" data-event="call_click">
+                    {p.display}
+                  </a>
+                  {p.whatsapp && <span class="lp-contact-tag">WhatsApp</span>}
+                </li>
+              ))}
+              {site.emails.map((e) => (
+                <li>
+                  <Icon name="mail" size={20} />
+                  <a href={mailHref(e)} data-event="email_click">
+                    {e}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <Todo text="confirm the main phone number and the main email." block />
+            <div class="lp-hours">
+              <p class="lp-hours-k">
+                <Icon name="clock" size={18} /> Working hours
+              </p>
+              <p>{openSummary}</p>
+              {closedSummary && <p class="lp-hours-closed">{closedSummary}</p>}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <section class="lp-sec lp-surface" aria-labelledby="loc-title">
       <div class="container-page">
-        <header class="lp-sec-head">
-          <p class="eyebrow">07 · Factory</p>
-          <h2 id="loc-title">
-            {site.address.locality}, {site.address.city}
-          </h2>
-          <p class="lp-sec-lede">{site.areaContext}</p>
+        <header class="lp-head lp-head-split">
+          <div>
+            <p class="lp-eyebrow">
+              <span>07</span> The factory
+            </p>
+            <h2 id="loc-title">
+              {site.address.locality}, {site.address.city}
+            </h2>
+          </div>
+          <div class="lp-head-aside">
+            <p>{site.areaContext}.</p>
+          </div>
         </header>
         <div class="lp-loc">
-          <div class="lp-loc-panel">
+          <PhotoPlaceholder
+            ratio="4 / 3"
+            caption="the shop floor with coiling machines running"
+            class="lp-loc-photo"
+          />
+          <div class="lp-loc-card">
             <CompanyDetails />
-          </div>
-          <div class="lp-loc-panel">
-            <h3>Working hours</h3>
-            <HoursTable />
-            <ContactLinks class="mt-8" />
+            <div class="lp-loc-links">
+              <a
+                class="lp-arrow-link"
+                href={mapUrl}
+                target="_blank"
+                rel="noopener"
+                data-event="outbound_click"
+              >
+                <Icon name="map-pin" size={18} /> Get directions
+              </a>
+              {talawadeHref && (
+                <a class="lp-arrow-link" href={talawadeHref}>
+                  Talawade and PCMC <Icon name="arrow-right" size={18} />
+                </a>
+              )}
+              {aboutHref && (
+                <a class="lp-arrow-link" href={aboutHref}>
+                  About us <Icon name="arrow-right" size={18} />
+                </a>
+              )}
+            </div>
           </div>
         </div>
-        {talawadeHref && (
-          <p class="mt-6">
-            <a href={talawadeHref}>
-              Talawade and PCMC — address, hours and nearby industrial areas
-            </a>
-          </p>
-        )}
       </div>
     </section>
 
-    <div class="lp-cta">
-      <CTASection />
-    </div>
+    <section class="lp-sec" aria-labelledby="faq-title">
+      <div class="container-page lp-faq">
+        <header class="lp-head lp-faq-head">
+          <p class="lp-eyebrow">
+            <span>08</span> Questions
+          </p>
+          <h2 id="faq-title">Frequently asked questions</h2>
+          <p class="lp-lede">
+            Anything else?{' '}
+            <a class="link" href={whatsappHref()} target="_blank" rel="noopener">
+              Ask on WhatsApp
+            </a>
+            .
+          </p>
+        </header>
+        <FAQ items={homeFaqs} />
+      </div>
+    </section>
   </div>
 </BaseLayout>
