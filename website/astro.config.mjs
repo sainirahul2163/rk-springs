@@ -6,17 +6,17 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import { loadEnv } from 'vite';
 import { lastmodForPath } from './src/data/page-dates.ts';
+import { site as company } from './src/data/site.ts';
 
 const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
+/** Explicit override; otherwise the final domain (https://www.rksprings.com). */
 const siteUrl = (process.env.PUBLIC_SITE_URL || env.PUBLIC_SITE_URL || '').replace(/\/+$/, '');
-if (process.env.VERCEL_ENV === 'production' && !siteUrl) {
-  throw new Error('PUBLIC_SITE_URL is required for production deploys.');
-}
-const site = siteUrl || 'http://localhost:4321';
-/** Same gate as src/lib/env.ts INDEXABLE (kept here so the config never imports src). */
+const site = siteUrl || company.origin;
+/** Same gate as INDEXABLE in src/lib/env.ts. */
 const indexable =
-  Boolean(siteUrl) &&
-  (process.env.VERCEL_ENV === undefined || process.env.VERCEL_ENV === 'production') &&
+  (process.env.VERCEL_ENV === undefined
+    ? Boolean(siteUrl)
+    : process.env.VERCEL_ENV === 'production') &&
   (process.env.PUBLIC_SHOW_TODOS || env.PUBLIC_SHOW_TODOS) !== 'true';
 
 /** Built pages that must not appear in the sitemap even when the build is indexable. */

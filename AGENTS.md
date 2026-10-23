@@ -1,7 +1,9 @@
 # AGENTS.md: rules for any AI agent working in this repo
 
 **Project:** an SEO-first B2B website for **RK Springs & Wireforms** (legal name RK Enterprises), a spring and wire-form manufacturer in Talawade, Pune, India.
+**Domain: `rksprings.com`** (final). The one canonical host is **`https://www.rksprings.com`**; the bare domain redirects to `www`. It is defined once in `website/src/data/site.ts` (`site.origin`). Never hard-code another domain.
 **The app lives in `/website`.** Don't move, rename or edit the planning docs in the repo root unless asked.
+**SEO history and decisions:** `SEO-WORK-LOG.md`. Read it before changing titles, schema, robots, the sitemap or share images.
 
 ## Read these first, in this order of authority
 1. `CLIENT-PROFILE.md`: confirmed facts. **It overrides everything else.**
@@ -29,6 +31,8 @@
    - JSON-LD is generated from data files, never hand-pasted.
    - No doorway or duplicate city pages, and no keyword stuffing.
    - `lang="en-IN"`.
+   - `npm run build` runs `audit-html`, which enforces all of the above. Never weaken a check to get a green build.
+   - After adding a page or changing an H1, run `npm run og` and commit `public/og/`.
 
 4. **Performance budget.**
    - Content pages ship **under 100 KB of JS** (0 KB by default).

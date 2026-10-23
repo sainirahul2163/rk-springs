@@ -1,6 +1,6 @@
 # Content review: RK Springs & Wireforms website
 
-Last updated: Phase 7 (QA and hardening), 4 Oct 2026.
+Last updated: SEO pass, 23 Oct 2026 (after Phase 7). Domain decided: **rksprings.com** (canonical `https://www.rksprings.com`). Details in `SEO-WORK-LOG.md`.
 
 Phases 0–7 are built. Phase 7 ran every §12 gate, hardened LCP (Latin font subsets, deferred extra weights, `client:idle` islands), added Playwright smoke / RFQ / calculator / keyboard / overflow tests, and wrote `LAUNCH-CHECKLIST.md`. Spiral springs stays draft-gated. **Waiting for review of the numbers and the launch list. Do not start post-Phase-7 work until you approve.**
 
@@ -62,7 +62,7 @@ From CLIENT-PROFILE.md §8:
 - [ ] Machine list and name-plate photos
 - [ ] Factory map pin and coordinates
 - [ ] Main phone number and main email
-- [ ] Domain purchase
+- [ ] Domain purchase (rksprings.com decided 23 Oct 2026; buy and point DNS at Vercel)
 - [ ] Top 5 products
 - [ ] Sample and production lead times
 - [ ] Team size
@@ -184,3 +184,25 @@ Added in Phase 6:
 - Fonts: Latin + Latin-ext only. Heading weight (600) is preloaded with `font-display: optional`. Body, medium, mono and Latin-ext load after `load` / idle so LCP text is not queued behind eight font files.
 - Lighthouse is `npm run lh`: gzip on the preview server (as Vercel does), fresh Chrome per page, median of 3 simulated-mobile runs.
 - No `TODO(client)` is visible in the production HTML. `npm run todo` still lists 49 markers for you.
+
+## 11. SEO pass (23 Oct 2026)
+
+Full record in `SEO-WORK-LOG.md`. What changed, for content review:
+
+- **Titles** are keyword-first on every page, e.g. "Torsion Spring Manufacturer in Pune". Long titles use the short suffix "| RK Springs". Please check the wording reads well to a buyer.
+- **Product H1s** now carry the place: "Custom torsion springs, made in Pune", "Tension and extension springs, made in Pune", "Custom wire forms, bent in Pune", and so on.
+- **Product H2s** name the product: "Torsion spring specification", "Where torsion springs are used", "How we make torsion springs", "Torsion spring FAQ".
+- **New contextual links:**
+  - Home → all calculators, and all guides + glossary
+  - Glossary → "Put the terms to work"
+  - HSN and price guides → springs hub
+  - Talawade page → springs and industries hubs
+  - 404 → "Popular pages"
+- **Share cards:** every page now has its own share card (`public/og/`), made from the page's own technical drawing. Re-run `npm run og` after changing an H1 or adding a page.
+- **No new facts were added.** No reviews, prices, ISO, PPAP, lab or export claims. No `Product` schema without prices or reviews.
+- New open items:
+  - [ ] Real logo → re-run `npm run og` (favicon, apple-touch icon, schema logo and all share cards are rendered from the temporary mark).
+  - [ ] GBP / IndiaMART / Justdial / LinkedIn URLs for `site.sameAs`.
+  - [ ] `sales@rksprings.com` once it exists.
+  - [ ] Client OK on allowing AI training crawlers in `robots.txt` (allowed by default, per the blueprint).
+  - [ ] `SEO-MASTER-PLAYBOOK.md` was mentioned but is not in the repo; push it so it can be checked against this pass.

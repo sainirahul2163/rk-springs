@@ -3,6 +3,7 @@ import Card from '@/components/ui/Card.astro';
 import CTASection from '@/components/ui/CTASection.astro';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
+import { glossaryTerms } from '@/data/glossary';
 import PageLayout from '@/layouts/PageLayout.astro';
 
 const guides = [
@@ -41,8 +42,8 @@ const guides = [
 
 <PageLayout
   route="resources"
-  title="Spring Design Guides"
-  description="Guides on measuring a spring, torsion vs extension, HSN and GST, price factors, and a 60-term glossary. From our unit in Talawade, Pune."
+  title="Spring Design Guides & Glossary"
+  description={`Spring guides: how to measure a spring, torsion vs extension vs compression, HSN and GST, price factors, and a ${glossaryTerms.length}-term glossary.`}
   context="a spring"
   pageKind="CollectionPage"
 >
@@ -81,7 +82,7 @@ const guides = [
         <Card
           variant="article"
           title="Spring glossary"
-          description="Active coils, spring index, rate, initial tension, solid height, wind direction, and 60 other terms, each with an anchor."
+          description={`Active coils, spring index, rate, initial tension, solid height, wind direction, and ${glossaryTerms.length - 6} other terms, each with an anchor.`}
           to="glossary"
           eyebrow="A–Z"
           headingLevel="h3"

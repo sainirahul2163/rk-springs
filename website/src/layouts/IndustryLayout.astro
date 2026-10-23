@@ -6,6 +6,7 @@ import CTASection from '@/components/ui/CTASection.astro';
 import FAQ from '@/components/ui/FAQ.astro';
 import RelatedLinks from '@/components/ui/RelatedLinks.astro';
 import type { RouteId } from '@/data/routes';
+import type { ServiceLd } from '@/lib/jsonld';
 import PageLayout from './PageLayout.astro';
 
 interface Props {
@@ -17,9 +18,16 @@ interface Props {
   context?: string;
   faqs?: readonly FaqItem[];
   related?: readonly RelatedLink[];
+  /** Service JSON-LD overrides (name defaults to the H1). */
+  service?: Partial<ServiceLd>;
 }
 
-const { route, title, description, h1, lede, context, faqs, related = [] } = Astro.props;
+const { route, title, description, h1, lede, context, faqs, related = [], service } = Astro.props;
+const serviceLd: ServiceLd = {
+  name: h1,
+  description,
+  ...service,
+};
 ---
 
 <PageLayout
@@ -27,6 +35,7 @@ const { route, title, description, h1, lede, context, faqs, related = [] } = Ast
   title={title}
   description={description}
   context={context}
+  service={serviceLd}
   {...(faqs ? { faqs } : {})}
 >
   <section class="container-page pt-6 pb-8">

@@ -18,7 +18,7 @@ const faqs = [
 
 <ArticleLayout
   route="hsnGst"
-  title="HSN Code and GST Springs"
+  title="HSN Code for Springs and GST Rate"
   description="HSN 7320 covers springs of iron or steel; 7320 20 covers helical springs. GST is commonly 18%. Confirm with your CA. Wire forms may be 7326."
   h1="HSN code and GST for springs"
   lede="The code buyers put on the purchase order, and the tax rate that usually sits next to it. This is a reading of public tariff pages, not advice from our CA."
@@ -38,6 +38,12 @@ const faqs = [
   ]}
   faqs={faqs}
   related={[
+    {
+      to: 'springs',
+      label: 'Springs we make',
+      description: 'The helical springs under 7320 20.',
+    },
+    { to: 'wireForms', label: 'Wire forms', description: 'Clips, hooks and pins; check 7326.' },
     { to: 'ordering', label: 'Ordering with us', description: 'GST invoice, MOQ, ex-works.' },
     {
       to: 'priceGuide',

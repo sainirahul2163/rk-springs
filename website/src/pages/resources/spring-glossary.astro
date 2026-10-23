@@ -1,4 +1,5 @@
 ---
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
 import { glossaryByLetter, glossaryTerms } from '@/data/glossary';
 import PageLayout from '@/layouts/PageLayout.astro';
 
@@ -12,8 +13,8 @@ const glossary = glossaryTerms.map((t) => ({
 
 <PageLayout
   route="glossary"
-  title="Spring Glossary"
-  description="Sixty-plus spring terms: active coils, spring index, rate, initial tension, solid height, wind direction. Anchored so other pages can link here."
+  title="Spring Glossary: Terms and Definitions"
+  description="Spring terms defined in plain English: active coils, spring index, rate, initial tension, solid height, wind direction and more. Metric units."
   context="a spring"
   glossary={glossary}
 >
@@ -48,6 +49,33 @@ const glossary = glossaryTerms.map((t) => ({
         </dl>
       </section>
     ))}
+
+    <RelatedLinks
+      class="mt-12 max-w-[46rem]"
+      title="Put the terms to work"
+      links={[
+        {
+          to: 'measure',
+          label: 'How to measure a spring',
+          description: 'Wire, OD, free length, coils and ends, in mm.',
+        },
+        {
+          to: 'typesCompared',
+          label: 'Torsion vs extension vs compression',
+          description: 'Which spring the assembly actually needs.',
+        },
+        {
+          to: 'compressionCalc',
+          label: 'Compression spring calculator',
+          description: 'Rate, stress and solid height from your numbers.',
+        },
+        {
+          to: 'springs',
+          label: 'Springs we make',
+          description: 'Torsion, double torsion, extension, compression and conical.',
+        },
+      ]}
+    />
   </article>
 </PageLayout>
 
