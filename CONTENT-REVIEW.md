@@ -194,3 +194,4 @@ Added in Phase 6:
 - Zero client JS. Only token colours, no hex values. The hero drawing's reveal animation is turned off on this page because it sometimes left the drawing blank when it ran off-screen on phones.
 - Files: `src/pages/landing.astro`, `src/components/landing/*`, `src/styles/landing.css`.
 - To promote it later, move the markup into `src/pages/index.astro`. Then drop the preview bar, set the homepage title and description, and remove `/landing/` from `routes.ts`, the sitemap exclusions and the smoke test.
+- Homepage hero visual updated 25 Oct 2026 with the supplied spring isolated on transparency and restored technical callouts for the wire range, left/right coils, centre loop and leg span. The original hero copy and all other homepage sections are unchanged.

@@ -1,5 +1,6 @@
 ---
-import HeroDrawing from '@/components/diagrams/HeroDrawing.astro';
+import { Image } from 'astro:assets';
+import heroSpringImage from '@/assets/polished-stainless-steel-torsion-springs-hero.png';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 import TrustBar from '@/components/ui/TrustBar.astro';
@@ -47,7 +48,89 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
       <TrustBar class="hero-trust" />
     </div>
     <div class="hero-art">
-      <HeroDrawing />
+      <Image
+        class="hero-product-image"
+        src={heroSpringImage}
+        alt="Polished stainless steel double torsion spring with two coils and formed legs"
+        width={1200}
+        format="webp"
+        quality={84}
+        loading="eager"
+        fetchpriority="high"
+      />
+      <svg class="hero-annotations" viewBox="0 0 560 493" fill="none" aria-hidden="true">
+        <defs>
+          <marker
+            id="hero-dimension-arrow"
+            markerWidth="6"
+            markerHeight="6"
+            refX="3"
+            refY="3"
+            orient="auto-start-reverse"
+            markerUnits="strokeWidth"
+          >
+            <path d="M6 0 0 3 6 6" fill="var(--color-blue-700)" stroke="none" />
+          </marker>
+        </defs>
+        <g class="hero-callout-lines">
+          <path d="M548 84h-25l-155 111" />
+          <circle cx="368" cy="195" r="2.2" />
+          <path d="M280 143h-34l-75-68" />
+          <circle cx="171" cy="75" r="2.2" />
+          <path class="hero-lh-line" d="M76 234h45L31 290" />
+          <circle cx="31" cy="290" r="2.2" />
+          <path d="M548 222h-65l-89 22" />
+          <circle cx="394" cy="244" r="2.2" />
+          <path d="M198 452v24m350-225v201" />
+          <path
+            d="M198 476h350"
+            marker-start="url(#hero-dimension-arrow)"
+            marker-end="url(#hero-dimension-arrow)"
+          />
+        </g>
+        <g class="hero-callout-labels">
+          <text x="548" y="79" text-anchor="end">
+            WIRE Ø 0.40–2.50 MM
+          </text>
+          <text x="284" y="139">
+            CENTRE LOOP
+          </text>
+          <text x="8" y="230">
+            LH COIL
+          </text>
+          <text x="548" y="219" text-anchor="end">
+            RH COIL
+          </text>
+          <text x="373" y="468" text-anchor="middle">
+            LEG SPAN
+          </text>
+        </g>
+        <g class="hero-title-block">
+          <path
+            d="M404 9h146v51H404zm0 25h146m-51-25v51"
+            fill="var(--color-white)"
+            fill-opacity="0.94"
+          />
+          <text x="410" y="20">
+            PART
+          </text>
+          <text x="410" y="30">
+            DOUBLE TORSION
+          </text>
+          <text x="503" y="20">
+            QUOTE
+          </text>
+          <text x="503" y="30">
+            IN 24 H
+          </text>
+          <text x="410" y="45">
+            EST. 2017 · PUNE
+          </text>
+          <text x="503" y="45">
+            NTS
+          </text>
+        </g>
+      </svg>
     </div>
   </div>
 </section>
@@ -150,9 +233,79 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
   }
 
   .hero-art {
+    position: relative;
     max-width: 560px;
     width: 100%;
+    aspect-ratio: 1006 / 885;
     justify-self: center;
+  }
+
+  .hero-product-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 5px color-mix(in srgb, var(--color-navy-950) 18%, transparent));
+  }
+
+  .hero-annotations {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
+  }
+
+  .hero-callout-lines {
+    color: var(--color-blue-700);
+    stroke: currentColor;
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .hero-callout-lines circle {
+    fill: currentColor;
+    stroke: var(--color-white);
+    stroke-width: 0.7;
+  }
+
+  .hero-callout-lines .hero-lh-line {
+    stroke-width: 1.8;
+  }
+
+  .hero-callout-labels,
+  .hero-title-block {
+    fill: var(--color-navy-900);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.045em;
+  }
+
+  .hero-callout-labels text,
+  .hero-title-block text {
+    paint-order: stroke fill;
+    stroke: var(--color-white);
+    stroke-width: 1.75px;
+    stroke-linejoin: round;
+  }
+
+  .hero-title-block {
+    font-size: 8px;
+    letter-spacing: 0.035em;
+  }
+
+  .hero-title-block path {
+    stroke: color-mix(in srgb, var(--color-navy-900) 72%, transparent);
+    stroke-width: 0.75;
+  }
+
+  .hero-title-block text:nth-of-type(odd) {
+    fill: var(--color-slate);
+    font-size: 6.5px;
+    letter-spacing: 0.08em;
   }
 
   @media (max-width: 479.98px) {
