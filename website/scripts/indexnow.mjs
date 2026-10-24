@@ -11,11 +11,7 @@ import { join } from 'node:path';
 const root = join(import.meta.dirname, '..');
 const siteTs = readFileSync(join(root, 'src/data/site.ts'), 'utf8');
 const key = siteTs.match(/indexNowKey: '([^']+)'/)?.[1];
-const origin = (
-  process.env.PUBLIC_SITE_URL ||
-  siteTs.match(/origin: '([^']+)'/)?.[1] ||
-  ''
-).replace(/\/+$/, '');
+const origin = (siteTs.match(/origin: '([^']+)'/)?.[1] || '').replace(/\/+$/, '');
 if (!key || !origin) {
   console.error('indexnow: key or origin missing in src/data/site.ts');
   process.exit(1);

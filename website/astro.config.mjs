@@ -9,13 +9,14 @@ import { lastmodForPath } from './src/data/page-dates.ts';
 import { site as company } from './src/data/site.ts';
 
 const env = loadEnv(process.env.NODE_ENV ?? 'production', process.cwd(), '');
-/** Explicit override; otherwise the final domain (https://www.rksprings.com). */
-const siteUrl = (process.env.PUBLIC_SITE_URL || env.PUBLIC_SITE_URL || '').replace(/\/+$/, '');
-const site = siteUrl || company.origin;
+/** Always the final domain (https://www.rksprings.com); see src/lib/env.ts. */
+const site = company.origin;
+/** Local only: any PUBLIC_SITE_URL value rehearses an indexable production build. */
+const localProduction = Boolean(process.env.PUBLIC_SITE_URL || env.PUBLIC_SITE_URL);
 /** Same gate as INDEXABLE in src/lib/env.ts. */
 const indexable =
   (process.env.VERCEL_ENV === undefined
-    ? Boolean(siteUrl)
+    ? localProduction
     : process.env.VERCEL_ENV === 'production') &&
   (process.env.PUBLIC_SHOW_TODOS || env.PUBLIC_SHOW_TODOS) !== 'true';
 

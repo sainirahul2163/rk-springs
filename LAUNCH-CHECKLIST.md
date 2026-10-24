@@ -5,7 +5,7 @@ Phase 7 quality gates were run on 4 Oct 2026 and re-run after the SEO pass on 23
 ## 1. Do not launch until these exist
 
 - [ ] Domain **rksprings.com** bought (decided 23 Oct 2026). In Vercel → Project → Domains add `www.rksprings.com` (primary) and `rksprings.com` (set to redirect to `www`). At the registrar: `A @ 76.76.21.21` and `CNAME www cname.vercel-dns.com` (or whatever Vercel shows), or move nameservers to Vercel.
-- [ ] Nothing else to configure for SEO: the code already uses `https://www.rksprings.com` for every canonical, the sitemap, robots.txt, JSON-LD, share cards and llms.txt. `PUBLIC_SITE_URL` stays empty.
+- [ ] Nothing else to configure for SEO: the code already uses `https://www.rksprings.com` for every canonical, the sitemap, robots.txt, JSON-LD, share cards and llms.txt. Delete any old `PUBLIC_SITE_URL` from the Vercel env: it is ignored now, and a `*.vercel.app` value there made the first PR preview fail (see `SEO-WORK-LOG.md`).
 - [ ] Logo file (wordmark + favicon). The coil mark is temporary.
 - [ ] Confirm `+91 72620 92185` is the public main number, or give the real one.
 - [ ] Pick the public email (plan a domain address such as `sales@<domain>`).
@@ -25,7 +25,7 @@ Spiral springs stays **draft-gated** (404 in production) until you confirm wire 
 
   | Name | Notes |
   |---|---|
-  | `PUBLIC_SITE_URL` | Leave empty (the code defaults to `https://www.rksprings.com`) |
+  | `PUBLIC_SITE_URL` | Do not set (ignored on Vercel; URLs always use `https://www.rksprings.com`) |
   | `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | Server only |
   | `RESEND_API_KEY` / `RFQ_FROM_EMAIL` / `RFQ_NOTIFY_EMAIL` | Server only |
   | `PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY` | |

@@ -4,15 +4,15 @@ import { site } from '@/data/site';
 // Build-time only (Node); avoids pulling in @types/node for one variable.
 declare const process: { env: Record<string, string | undefined> };
 
-/** Explicit origin override (no trailing slash). Empty means "use the final domain". */
-const OVERRIDE = (import.meta.env.PUBLIC_SITE_URL || '').replace(/\/+$/, '');
-
 /**
  * Canonical origin for every absolute URL (canonical, og:url, JSON-LD, sitemap, robots).
- * Always the production domain unless PUBLIC_SITE_URL overrides it, so a preview or local
- * build never emits localhost canonicals.
+ * Always the final domain from site.ts, in every environment. PUBLIC_SITE_URL no longer
+ * changes URLs, so a stale value (e.g. a *.vercel.app address) cannot leak into canonicals.
  */
-export const SITE_URL = OVERRIDE || site.origin;
+export const SITE_URL = site.origin;
+
+/** Local only: any PUBLIC_SITE_URL value rehearses an indexable production build. */
+const LOCAL_PRODUCTION = Boolean(import.meta.env.PUBLIC_SITE_URL);
 
 /** Show TODO(client) markers and photo placeholders (dev, or an explicit client-review build). */
 export const SHOW_TODOS = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_TODOS === 'true';
@@ -26,7 +26,7 @@ export const SHOW_TODOS = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_TOD
 export const INDEXABLE =
   import.meta.env.PROD &&
   (process.env.VERCEL_ENV === undefined
-    ? Boolean(OVERRIDE)
+    ? LOCAL_PRODUCTION
     : process.env.VERCEL_ENV === 'production') &&
   import.meta.env.PUBLIC_SHOW_TODOS !== 'true';
 

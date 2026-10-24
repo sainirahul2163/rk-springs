@@ -47,15 +47,15 @@ npm run lh
 
 Copy `.env.example` to `.env`. Secrets stay server-side. `PUBLIC_*` is visible in the browser.
 
-| Variable                                                            | Use                                                                                                                                                                        |
-| ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `PUBLIC_SITE_URL`                                                   | Optional origin override, no trailing slash. Leave empty on Vercel: canonicals use `https://www.rksprings.com`. Locally, set it to rehearse an indexable production build. |
-| `PUBLIC_SHOW_TODOS`                                                 | `true` shows TODO markers, photo placeholders, `/styleguide/` and draft pages (always noindex).                                                                            |
-| `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY`                        | RFQ storage. Leave blank for the `.rfq-dev/` fallback.                                                                                                                     |
-| `RESEND_API_KEY` / `RFQ_FROM_EMAIL` / `RFQ_NOTIFY_EMAIL`            | Quote emails.                                                                                                                                                              |
-| `PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY`                | Bot check. Skipped when unset.                                                                                                                                             |
-| `PUBLIC_GA4_ID` / `PUBLIC_CLARITY_ID`                               | Optional analytics. Scripts load only when set.                                                                                                                            |
-| `PUBLIC_GOOGLE_SITE_VERIFICATION` / `PUBLIC_BING_SITE_VERIFICATION` | Optional verification meta tags (a DNS TXT record is preferred).                                                                                                           |
+| Variable                                                            | Use                                                                                                                                                            |
+| ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_SITE_URL`                                                   | Local only: any value rehearses an indexable production build. It never changes URLs (always `https://www.rksprings.com`). Ignored on Vercel; delete it there. |
+| `PUBLIC_SHOW_TODOS`                                                 | `true` shows TODO markers, photo placeholders, `/styleguide/` and draft pages (always noindex).                                                                |
+| `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY`                        | RFQ storage. Leave blank for the `.rfq-dev/` fallback.                                                                                                         |
+| `RESEND_API_KEY` / `RFQ_FROM_EMAIL` / `RFQ_NOTIFY_EMAIL`            | Quote emails.                                                                                                                                                  |
+| `PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY`                | Bot check. Skipped when unset.                                                                                                                                 |
+| `PUBLIC_GA4_ID` / `PUBLIC_CLARITY_ID`                               | Optional analytics. Scripts load only when set.                                                                                                                |
+| `PUBLIC_GOOGLE_SITE_VERIFICATION` / `PUBLIC_BING_SITE_VERIFICATION` | Optional verification meta tags (a DNS TXT record is preferred).                                                                                               |
 
 Without RFQ keys, `POST /api/rfq` writes JSON and uploaded files to `.rfq-dev/` and still returns a reference.
 
@@ -72,7 +72,7 @@ Without RFQ keys, `POST /api/rfq` writes JSON and uploaded files to `.rfq-dev/` 
 - Framework: Astro
 - Functions region: `bom1`
 - Node.js 22.18 or later
-- Domains: add `www.rksprings.com` (primary) and `rksprings.com` (redirects to www). `PUBLIC_SITE_URL` is not needed
+- Domains: add `www.rksprings.com` (primary) and `rksprings.com` (redirects to www). Delete any old `PUBLIC_SITE_URL` from the Vercel env (it is ignored)
 - Do **not** set `PUBLIC_SHOW_TODOS` on production
 - Preview deployments stay noindex (`VERCEL_ENV !== production`), and every `*.vercel.app` host sends `X-Robots-Tag: noindex`
 - `/styleguide/` and draft pages (spiral springs) return a real 404 unless `PUBLIC_SHOW_TODOS=true`

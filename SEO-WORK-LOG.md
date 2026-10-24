@@ -8,7 +8,7 @@ The running record of SEO work on this site: what was done, why, and what is sti
 |---|---|
 | Domain | **rksprings.com** (final, chosen by the client on 23 Oct 2026; purchase and DNS pending) |
 | Canonical host | **https://www.rksprings.com** — the bare `rksprings.com` 308-redirects to `www` (`website/vercel.json`) |
-| Where it is set | `website/src/data/site.ts` → `site.domain`, `site.origin`. `PUBLIC_SITE_URL` is now only an optional override |
+| Where it is set | `website/src/data/site.ts` → `site.domain`, `site.origin`. The only source of the origin. `PUBLIC_SITE_URL` never changes URLs; locally it only switches on an indexable rehearsal build |
 | Language / region | `en-IN`, metric first, ₹ |
 | Facts allowed | `CLIENT-PROFILE.md` only. No reviews, ratings, prices, ISO/IATF, PPAP, test lab, export or "best/leading" |
 
@@ -195,3 +195,18 @@ These come from blueprint §4.3 and §4.9. They are new pages, not fixes, so per
 - How to choose a spring manufacturer in Pune [spring manufacturer in pune], local commercial.
 - Case studies, once the client gives permission and details.
 - A "Reviewed by Rutvik" line on the guides (E-E-A-T), once he has read them. This needs his surname confirmed and consent.
+
+---
+
+## 24 Oct 2026: PR preview failure fixed
+
+- **Symptom:** the first Vercel preview of the SEO pass failed, while `main` deployed fine. The Vercel log could not be read from the session: the connected Vercel account has no access to the `rk-spring` team.
+- **Reproduced:** a clean clone of the PR commit builds green with Vercel's preview env vars. It fails on every page ("localhost or vercel.app URL in the HTML") only when `PUBLIC_SITE_URL` is set to a `*.vercel.app` address.
+  - That value fits the history: the old code demanded `PUBLIC_SITE_URL` for production before the domain existed.
+  - It is the likely cause, but not confirmed against the actual Vercel log.
+- **Fix:** URLs now always come from `site.origin`, in every environment.
+  - `src/lib/env.ts`, `astro.config.mjs`, `audit-html` and `indexnow` no longer read the origin from `PUBLIC_SITE_URL`.
+  - Locally, the variable only switches on an indexable rehearsal build.
+  - A stale env value can no longer put a `vercel.app` canonical on the live site, or fail the build.
+  - The `vercel.app` audit check is unchanged.
+- **To do in Vercel:** delete `PUBLIC_SITE_URL` from the project env; it is ignored now. To let this session read build logs in future, connect a Vercel account that belongs to the `rk-spring` team.

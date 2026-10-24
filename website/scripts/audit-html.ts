@@ -14,11 +14,9 @@ const TITLE_MAX = 60;
 const DESC_MAX = 155;
 const TITLE_MIN = 30;
 const DESC_MIN = 70;
-/** Production origin, unless PUBLIC_SITE_URL overrides it (mirrors src/lib/env.ts). */
+/** Production origin from src/data/site.ts (the only source; mirrors src/lib/env.ts). */
 const SITE_ORIGIN = (
-  process.env.PUBLIC_SITE_URL ||
-  readFileSync(join(root, 'src/data/site.ts'), 'utf8').match(/origin: '([^']+)'/)?.[1] ||
-  ''
+  readFileSync(join(root, 'src/data/site.ts'), 'utf8').match(/origin: '([^']+)'/)?.[1] || ''
 ).replace(/\/+$/, '');
 
 if (!existsSync(dist)) {
