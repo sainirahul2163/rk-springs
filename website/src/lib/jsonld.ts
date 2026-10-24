@@ -1,9 +1,13 @@
 /**
- * JSON-LD @graph builders. Facts from site.ts only. No offers, prices or aggregateRating.
+ * JSON-LD @graph builders. Facts from site.ts only. No offers, prices, reviews or aggregateRating.
+ *
+ * Product nodes are deliberately not emitted: Google treats a Product without offers, review
+ * or aggregateRating as an invalid item, and we publish neither prices nor reviews. Each spring
+ * page describes the made-to-drawing work as a Service provided by the one Organization entity.
  */
 import type { FaqItem } from '@/components/ui/FAQ.astro';
 import { mapUrl, primaryEmail, primaryPhone, site } from '@/data/site';
-import { trail, type RouteId } from '@/data/routes';
+import { childrenOf, trail, type RouteId } from '@/data/routes';
 import { absoluteUrl } from './env';
 
 export type PageKind = 'WebPage' | 'AboutPage' | 'ContactPage' | 'CollectionPage' | 'TechArticle';
@@ -14,6 +18,16 @@ export interface GlossaryTermLd {
   definition: string;
 }
 
+export interface ServiceLd {
+  /** What is made, e.g. "Torsion springs". */
+  name: string;
+  description: string;
+  /** Defaults to "Custom spring manufacturing". */
+  serviceType?: string;
+  /** Who it is for, e.g. "Makers of MCBs and switchgear". */
+  audience?: string;
+}
+
 export interface JsonLdPage {
   path: string;
   title: string;
@@ -21,10 +35,17 @@ export interface JsonLdPage {
   kind?: PageKind;
   route?: RouteId;
   faqs?: readonly FaqItem[];
+  /** Spring or wire-form product page. */
   product?: { name: string; description: string };
+  /** Industry or capability page. */
+  service?: ServiceLd;
   glossary?: readonly GlossaryTermLd[];
   article?: { headline: string; datePublished: string; dateModified: string };
   tool?: { name: string; description: string };
+  /** Absolute URL of the page's share card. */
+  image?: string;
+  /** ISO date (YYYY-MM-DD or full ISO) of the last real content change. */
+  dateModified?: string;
 }
 
 type Node = Record<string, unknown>;
@@ -44,19 +65,35 @@ function websiteId(): string {
   return `${absoluteUrl('/')}#website`;
 }
 
+function logoId(): string {
+  return `${absoluteUrl('/')}#logo`;
+}
+
+const ORG_DESCRIPTION = `Maker of torsion, double torsion, extension, compression and conical springs and wire forms in ${site.capability.wireMinMm.toFixed(2)}–${site.capability.wireMaxMm.toFixed(2)} mm wire, made to drawing or sample in ${site.address.locality}, ${site.address.city}, since ${site.foundingYear}.`;
+
 function organization(): Node {
   const a = site.address;
   const node: Node = {
     '@type': ['Organization', 'LocalBusiness'],
     '@id': orgId(),
     name: site.brand,
+    alternateName: [site.shortBrand, site.legalName],
     legalName: site.legalName,
+    description: ORG_DESCRIPTION,
     foundingDate: String(site.foundingYear),
     taxID: site.gstin,
     url: absoluteUrl('/'),
-    // TODO(client): replace /favicon.svg with the real square logo file.
-    logo: absoluteUrl('/favicon.svg'),
-    image: absoluteUrl('/og-default.png'),
+    // TODO(client): logo.png is rendered from the temporary favicon; replace with the real logo.
+    logo: {
+      '@type': 'ImageObject',
+      '@id': logoId(),
+      url: absoluteUrl('/logo.png'),
+      contentUrl: absoluteUrl('/logo.png'),
+      width: 512,
+      height: 512,
+      caption: site.brand,
+    },
+    image: { '@id': logoId() },
     email: primaryEmail,
     telephone: primaryPhone.e164,
     address: {
@@ -72,9 +109,14 @@ function organization(): Node {
       'Torsion springs',
       'Double torsion springs',
       'Extension springs',
+      'Tension springs',
       'Compression springs',
       'Conical springs',
       'Wire forms',
+      'Switchgear and MCB springs',
+      'Reverse engineering a spring from a sample',
+      'Stress relieving of springs',
+      'Spring end grinding',
       'Custom spring manufacturing',
     ],
     founder: {
@@ -90,12 +132,12 @@ function organization(): Node {
       areaServed: 'IN',
       availableLanguage: ['en'],
     },
-    openingHoursSpecification: site.hours.openDays.map((day) => ({
+    openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
-      dayOfWeek: day,
+      dayOfWeek: [...site.hours.openDays],
       opens: site.hours.opens,
       closes: site.hours.closes,
-    })),
+    },
     hasMap: mapUrl,
     identifier: [
       { '@type': 'PropertyValue', name: 'GSTIN', value: site.gstin },
@@ -119,6 +161,7 @@ function website(): Node {
     '@id': websiteId(),
     url: absoluteUrl('/'),
     name: site.brand,
+    alternateName: [site.shortBrand, site.domain],
     inLanguage: 'en-IN',
     publisher: { '@id': orgId() },
     description:
@@ -126,8 +169,9 @@ function website(): Node {
   };
 }
 
-function breadcrumbs(route: RouteId, pageUrl: string): Node {
+function breadcrumbs(route: RouteId, pageUrl: string): Node | null {
   const items = trail(route);
+  if (items.length < 2) return null;
   return {
     '@type': 'BreadcrumbList',
     '@id': `${pageUrl}#breadcrumb`,
@@ -140,6 +184,26 @@ function breadcrumbs(route: RouteId, pageUrl: string): Node {
   };
 }
 
+function service(pageUrl: string, s: ServiceLd, image?: string): Node {
+  return {
+    '@type': 'Service',
+    '@id': `${pageUrl}#service`,
+    name: s.name,
+    serviceType: s.serviceType ?? 'Custom spring manufacturing',
+    description: s.description,
+    url: pageUrl,
+    provider: { '@id': orgId() },
+    brand: { '@id': orgId() },
+    areaServed: { '@type': 'Country', name: 'India' },
+    ...(s.audience ? { audience: { '@type': 'BusinessAudience', audienceType: s.audience } } : {}),
+    ...(image ? { image } : {}),
+  };
+}
+
+function isoDate(d: string): string {
+  return d.length === 10 ? d : new Date(d).toISOString().slice(0, 10);
+}
+
 export function buildGraph(page: JsonLdPage): {
   '@context': 'https://schema.org';
   '@graph': Node[];
@@ -148,8 +212,11 @@ export function buildGraph(page: JsonLdPage): {
   const kind = page.kind ?? 'WebPage';
   const graph: Node[] = [organization(), website()];
 
+  const isArticle = kind === 'TechArticle' && Boolean(page.article);
   const webPage: Node = {
-    '@type': kind,
+    // An article page is a WebPage whose main entity is the TechArticle (breadcrumb and
+    // primaryImageOfPage are WebPage properties, not Article ones).
+    '@type': isArticle ? 'WebPage' : kind,
     '@id': `${pageUrl}#webpage`,
     url: pageUrl,
     name: page.title,
@@ -160,27 +227,80 @@ export function buildGraph(page: JsonLdPage): {
     publisher: { '@id': orgId() },
   };
 
-  if (page.kind === 'TechArticle' && page.article) {
-    webPage.headline = page.article.headline;
-    webPage.author = { '@id': orgId() };
-    webPage.publisher = { '@id': orgId() };
+  if (page.image) {
+    const imageNode = {
+      '@type': 'ImageObject',
+      '@id': `${pageUrl}#primaryimage`,
+      url: page.image,
+      contentUrl: page.image,
+      width: 1200,
+      height: 630,
+    };
+    graph.push(imageNode);
+    webPage.primaryImageOfPage = { '@id': imageNode['@id'] };
+    webPage.image = { '@id': imageNode['@id'] };
+  }
+  if (page.dateModified) webPage.dateModified = isoDate(page.dateModified);
+
+  if (isArticle && page.article) {
     webPage.datePublished = page.article.datePublished;
     webPage.dateModified = page.article.dateModified;
   }
 
   if (page.route) {
     const crumbs = breadcrumbs(page.route, pageUrl);
-    graph.push(crumbs);
-    webPage.breadcrumb = { '@id': crumbs['@id'] };
+    if (crumbs) {
+      graph.push(crumbs);
+      webPage.breadcrumb = { '@id': crumbs['@id'] };
+    }
+
+    if (kind === 'CollectionPage') {
+      const children = childrenOf(page.route);
+      if (children.length > 0) {
+        const list: Node = {
+          '@type': 'ItemList',
+          '@id': `${pageUrl}#itemlist`,
+          numberOfItems: children.length,
+          itemListElement: children.map((c, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: c.label,
+            url: absoluteUrl(c.path),
+          })),
+        };
+        graph.push(list);
+        webPage.mainEntity = { '@id': list['@id'] };
+      }
+    }
   }
 
   graph.push(webPage);
+
+  if (isArticle && page.article) {
+    graph.push({
+      '@type': 'TechArticle',
+      '@id': `${pageUrl}#article`,
+      headline: page.article.headline,
+      description: page.description,
+      inLanguage: 'en-IN',
+      datePublished: page.article.datePublished,
+      dateModified: page.article.dateModified,
+      author: { '@id': orgId() },
+      publisher: { '@id': orgId() },
+      isPartOf: { '@id': `${pageUrl}#webpage` },
+      mainEntityOfPage: { '@id': `${pageUrl}#webpage` },
+      articleSection: 'Spring design guides',
+      ...(page.image ? { image: { '@id': `${pageUrl}#primaryimage` } } : {}),
+    });
+    webPage.mainEntity = { '@id': `${pageUrl}#article` };
+  }
 
   if (page.faqs && page.faqs.length > 0) {
     graph.push({
       '@type': 'FAQPage',
       '@id': `${pageUrl}#faq`,
       isPartOf: { '@id': `${pageUrl}#webpage` },
+      inLanguage: 'en-IN',
       mainEntity: page.faqs.map((f) => ({
         '@type': 'Question',
         name: f.q,
@@ -196,23 +316,21 @@ export function buildGraph(page: JsonLdPage): {
       name: page.title,
       hasDefinedTerm: page.glossary.map((t) => ({
         '@type': 'DefinedTerm',
+        '@id': `${pageUrl}#${t.id}`,
         name: t.term,
         description: t.definition,
         url: `${pageUrl}#${t.id}`,
+        inDefinedTermSet: { '@id': `${pageUrl}#glossary` },
       })),
     });
   }
 
-  if (page.product) {
-    graph.push({
-      '@type': 'Service',
-      '@id': `${pageUrl}#service`,
-      name: 'Custom spring manufacturing',
-      serviceType: page.product.name,
-      provider: { '@id': orgId() },
-      areaServed: { '@type': 'Country', name: 'India' },
-      description: page.product.description,
-    });
+  const svc: ServiceLd | undefined = page.product
+    ? { ...page.product, serviceType: 'Custom spring manufacturing' }
+    : page.service;
+  if (svc) {
+    graph.push(service(pageUrl, svc, page.image));
+    webPage.mainEntity = { '@id': `${pageUrl}#service` };
   }
 
   if (page.tool) {
@@ -223,10 +341,14 @@ export function buildGraph(page: JsonLdPage): {
       description: page.tool.description,
       applicationCategory: 'EngineeringApplication',
       operatingSystem: 'Any',
+      browserRequirements: 'Requires JavaScript',
+      isAccessibleForFree: true,
       provider: { '@id': orgId() },
       url: pageUrl,
       inLanguage: 'en-IN',
+      ...(page.image ? { image: page.image } : {}),
     });
+    webPage.mainEntity = { '@id': `${pageUrl}#webapp` };
   }
 
   return { '@context': 'https://schema.org', '@graph': graph };

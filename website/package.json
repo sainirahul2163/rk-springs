@@ -18,7 +18,9 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "lh": "node scripts/lighthouse.mjs",
-    "js-budget": "node scripts/js-budget.mjs"
+    "js-budget": "node scripts/js-budget.mjs",
+    "og": "node scripts/make-og.mjs",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@astrojs/react": "7.0.0",

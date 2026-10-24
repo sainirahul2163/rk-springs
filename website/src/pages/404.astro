@@ -1,5 +1,6 @@
 ---
 import Button from '@/components/ui/Button.astro';
+import RelatedLinks from '@/components/ui/RelatedLinks.astro';
 import { linkTo } from '@/data/routes';
 import { site } from '@/data/site';
 import BaseLayout from '@/layouts/BaseLayout.astro';
@@ -36,5 +37,23 @@ const contact = linkTo('contact');
         </Button>
       )}
     </div>
+    <RelatedLinks
+      class="mt-12 max-w-[46rem]"
+      title="Popular pages"
+      links={[
+        { to: 'torsion', label: 'Torsion springs', description: 'Our highest-volume spring.' },
+        {
+          to: 'doubleTorsion',
+          label: 'Double torsion springs',
+          description: 'Two coils and a centre loop.',
+        },
+        { to: 'compression', label: 'Compression springs', description: 'Push springs.' },
+        { to: 'extension', label: 'Tension / extension springs', description: 'Pull springs.' },
+        { to: 'wireForms', label: 'Wire forms', description: 'Clips, hooks and pins.' },
+        { to: 'tools', label: 'Spring calculators', description: 'Rate, stress and units.' },
+        { to: 'resources', label: 'Spring design guides', description: 'Measure, compare, HSN.' },
+        { to: 'rfq', label: 'Request a quote', description: 'Quote within 24 hours.' },
+      ]}
+    />
   </section>
 </BaseLayout>

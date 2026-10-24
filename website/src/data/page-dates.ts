@@ -9,7 +9,18 @@ const written: Record<string, string> = {
   '/resources/extension-spring-end-types/': '2026-10-04',
   '/resources/hsn-code-gst-springs/': '2026-10-04',
   '/resources/spring-price-guide-india/': '2026-10-04',
-  '/resources/spring-glossary/': '2026-10-04',
+  '/resources/spring-glossary/': '2026-10-23',
+  // 23 Oct 2026 SEO pass: new H1s, intro links or related-link sections (SEO-WORK-LOG.md).
+  '/': '2026-10-23',
+  '/springs/torsion-springs/': '2026-10-23',
+  '/springs/double-torsion-springs/': '2026-10-23',
+  '/springs/extension-springs/': '2026-10-23',
+  '/springs/compression-springs/': '2026-10-23',
+  '/springs/conical-springs/': '2026-10-23',
+  '/wire-forms/': '2026-10-23',
+  '/resources/': '2026-10-23',
+  '/locations/talawade-pcmc/': '2026-10-23',
+  '/tools/spring-rate-converter/': '2026-10-23',
 };
 
 const DEFAULT = '2026-10-04';

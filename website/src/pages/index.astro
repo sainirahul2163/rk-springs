@@ -19,6 +19,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 const catalogue = [...products, wireFormsItem].filter((p) => linkTo(p.route));
 const capabilitiesHref = linkTo('capabilities');
 const talawadeHref = linkTo('talawade');
+const toolsHref = linkTo('tools');
+const resourcesHref = linkTo('resources');
 
 const proofs = [
   {
@@ -274,6 +276,12 @@ const guides = [
         </li>
       ))}
     </ul>
+    {(toolsHref || resourcesHref) && (
+      <p class="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+        {toolsHref && <a href={toolsHref}>All spring calculators</a>}
+        {resourcesHref && <a href={resourcesHref}>All spring design guides and the glossary</a>}
+      </p>
+    )}
   </Section>
 
   <Section labelledby="faq-title">

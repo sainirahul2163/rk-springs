@@ -247,3 +247,10 @@ export function trail(id: RouteId): { id: RouteId; label: string; path: string }
   }
   return out;
 }
+
+/** Published, indexable child routes of a hub, in registry order (hub ItemList, llms.txt). */
+export function childrenOf(id: RouteId): { id: RouteId; label: string; path: string }[] {
+  return (Object.entries(routes) as [RouteId, RouteDef][])
+    .filter(([, r]) => r.parent === id && r.status === 'live' && !r.noindex)
+    .map(([cid, r]) => ({ id: cid, label: r.label, path: r.path }));
+}

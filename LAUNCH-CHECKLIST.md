@@ -1,11 +1,11 @@
 # Launch checklist: RK Springs & Wireforms
 
-Phase 7 quality gates were run on 4 Oct 2026 against a production-like build (`PUBLIC_SITE_URL=https://www.rksprings.in`, `PUBLIC_SHOW_TODOS` unset). This file is what to do before the site is public. Do not treat a green local build as “live”.
+Phase 7 quality gates were run on 4 Oct 2026 and re-run after the SEO pass on 23 Oct 2026 against a production-like build (`PUBLIC_SITE_URL=https://www.rksprings.com`, `PUBLIC_SHOW_TODOS` unset). This file is what to do before the site is public. Do not treat a green local build as “live”.
 
 ## 1. Do not launch until these exist
 
-- [ ] Domain bought and DNS pointed at Vercel (`www` + apex).
-- [ ] `PUBLIC_SITE_URL` set to the live origin, no trailing slash (planned: `https://www.rksprings.in`).
+- [ ] Domain **rksprings.com** bought (decided 23 Oct 2026). In Vercel → Project → Domains add `www.rksprings.com` (primary) and `rksprings.com` (set to redirect to `www`). At the registrar: `A @ 76.76.21.21` and `CNAME www cname.vercel-dns.com` (or whatever Vercel shows), or move nameservers to Vercel.
+- [ ] Nothing else to configure for SEO: the code already uses `https://www.rksprings.com` for every canonical, the sitemap, robots.txt, JSON-LD, share cards and llms.txt. Delete any old `PUBLIC_SITE_URL` from the Vercel env: it is ignored now, and a `*.vercel.app` value there made the first PR preview fail (see `SEO-WORK-LOG.md`).
 - [ ] Logo file (wordmark + favicon). The coil mark is temporary.
 - [ ] Confirm `+91 72620 92185` is the public main number, or give the real one.
 - [ ] Pick the public email (plan a domain address such as `sales@<domain>`).
@@ -25,12 +25,13 @@ Spiral springs stays **draft-gated** (404 in production) until you confirm wire 
 
   | Name | Notes |
   |---|---|
-  | `PUBLIC_SITE_URL` | Live origin |
+  | `PUBLIC_SITE_URL` | Do not set (ignored on Vercel; URLs always use `https://www.rksprings.com`) |
   | `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | Server only |
   | `RESEND_API_KEY` / `RFQ_FROM_EMAIL` / `RFQ_NOTIFY_EMAIL` | Server only |
   | `PUBLIC_TURNSTILE_SITE_KEY` / `TURNSTILE_SECRET_KEY` | |
   | `PUBLIC_GA4_ID` | Optional |
   | `PUBLIC_CLARITY_ID` | Optional |
+  | `PUBLIC_GOOGLE_SITE_VERIFICATION` / `PUBLIC_BING_SITE_VERIFICATION` | Optional (prefer DNS verification) |
 
 - [ ] Do **not** set `PUBLIC_SHOW_TODOS` on production.
 - [ ] Preview deployments stay noindex (`VERCEL_ENV !== production`).
@@ -69,7 +70,7 @@ Commands (from `/website`):
 ```bash
 npm test                  # Vitest
 npm run check             # astro check, ESLint, Prettier
-PUBLIC_SITE_URL=https://www.rksprings.in npm run build
+PUBLIC_SITE_URL=https://www.rksprings.com npm run build
 npm run js-budget
 npm run test:e2e
 npm run lh                # needs dist/; median of 3 mobile runs
@@ -98,11 +99,38 @@ npm run todo
 
 All five meet §12 on that median: every category ≥ 95, LCP < 1.8 s, CLS < 0.05. Calculator accessibility 98 is the lowest category score (still above 95).
 
+### Re-run after the SEO pass (23 Oct 2026, same method)
+
+| Gate | Result |
+|---|---|
+| `astro check` / ESLint / Prettier | 0 errors, 0 warnings |
+| Vitest | 62 passed (adds 11 SEO tests: title fallback, domain, share-card slug, JSON-LD rules) |
+| Playwright | 44 passed |
+| `audit-html` | 41 pages (38 indexable), 38 sitemap URLs, 0 errors, 0 warnings, with the stricter SEO checks listed in `SEO-WORK-LOG.md` |
+| schema.org validator | 38 / 38 indexable pages: 0 errors, 0 warnings |
+| JS budget | Content pages unchanged (largest island: RFQ 332 KB) |
+
+| Page | P | A | BP | SEO | LCP | CLS |
+|---|---:|---:|---:|---:|---:|---:|
+| `/` | 100 | 100 | 100 | 100 | 1.65 s | 0.000 |
+| `/springs/torsion-springs/` | 100 | 100 | 100 | 100 | 1.50 s | 0.001 |
+| `/resources/how-to-measure-a-spring/` | 100 | 100 | 100 | 100 | 1.35 s | 0.000 |
+| `/tools/compression-spring-calculator/` | 100 | 100 | 100 | 100 | 1.50 s | 0.000 |
+| `/request-a-quote/` | 100 | 100 | 100 | 100 | 1.66 s | 0.000 |
+
+LCP moves ±0.3 s between runs on this machine; every run stayed under 1.8 s.
+
 Island pages (RFQ and the calculators) ship 239–331 KB of React. A later median on the same machine has read 1.80–1.95 s LCP on those two URLs while categories stayed ≥ 99. Content pages stay at 1.20–1.35 s. Quote the table above; if PageSpeed shows ~2 s on `/request-a-quote/` or a calculator, re-run `npm run lh`.
 
 ## 6. After go-live
 
-- [ ] Search Console: add the property, submit `https://www.rksprings.in/sitemap-index.xml`.
+- [ ] `curl -I https://rksprings.com/` → one 308 to `https://www.rksprings.com/`. `curl -I http://www.rksprings.com/` → one redirect to https.
+- [ ] `curl -I https://<project>.vercel.app/` shows `x-robots-tag: noindex, nofollow` (the deploy URL must not compete with the domain).
+- [ ] Search Console: add a **Domain** property for `rksprings.com` (DNS TXT record), submit `https://www.rksprings.com/sitemap-index.xml`.
+- [ ] Bing Webmaster Tools: import from Search Console (one click), confirm the sitemap. Bing also feeds ChatGPT search and Copilot.
+- [ ] Run `npm run build && npm run indexnow` once from `/website` (key file `public/bd9d2b2fcc9721684fc2fb79e97dc478.txt` must load on the live site). Repeat after each content release.
+- [ ] Google Business Profile: website field = `https://www.rksprings.com/`, same name, address and phone as the footer. Then add the GBP, IndiaMART and Justdial URLs to `site.sameAs` in `src/data/site.ts`.
+- [ ] Rich Results Test on `/`, `/springs/torsion-springs/`, `/resources/how-to-measure-a-spring/`: expect Breadcrumbs, FAQ and Organization detected, 0 errors.
 - [ ] Fetch `/`, `/springs/torsion-springs/`, `/request-a-quote/` as Googlebot.
 - [ ] Confirm `robots.txt` points at the sitemap and does not noindex.
 - [ ] Click-test WhatsApp, tel, and the RFQ from a phone.
