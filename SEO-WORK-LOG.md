@@ -210,3 +210,10 @@ These come from blueprint §4.3 and §4.9. They are new pages, not fixes, so per
   - A stale env value can no longer put a `vercel.app` canonical on the live site, or fail the build.
   - The `vercel.app` audit check is unchanged.
 - **To do in Vercel:** delete `PUBLIC_SITE_URL` from the project env; it is ignored now. To let this session read build logs in future, connect a Vercel account that belongs to the `rk-spring` team.
+
+## 24 Oct 2026: production deploy blocked, then unblocked
+
+- The merge of PR #1 (`142c2fc`) was **blocked** by Vercel, not failed. The Hobby plan does not deploy a private repo when a commit author lacks access to the Vercel project, and the PR's commits were authored by Claude.
+- The client made the GitHub repo **public**, which lifts the Hobby author check. A follow-up commit to `main` triggers the production deploy.
+- If the repo is ever made private again, deploy with **Redeploy** in the Vercel dashboard, or upgrade to Pro.
+
