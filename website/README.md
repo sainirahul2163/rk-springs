@@ -76,6 +76,7 @@ Without RFQ keys, `POST /api/rfq` writes JSON and uploaded files to `.rfq-dev/` 
 - Do **not** set `PUBLIC_SHOW_TODOS` on production
 - Preview deployments stay noindex (`VERCEL_ENV !== production`), and every `*.vercel.app` host sends `X-Robots-Tag: noindex`
 - `/styleguide/` and draft pages (spiral springs) return a real 404 unless `PUBLIC_SHOW_TODOS=true`
+- The Vercel team is on the **Hobby** plan. Hobby blocks deployments of a **private** repo when a commit author is not the account owner (e.g. commits authored by Claude). The GitHub repo is **public** since 24 Oct 2026, which lifts that check. If the repo goes private again, use **Redeploy** in the Vercel dashboard after each merge, or upgrade to Pro
 
 ## Adding content
 
