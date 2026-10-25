@@ -53,7 +53,6 @@ Pages flagged **draft-gated** are built but excluded from the production build, 
 | 40 | `/terms/` | Legal | 2 | draft | Legal review |
 | 41 | `404` | Utility (noindex) | 2 | draft | — |
 | — | `/styleguide/` | Internal (noindex) | 1 | draft | Logo (wordmark and favicon are temporary) |
-| — | `/landing/` | Homepage design preview (noindex, not in sitemap) | — | draft | Client's choice of design; same inputs as `/` plus machine list and factory photo |
 
 ## 2. Open TODO(client) items
 
@@ -139,6 +138,7 @@ Added in Phase 6:
 - Product pages are 900–1,300 words. They explain common engineering facts (wind direction, hook failure, spring index) without claiming a lab, CNC list, ISO, PPAP or named customers.
 - Two-wheeler work is mentioned only as a common application of the type, with a TODO before we treat it as a regular RK product.
 - Industry, tool and resource teasers on Home render as cards; they are not links until those pages exist.
+- Homepage hero visual updated 25 Oct 2026 with the supplied spring isolated on transparency and restored technical callouts for the wire range, left/right coils, centre loop and leg span. The original hero copy and all other homepage sections are unchanged.
 
 ## 6. Phase 3 notes
 
@@ -186,12 +186,50 @@ Added in Phase 6:
 - Lighthouse is `npm run lh`: gzip on the preview server (as Vercel does), fresh Chrome per page, median of 3 simulated-mobile runs.
 - No `TODO(client)` is visible in the production HTML. `npm run todo` still lists 49 markers for you.
 
-## 11. `/landing/` homepage redesign (21 Oct 2026)
+## 11. `/landing/` homepage redesign (21 Oct 2026; removed 25 Oct 2026)
 
 - The client did not like the original homepage look, so `/landing/` now holds a new homepage layout for review. **The live `/` is untouched.** It's noindex and kept out of the sitemap, so it can't compete with `/` in search.
 - Layout follows a typical industrial-supplier homepage. A dark blueprint hero with the double torsion drawing redrawn white-on-navy. A row of key figures (wire range, 24 h quote, usual batch, since 2017). A registrations strip (ZED, Udyam, GSTIN). Datasheet-style product cards, with torsion and double torsion marked "Specialist". A shop-floor capability block with a to-scale wire-gauge drawing. Then industries, a six-step process, an RFQ checklist with direct contact details, the factory block and the FAQ.
 - Every fact comes from `site.ts`, `navigation.ts` and `faqs.ts`. No new claims. "Our highest-volume parts" is based on CLIENT-PROFILE §2, which ranks products by volume.
 - Zero client JS. Only token colours, no hex values. The hero drawing's reveal animation is turned off on this page because it sometimes left the drawing blank when it ran off-screen on phones.
 - Files: `src/pages/landing.astro`, `src/components/landing/*`, `src/styles/landing.css`.
-- To promote it later, move the markup into `src/pages/index.astro`. Then drop the preview bar, set the homepage title and description, and remove `/landing/` from `routes.ts`, the sitemap exclusions and the smoke test.
-- Homepage hero visual updated 25 Oct 2026 with the supplied spring isolated on transparency and restored technical callouts for the wire range, left/right coils, centre loop and leg span. The original hero copy and all other homepage sections are unchanged.
+- Removed on 25 Oct 2026 at Rahul’s request, including its dedicated components/styles, route registry entry, sitemap exclusion and smoke-test entry. The notes above describe the former preview.
+
+## 12. `/landing2/` homepage concept (removed 25 Oct 2026)
+
+- The uncommitted alternative homepage concept has been removed at Rahul’s request, together with `/landing/`. Neither preview is part of the current site.
+
+## 13. Homepage hero visual refinement (25 Oct 2026)
+
+- **Status: ready for visual review.** This is a bounded refinement of the homepage hero from `c063221`, not a new build phase. No deployment or publication.
+- Studied the current hero and [Jai Shree Group](https://jaishreegroup.com/) for its layered industrial geometry and motion treatment. RK uses original open wire contours in the existing blue-and-white tokens.
+- Replaced the rectangular blueprint grid, title block, dimension arrows and all technical callouts with a soft blue backdrop and fine SVG wire turns behind the supplied photo. A simple “Double torsion spring” caption sits below the photo; there are no labels over the spring.
+- Preserved the heading, supporting copy, CTA markup, trust facts, image source, image dimensions, alt text and image delivery settings. The real photo remains stationary and unchanged. No new factual claims or client TODOs.
+- Background turns move through a small compression/release range over 16–18 seconds. A keyboard-accessible native checkbox pauses/resumes the motion, with a visible focus ring and 44 px label target. Animation is enabled only under `prefers-reduced-motion: no-preference`; reduced-motion styles keep a static composition and hide the unnecessary control. Mobile renders only one of the two wire groups.
+- Zero additional client JavaScript and no dependencies. All new colours reference existing tokens. No stock or generated photos, filters, canvas, or animation libraries.
+- Reviewed the local hero at 360, 390, 768, 1024, 1280 and 1440 px. No horizontal overflow observed. Checked the production desktop/mobile composition, photo clearance, caption placement, pause via click, resume via keyboard, focus visibility and control heights. Reduced-motion behaviour was reviewed in CSS; browser preference emulation was not available. Preview captures: `website/.screens/hero-desktop.jpg` and `website/.screens/hero-mobile.jpg` (gitignored).
+- Validation: `npm run check` passed (0 errors, warnings or hints); `npm run build` passed; `audit-html` reported 42 pages and 0 errors. The existing local noindex configuration produces 0 sitemap URLs. `npm run js-budget` passed (homepage 6.9 KB under the script's counting method, including inline schema). Mobile 4G LCP/CLS were not remeasured in this visual pass.
+- Scope: `website/src/components/home/HomeHero.astro` and this review entry only. Existing `/landing2/` work and prior review-file edits are preserved; `/landing/` and the rest of the homepage are untouched.
+
+- Headline follow-up (25 Oct 2026): changed the main headline to “Your design. Our springs.” at Rahul’s request, with “Spring & wire-form manufacturer in Pune” below it within the same H1. This reflects the confirmed made-to-drawing capability. Supporting copy, CTAs, photo and motion are unchanged. Reviewed at 1280 px and 390 px with no overflow and exactly one H1. `npm run check` and `npm run build` passed; HTML audit: 42 pages, 0 errors. Ready for review.
+
+- Motion visibility follow-up (25 Oct 2026): Rahul could not perceive the background movement. Browser inspection confirmed it was running, with reduced-motion off and pause unchecked; the original movement was too faint and slow. Increased the bounded wire flex from ±2° to ±5°, shortened each half-cycle to 8–10 seconds, slightly strengthened the token-based line gradient, and added a short travelling highlight along one contour per group. The photo remains stationary. All effects stay CSS/SVG-only, pause together, and remain disabled for reduced-motion users. Verified changing transform matrices and highlight offsets, pause/resume, and desktop/mobile appearance. `npm run check` and `npm run build` passed; HTML audit: 42 pages, 0 errors. Ready for review.
+
+- Hero photo quality follow-up (25 Oct 2026): the supplied source is 1006 × 885 px. Created a non-generative 3840 × 3378 px upscale with Lanczos resampling, light sharpening and lossless WebP storage at `website/src/assets/polished-stainless-steel-torsion-springs-hero-4k.webp` (2.61 MiB). This is an upscale, not a native 4K photograph, and does not recover missing captured detail. Original PNG is retained unchanged; product geometry, lighting, framing and transparency are preserved. Raised hero WebP delivery quality from 84 to 98 and added 560/840/1120/1680/2240 px responsive outputs with explicit sizes; the full master is not downloaded by ordinary page views. Output image sizes are approximately 65/112/163/277/409 KiB. Reviewed production desktop (1280 px, DPR 2; 1120 px resource selected) and mobile (390 px) with loaded images and no overflow. `npm run check` and `npm run build` passed; HTML audit: 42 pages, 0 errors. Photo asset and hero image props only; no dependencies or JavaScript added. Ready for review.
+
+- Development-preview fix (25 Oct 2026): the running Astro server at `localhost:4325` returned HTTP 500 for the new 4K image import even though the asset existed and production builds passed. Restarted the existing development server on the same port to clear its stale module-resolution state. Verified HTTP 200 and the loaded hero image in a browser at the exact URL from Rahul’s screenshot, with no error overlay. No source change was needed.
+
+- Responsive annotation restoration (25 Oct 2026): restored CENTRE LOOP, LH COIL, RH COIL, WIRE RANGE (using the confirmed `site.capability.wireRangeLabel`) and LEG SPAN around the real hero photo at Rahul’s request. The former title box remains removed. Added a square stage with a fixed coordinate system, 4% horizontal photo clearance, short SVG callout leaders, and a simple split leg-span rule below the photo. Labels use HTML text with container-relative sizing and an 11 px minimum; they remain separate from the product and do not move with the decorative animation. Updated responsive image size hints to match the 92%-width photo. No image asset, headline, supporting copy, CTA, or other page changes.
+- Annotation validation: browser review at 320, 360, 390, 768, 1024, 1280 and 1440 px; all five labels stay within the stage, with no horizontal overflow. Reviewed callout endpoints and image clearance on phones, tablet and desktop, plus the development preview at `localhost:4325`. `npm run check` passed (0 errors/warnings/hints); `npm run build` passed; HTML audit: 42 pages, 0 errors. Updated captures: `website/.screens/hero-labels-desktop.jpg` and `website/.screens/hero-labels-mobile.jpg`. Ready for review; no deployment.
+
+- Hero viewport and control refinement (25 Oct 2026): removed the pause/resume checkbox, label and their styles at Rahul’s request. The CSS/SVG wire effect now runs once and settles by 4.8 seconds, with the travelling highlight fading out; reduced-motion users keep a static background. No persistent animation remains that requires a pause control.
+- Reduced hero padding and copy spacing; removed oversized trust-block reserved heights; made trust facts compact; sized the art to the available viewport height with a lower bound that protects annotation legibility. Two-column composition now starts at 768 px, with compact tablet typography/buttons and short-screen spacing. CTA touch targets remain at least 44 px. The real photo, headline, supporting copy, links and all five labels remain present. Mobile keeps a readable vertical flow rather than clipping or shrinking the full content into one screen.
+- Verified full hero bottom at or above the viewport bottom in the development preview at 768×650, 768×768, 768×1024, 1024×650, 1024×768, 1280×600, 1280×650, 1280×720, 1366×768 and 1440×900. In particular, the complete hero ends at 720 px on a 1280×720 laptop. Mobile 360/390 px retains a natural vertical layout, with no horizontal overflow or awkward trust-label wrapping; the narrowest 320 px trust list uses one column. Confirmed no pause control remains and the background settles to its final transform. `npm run check` and `npm run build` pass; HTML audit: 42 pages, 0 errors. Screenshot: `website/.screens/hero-fit-laptop.jpg`. Scope remains HomeHero and these notes; no deployment. Ready for review.
+
+
+## 14. Remove alternative homepage previews (25 Oct 2026)
+
+- Removed `/landing/` and the uncommitted `/landing2/` concept at Rahul’s explicit request. Deleted their dedicated Astro pages, components, CSS and landing2 data. Removed preview route registrations, sitemap exclusions, the former landing smoke-test entry and the unused layout theme-class prop.
+- Retained the completed homepage hero work from this chat, including its original photo and non-generative upscale, responsive annotations, revised headline, compact viewport layout and one-time wire animation. Unrelated `.claude/` and `SEO-MASTER-PLAYBOOK.md` files remain outside the commit.
+- Validation: `npm run check` and `npm run build` pass. The HTML audit reports 40 pages and 0 errors. Neither preview appears in build output. Local development HTTP checks: `/` → 200; `/landing/` → 404; `/landing2/` → 404. No remaining preview references in runtime source, config or tests.
+- Publish scope: commit and push the current `landing-redesign` branch to GitHub, as requested. No deployment command or merge into `main`.

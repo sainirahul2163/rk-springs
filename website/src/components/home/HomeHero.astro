@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import heroSpringImage from '@/assets/polished-stainless-steel-torsion-springs-hero.png';
+import heroSpringImage from '@/assets/polished-stainless-steel-torsion-springs-hero-4k.webp';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 import TrustBar from '@/components/ui/TrustBar.astro';
@@ -9,7 +9,7 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
 ---
 
 <section class="hero" aria-labelledby="hero-title">
-  <div class="hero-bg bp-grid bp-grid-fade" aria-hidden="true"></div>
+  <div class="hero-bg" aria-hidden="true"></div>
   <div class="container-page hero-inner">
     <div class="hero-copy">
       <p class="eyebrow hero-eyebrow">
@@ -20,7 +20,12 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
         <span class="hero-wire">Wire {site.capability.wireRangeLabel}</span>
       </p>
       <h1 id="hero-title" class="text-h1">
-        Precision spring and wire-form manufacturer in Pune
+        <span class="hero-headline">
+          Your design.
+          <br />
+          Our springs.
+        </span>
+        <span class="hero-descriptor">Spring &amp; wire-form manufacturer in Pune</span>
       </h1>
       <p class="hero-sub text-lead">
         Torsion and double torsion specialists. Every spring made to your drawing or sample.
@@ -48,89 +53,93 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
       <TrustBar class="hero-trust" />
     </div>
     <div class="hero-art">
-      <Image
-        class="hero-product-image"
-        src={heroSpringImage}
-        alt="Polished stainless steel double torsion spring with two coils and formed legs"
-        width={1200}
-        format="webp"
-        quality={84}
-        loading="eager"
-        fetchpriority="high"
-      />
-      <svg class="hero-annotations" viewBox="0 0 560 493" fill="none" aria-hidden="true">
-        <defs>
-          <marker
-            id="hero-dimension-arrow"
-            markerWidth="6"
-            markerHeight="6"
-            refX="3"
-            refY="3"
-            orient="auto-start-reverse"
-            markerUnits="strokeWidth"
-          >
-            <path d="M6 0 0 3 6 6" fill="var(--color-blue-700)" stroke="none" />
-          </marker>
-        </defs>
-        <g class="hero-callout-lines">
-          <path d="M548 84h-25l-155 111" />
-          <circle cx="368" cy="195" r="2.2" />
-          <path d="M280 143h-34l-75-68" />
-          <circle cx="171" cy="75" r="2.2" />
-          <path class="hero-lh-line" d="M76 234h45L31 290" />
-          <circle cx="31" cy="290" r="2.2" />
-          <path d="M548 222h-65l-89 22" />
-          <circle cx="394" cy="244" r="2.2" />
-          <path d="M198 452v24m350-225v201" />
-          <path
-            d="M198 476h350"
-            marker-start="url(#hero-dimension-arrow)"
-            marker-end="url(#hero-dimension-arrow)"
-          />
-        </g>
-        <g class="hero-callout-labels">
-          <text x="548" y="79" text-anchor="end">
-            WIRE Ø 0.40–2.50 MM
-          </text>
-          <text x="284" y="139">
-            CENTRE LOOP
-          </text>
-          <text x="8" y="230">
-            LH COIL
-          </text>
-          <text x="548" y="219" text-anchor="end">
-            RH COIL
-          </text>
-          <text x="373" y="468" text-anchor="middle">
-            LEG SPAN
-          </text>
-        </g>
-        <g class="hero-title-block">
-          <path
-            d="M404 9h146v51H404zm0 25h146m-51-25v51"
-            fill="var(--color-white)"
-            fill-opacity="0.94"
-          />
-          <text x="410" y="20">
-            PART
-          </text>
-          <text x="410" y="30">
-            DOUBLE TORSION
-          </text>
-          <text x="503" y="20">
-            QUOTE
-          </text>
-          <text x="503" y="30">
-            IN 24 H
-          </text>
-          <text x="410" y="45">
-            EST. 2017 · PUNE
-          </text>
-          <text x="503" y="45">
-            NTS
-          </text>
-        </g>
-      </svg>
+      <div class="hero-wirefield" aria-hidden="true">
+        <svg viewBox="0 0 640 560" fill="none" focusable="false">
+          <defs>
+            <linearGradient
+              id="hero-wire-tone"
+              x1="80"
+              y1="480"
+              x2="560"
+              y2="80"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stop-color="var(--color-blue-300)" stop-opacity="0.12" />
+              <stop offset="0.45" stop-color="var(--color-blue-700)" stop-opacity="0.4" />
+              <stop offset="1" stop-color="var(--color-blue-300)" stop-opacity="0.55" />
+            </linearGradient>
+          </defs>
+          {/* Open, offset turns suggest formed wire without diagram annotations. */}
+          <g class="hero-wire-turns hero-wire-turns-back">
+            {Array.from({ length: 6 }, (_, i) => (
+              <path
+                class:list={{ 'hero-wire-trace': i === 2 }}
+                d={`M ${410 + i * 12} ${76 + i * 8} C ${565 + i * 8} ${114 + i * 8}, ${606 + i * 3} ${276 + i * 6}, ${474 + i * 7} ${369 + i * 5} S ${172 + i * 7} ${493 + i * 5}, ${93 + i * 5} ${385 + i * 4}`}
+              />
+            ))}
+          </g>
+          <g class="hero-wire-turns hero-wire-turns-front">
+            {Array.from({ length: 5 }, (_, i) => (
+              <path
+                class:list={{ 'hero-wire-trace': i === 2 }}
+                d={`M ${59 + i * 12} ${331 - i * 9} C ${10 + i * 10} ${232 - i * 9}, ${112 + i * 10} ${109 - i * 8}, ${258 + i * 9} ${98 - i * 7} S ${499 + i * 6} ${160 - i * 5}, ${528 + i * 4} ${227 - i * 5}`}
+              />
+            ))}
+          </g>
+        </svg>
+      </div>
+      <div class="hero-product-stage">
+        <Image
+          class="hero-product-image"
+          src={heroSpringImage}
+          alt="Polished stainless steel double torsion spring with two coils and formed legs"
+          width={1120}
+          widths={[560, 840, 1120, 1680, 2240]}
+          sizes="(min-width: 1280px) 516px, (min-width: 768px) 42vw, (min-width: 600px) 516px, calc(92vw - 37px)"
+          format="webp"
+          quality={98}
+          loading="eager"
+          fetchpriority="high"
+        />
+        <svg
+          class="hero-annotation-lines"
+          viewBox="0 0 560 560"
+          fill="none"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <g class="hero-feature-lines">
+            <path d="M78 36h12l20 48" />
+            <path d="M40 286v20l22 22" />
+            <path d="M520 242h-44l-84 18" />
+            <circle cx="110" cy="84" r="2.5" />
+            <circle cx="62" cy="328" r="2.5" />
+            <circle cx="392" cy="260" r="2.5" />
+          </g>
+          <g class="hero-span-lines">
+            <path d="M204 532h116m92 0h112m-320-5v10m320-10v10" />
+          </g>
+        </svg>
+        <div class="hero-part-label hero-label-centre" aria-hidden="true">
+          CENTRE LOOP
+        </div>
+        <div class="hero-part-label hero-label-wire" aria-hidden="true">
+          <span>WIRE RANGE</span>
+          <span>{site.capability.wireRangeLabel}</span>
+        </div>
+        <div class="hero-part-label hero-label-lh" aria-hidden="true">
+          LH COIL
+        </div>
+        <div class="hero-part-label hero-label-rh" aria-hidden="true">
+          RH COIL
+        </div>
+        <div class="hero-part-label hero-label-span" aria-hidden="true">
+          LEG SPAN
+        </div>
+      </div>
+      <div class="hero-art-footer">
+        <p class="hero-caption">Double torsion spring</p>
+      </div>
     </div>
   </div>
 </section>
@@ -147,12 +156,13 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
     position: absolute;
     inset: 0;
     z-index: -1;
+    background: radial-gradient(ellipse at 83% 48%, var(--color-blue-50), var(--color-white) 63%);
   }
 
   .hero-inner {
     display: grid;
-    gap: 32px;
-    padding-block: 48px 40px;
+    gap: 24px;
+    padding-block: 28px 24px;
     min-width: 0;
   }
 
@@ -166,7 +176,7 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
     align-items: center;
     gap: 0.4em 0.55em;
     color: var(--color-blue-700);
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 
   .hero-wire {
@@ -179,8 +189,23 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
     overflow-wrap: anywhere;
   }
 
+  .hero-headline {
+    display: block;
+  }
+
+  .hero-descriptor {
+    display: block;
+    margin-top: 12px;
+    font-size: clamp(1.125rem, 0.95rem + 0.5vw, 1.375rem);
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-wrap: pretty;
+    color: var(--color-blue-700);
+  }
+
   .hero-sub {
-    margin-top: 18px;
+    margin-top: 12px;
     max-width: 36rem;
     color: var(--color-slate);
   }
@@ -189,7 +214,7 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: 28px;
+    margin-top: 20px;
   }
 
   .hero-upload {
@@ -197,7 +222,7 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
     align-items: center;
     gap: 8px;
     min-height: 44px;
-    margin-top: 8px;
+    margin-top: 4px;
     font-weight: 500;
     color: var(--color-blue-700);
     text-decoration: underline;
@@ -209,103 +234,210 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
   }
 
   .hero-copy :global(.hero-trust) {
-    margin-top: 28px;
-    padding-top: 20px;
+    margin-top: 16px;
+    padding-top: 12px;
     border-top: 1px solid var(--color-grid);
     max-width: 34rem;
-    min-height: 12.5rem;
+    min-height: 0;
   }
 
   .hero-copy :global(.hero-trust .trustbar-list) {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px 24px;
-  }
-
-  @media (min-width: 480px) {
-    .hero-copy :global(.hero-trust) {
-      min-height: 7rem;
-    }
-
-    .hero-copy :global(.hero-trust .trustbar-list) {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 16px;
   }
 
   .hero-art {
     position: relative;
+    isolation: isolate;
     max-width: 560px;
     width: 100%;
-    aspect-ratio: 1006 / 885;
     justify-self: center;
   }
 
-  .hero-product-image {
-    display: block;
+  .hero-product-stage {
+    position: relative;
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 8px 5px color-mix(in srgb, var(--color-navy-950) 18%, transparent));
+    aspect-ratio: 1;
+    container-type: inline-size;
   }
 
-  .hero-annotations {
+  .hero-product-image {
+    position: absolute;
+    top: 7.5%;
+    left: 4%;
+    display: block;
+    width: 92%;
+    height: auto;
+    aspect-ratio: 1006 / 885;
+    object-fit: contain;
+  }
+
+  .hero-annotation-lines {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    overflow: visible;
     pointer-events: none;
-  }
-
-  .hero-callout-lines {
     color: var(--color-blue-700);
     stroke: currentColor;
-    stroke-width: 1.1;
+    stroke-width: 1;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
-  .hero-callout-lines circle {
-    fill: currentColor;
+  .hero-feature-lines circle {
+    fill: var(--color-blue-700);
     stroke: var(--color-white);
-    stroke-width: 0.7;
+    stroke-width: 1;
   }
 
-  .hero-callout-lines .hero-lh-line {
-    stroke-width: 1.8;
-  }
-
-  .hero-callout-labels,
-  .hero-title-block {
-    fill: var(--color-navy-900);
+  .hero-part-label {
+    position: absolute;
+    padding: 2px 4px;
+    background: color-mix(in srgb, var(--color-white) 90%, transparent);
+    color: var(--color-navy-900);
     font-family: var(--font-mono);
-    font-size: 9px;
+    font-size: clamp(0.6875rem, 2.1cqi, 0.75rem);
     font-weight: 500;
-    letter-spacing: 0.045em;
-  }
-
-  .hero-callout-labels text,
-  .hero-title-block text {
-    paint-order: stroke fill;
-    stroke: var(--color-white);
-    stroke-width: 1.75px;
-    stroke-linejoin: round;
-  }
-
-  .hero-title-block {
-    font-size: 8px;
+    line-height: 1.4;
     letter-spacing: 0.035em;
+    white-space: nowrap;
   }
 
-  .hero-title-block path {
-    stroke: color-mix(in srgb, var(--color-navy-900) 72%, transparent);
-    stroke-width: 0.75;
+  .hero-label-centre {
+    top: 1%;
+    left: 0;
   }
 
-  .hero-title-block text:nth-of-type(odd) {
-    fill: var(--color-slate);
-    font-size: 6.5px;
+  .hero-label-wire {
+    top: 1%;
+    right: 0;
+    display: grid;
+    gap: 2px;
+    text-align: right;
+  }
+
+  .hero-label-wire span:first-child {
+    color: var(--color-slate);
+    font-size: 0.9em;
     letter-spacing: 0.08em;
+  }
+
+  .hero-label-lh {
+    top: 46%;
+    left: 0;
+  }
+  .hero-label-rh {
+    top: 39%;
+    right: 0;
+  }
+
+  .hero-label-span {
+    top: 95%;
+    left: 65.35%;
+    transform: translate(-50%, -50%);
+  }
+
+  .hero-wirefield {
+    position: absolute;
+    z-index: -1;
+    inset: -7% -7% 2%;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse, transparent 24%, var(--color-white) 62%);
+  }
+
+  .hero-wirefield svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .hero-wire-turns {
+    stroke: url(#hero-wire-tone);
+    stroke-width: 1;
+    stroke-linecap: round;
+    transform-origin: 50% 50%;
+  }
+
+  .hero-art-footer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    margin-top: 8px;
+    border-top: 1px solid var(--color-grid);
+    padding-top: 8px;
+  }
+
+  .hero-caption {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-blue-700);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-wire-turns-back {
+      animation: hero-wire-release 4.8s ease-out both;
+    }
+
+    .hero-wire-turns-front {
+      animation: hero-wire-release 4.6s ease-out 0.2s both;
+    }
+
+    .hero-wire-trace {
+      stroke: var(--color-blue-700);
+      stroke-width: 1.5;
+      stroke-dasharray: 80 1400;
+      animation: hero-wire-travel 4.8s linear both;
+    }
+  }
+
+  @keyframes hero-wire-release {
+    from {
+      transform: translate(-6px, 8px) rotate(-5deg) scaleY(0.9);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes hero-wire-travel {
+    0% {
+      stroke-dashoffset: 1480;
+      stroke-opacity: 0.45;
+    }
+    85% {
+      stroke-opacity: 0.45;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      stroke-opacity: 0;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .hero-copy :global(.hero-trust .trustbar-list li) {
+      font-size: 0.6875rem;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-wire-turns-front {
+      display: none;
+    }
+    .hero-wirefield {
+      inset: -4% -3% 5%;
+    }
+  }
+
+  @media (max-width: 359.98px) {
+    .hero-copy :global(.hero-trust .trustbar-list) {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 479.98px) {
@@ -314,17 +446,82 @@ import { quoteHref, whatsappHref } from '@/lib/contact';
     }
   }
 
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
     .hero-inner {
       grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
       align-items: center;
-      gap: 48px;
-      padding-block: 72px 64px;
-      min-height: min(640px, calc(100svh - var(--header-h)));
+      gap: 28px;
+      padding-block: 28px;
+      min-height: min(720px, calc(100svh - var(--header-h) - 2px));
     }
 
     .hero-art {
+      max-width: min(560px, max(280px, calc(100svh - var(--header-h) - 104px)));
       justify-self: end;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .hero-inner {
+      gap: 48px;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023.98px) {
+    .hero-inner {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+    }
+
+    .hero-descriptor {
+      font-size: var(--text-body);
+    }
+
+    .hero-sub {
+      font-size: var(--text-body);
+      line-height: 1.5;
+    }
+
+    .hero-ctas {
+      gap: 8px;
+    }
+
+    .hero-ctas :global(.btn) {
+      min-height: 44px;
+      padding-inline: 16px;
+      font-size: 0.9375rem;
+    }
+
+    .hero-copy :global(.hero-trust .trustbar-list li) {
+      font-size: 0.6875rem;
+      letter-spacing: 0.02em;
+    }
+  }
+
+  @media (min-width: 768px) and (max-height: 700px) {
+    .hero-inner {
+      padding-block: 12px;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    .hero-eyebrow {
+      margin-bottom: 8px;
+    }
+
+    .hero-descriptor,
+    .hero-sub {
+      margin-top: 8px;
+    }
+
+    .hero-ctas {
+      margin-top: 16px;
     }
   }
 </style>
