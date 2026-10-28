@@ -1,11 +1,9 @@
 ---
 import HomeHero from '@/components/home/HomeHero.astro';
+import HomeFactory from '@/components/home/HomeFactory.astro';
 import Card from '@/components/ui/Card.astro';
-import CompanyDetails from '@/components/ui/CompanyDetails.astro';
-import ContactLinks from '@/components/ui/ContactLinks.astro';
 import CTASection from '@/components/ui/CTASection.astro';
 import FAQ from '@/components/ui/FAQ.astro';
-import HoursTable from '@/components/ui/HoursTable.astro';
 import ProcessSteps from '@/components/ui/ProcessSteps.astro';
 import Section from '@/components/ui/Section.astro';
 import SectionHeader from '@/components/ui/SectionHeader.astro';
@@ -18,7 +16,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 
 const catalogue = [...products, wireFormsItem].filter((p) => linkTo(p.route));
 const capabilitiesHref = linkTo('capabilities');
-const talawadeHref = linkTo('talawade');
 
 const proofs = [
   {
@@ -281,28 +278,7 @@ const guides = [
     <FAQ items={homeFaqs} class="mt-8" />
   </Section>
 
-  <Section tone="grid" labelledby="loc-title">
-    <SectionHeader
-      id="loc-title"
-      index={8}
-      eyebrow="Factory"
-      title={`${site.address.locality}, ${site.address.city}`}
-      lede={site.areaContext}
-    />
-    <div class="loc-grid">
-      <CompanyDetails />
-      <div>
-        <h3 class="mb-2 text-h3">Working hours</h3>
-        <HoursTable />
-        <ContactLinks class="mt-8" />
-      </div>
-    </div>
-    {talawadeHref && (
-      <p class="mt-6">
-        <a href={talawadeHref}>Talawade and PCMC — address, hours and nearby industrial areas</a>
-      </p>
-    )}
-  </Section>
+  <HomeFactory />
 
   <CTASection />
 </BaseLayout>
@@ -318,19 +294,6 @@ const guides = [
     .proof {
       grid-template-columns: 1fr 1fr;
       gap: 32px 40px;
-    }
-  }
-
-  .loc-grid {
-    display: grid;
-    gap: 40px;
-    margin-top: 40px;
-  }
-
-  @media (min-width: 900px) {
-    .loc-grid {
-      grid-template-columns: 1.2fr 1fr;
-      gap: 64px;
     }
   }
 </style>
