@@ -22,6 +22,7 @@ const indexable =
 /** Built pages that must not appear in the sitemap even when the build is indexable. */
 const sitemapExclude = new Set([
   '/styleguide/',
+  '/landing3/',
   '/springs/spiral-springs/',
   '/404/',
   '/request-a-quote/thank-you/',

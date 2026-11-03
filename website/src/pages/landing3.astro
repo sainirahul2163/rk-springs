@@ -1,0 +1,35 @@
+---
+/**
+ * /landing3 — a second homepage concept for client review.
+ *
+ * noindex on purpose: it is an alternative to `/`, so it must never compete with the real
+ * homepage in search. It is excluded from the sitemap in astro.config.mjs.
+ */
+import Catalogue from '@/components/landing3/Catalogue.astro';
+import Contact from '@/components/landing3/Contact.astro';
+import Hero from '@/components/landing3/Hero.astro';
+import Maker from '@/components/landing3/Maker.astro';
+import Markets from '@/components/landing3/Markets.astro';
+import Process from '@/components/landing3/Process.astro';
+import Proof from '@/components/landing3/Proof.astro';
+import Resources from '@/components/landing3/Resources.astro';
+import SpecSheet from '@/components/landing3/SpecSheet.astro';
+import Landing3Layout from '@/layouts/Landing3Layout.astro';
+---
+
+<Landing3Layout
+  title="Spring Manufacturer in Pune — Design Preview"
+  absoluteTitle
+  description="Design preview: torsion, double torsion, extension and compression springs and wire forms, made to your drawing in Talawade, Pune."
+  noindex
+>
+  <Hero />
+  <Proof />
+  <Catalogue />
+  <SpecSheet />
+  <Process />
+  <Markets />
+  <Maker />
+  <Resources />
+  <Contact />
+</Landing3Layout>

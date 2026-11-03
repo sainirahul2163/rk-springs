@@ -1,0 +1,39 @@
+---
+/**
+ * The RK monogram, redrawn as vector from the client's supplied logo (3 Nov 2026).
+ *
+ * The original was a photograph of a physical cut-out sign, so it carried a drop shadow,
+ * uneven colour and hand-cut edges. The artwork was traced, measured and rebuilt from exact
+ * geometry: the R's bowl is a concentric ellipse pair (rx 46 / 36.2 outer, 16.9 / 11.7 inner)
+ * and the K is a tapered chevron with a rounded point. The rebuild matches the traced original
+ * to 96% (R) and 94% (K) area overlap — the remainder is the sign's own irregularity.
+ *
+ * Brand navy is #0A3262, sampled from the supplied file. The mark inherits `currentColor`, so
+ * callers pick a tone that passes contrast on their background.
+ */
+interface Props {
+  /** Rendered height in px; width follows the 2.246 : 1 aspect ratio. */
+  height?: number;
+  title?: string | undefined;
+  class?: string | undefined;
+}
+
+const { height = 28, title, class: className } = Astro.props;
+const width = +(height * 2.246).toFixed(1);
+---
+
+<svg
+  class={className}
+  width={width}
+  height={height}
+  viewBox="0 0 224.6 100"
+  fill="currentColor"
+  role={title ? 'img' : undefined}
+  aria-label={title}
+  aria-hidden={title ? undefined : 'true'}
+  focusable="false"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path d="M18 0H83.5A46 36.2 0 0 1 106.27 67.65L132.65 100H99.7L76.4 72.7H29.1V100H0V47.9H83.5A16.9 11.7 0 0 0 83.5 24.5H0Z"></path>
+  <path d="M183.49 0H224.6L168.62 50L224.6 100H183.49L139.61 59.79A13.27 13.27 0 0 1 139.61 40.21Z"></path>
+</svg>

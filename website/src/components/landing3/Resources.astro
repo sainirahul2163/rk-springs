@@ -1,0 +1,253 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { linkTo } from '@/data/routes';
+
+const tools = (
+  [
+    {
+      to: 'compressionCalc',
+      name: 'Compression spring calculator',
+      d: 'Rate, solid height and stress from wire, OD, coils and free length.',
+    },
+    {
+      to: 'extensionCalc',
+      name: 'Extension spring calculator',
+      d: 'Rate and hook stress from your dimensions.',
+    },
+    {
+      to: 'rateConverter',
+      name: 'Spring rate converter',
+      d: 'N/mm, kgf/mm and lbf/in, side by side.',
+    },
+  ] as const
+)
+  .map((x) => ({ ...x, href: linkTo(x.to) }))
+  .filter((x): x is typeof x & { href: string } => x.href !== null);
+
+const guides = (
+  [
+    {
+      to: 'measure',
+      name: 'How to measure a spring',
+      d: 'What to note down when there is no drawing.',
+    },
+    {
+      to: 'whatIsDoubleTorsion',
+      name: 'What is a double torsion spring?',
+      d: 'Two coils, one centre loop, and when it is the right layout.',
+    },
+    {
+      to: 'typesCompared',
+      name: 'Torsion vs extension vs compression',
+      d: 'Which one your mechanism actually needs.',
+    },
+    {
+      to: 'hsnGst',
+      name: 'HSN code and GST for springs',
+      d: 'The code your purchase order needs, and the rate.',
+    },
+    {
+      to: 'priceGuide',
+      name: 'What springs cost in India',
+      d: 'What moves the per-piece price, and by how much.',
+    },
+    { to: 'glossary', name: 'Spring glossary', d: 'Free length, solid height, set, pitch, index.' },
+  ] as const
+)
+  .map((x) => ({ ...x, href: linkTo(x.to) }))
+  .filter((x): x is typeof x & { href: string } => x.href !== null);
+---
+
+<section class="res l3-sec" aria-labelledby="res-title">
+  <div class="l3-wrap">
+    <header class="l3-head is-split l3-reveal">
+      <div>
+        <p class="l3-mono l3-eyebrow">06 — Before you enquire</p>
+        <h2 id="res-title" class="l3-h2">
+          Work it out
+          <br />
+          yourself first.
+        </h2>
+      </div>
+      <p class="l3-lede">
+        Calculators and plain-English guides, free and with no sign-up. Results are estimates for
+        your own checking — the design on the quote is the one we confirm.
+      </p>
+    </header>
+
+    <div class="res-grid">
+      {tools.length > 0 && (
+        <div class="res-tools l3-reveal">
+          <h3 class="l3-mono res-h">Calculators</h3>
+          <ul>
+            {tools.map((t) => (
+              <li>
+                <a class="res-tool" href={t.href}>
+                  <span class="res-tool-icon" aria-hidden="true">
+                    <Icon name="calculator" size={20} />
+                  </span>
+                  <span class="res-tool-main">
+                    <span class="res-tool-name">{t.name}</span>
+                    <span class="res-tool-d">{t.d}</span>
+                  </span>
+                  <Icon name="arrow-up-right" size={18} class="res-go" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {guides.length > 0 && (
+        <div class="res-guides l3-reveal">
+          <h3 class="l3-mono res-h">Guides</h3>
+          <ul>
+            {guides.map((g) => (
+              <li>
+                <a class="res-guide" href={g.href}>
+                  <span class="res-guide-name">{g.name}</span>
+                  <span class="res-guide-d">{g.d}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .res {
+    background: var(--ink);
+    border-top: var(--rail);
+  }
+
+  .res-grid {
+    display: grid;
+    gap: 40px;
+  }
+
+  .res-h {
+    color: var(--amber);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  .res-grid ul {
+    list-style: none;
+  }
+
+  /* --- calculators --- */
+
+  .res-tool {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 14px 18px 0;
+    border-bottom: var(--rail);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      background-color 200ms var(--ease-out),
+      padding-left 200ms var(--ease-out);
+  }
+
+  .res-tool-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    color: var(--steel);
+    transition:
+      color 200ms var(--ease-out),
+      border-color 200ms var(--ease-out);
+  }
+
+  .res-tool-main {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .res-tool-name {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+  }
+
+  .res-tool-d {
+    color: var(--text-2);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .res-tool :global(.res-go) {
+    color: var(--text-3);
+    transition:
+      color 200ms var(--ease-out),
+      transform 200ms var(--ease-out);
+  }
+
+  .res-tool:hover {
+    background: var(--panel);
+    padding-left: 14px;
+  }
+
+  .res-tool:hover .res-tool-icon {
+    color: var(--amber);
+    border-color: var(--amber);
+  }
+
+  .res-tool:hover :global(.res-go) {
+    color: var(--amber);
+    transform: translate(3px, -3px);
+  }
+
+  /* --- guides --- */
+
+  .res-guide {
+    display: grid;
+    gap: 4px;
+    padding: 15px 14px 15px 0;
+    border-bottom: var(--rail);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      background-color 200ms var(--ease-out),
+      padding-left 200ms var(--ease-out);
+  }
+
+  .res-guide-name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .res-guide-d {
+    color: var(--text-3);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .res-guide:hover {
+    background: var(--panel);
+    padding-left: 14px;
+  }
+
+  .res-guide:hover .res-guide-name {
+    color: var(--amber);
+  }
+
+  @media (min-width: 900px) {
+    .res-grid {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      gap: 56px;
+    }
+  }
+</style>

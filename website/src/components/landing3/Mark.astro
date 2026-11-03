@@ -1,0 +1,91 @@
+---
+/**
+ * Lockup for the dark preview: the real RK monogram plus the brand name.
+ * The mark carries the brand blue lifted for contrast on graphite; the live
+ * blue-and-white site keeps its own Wordmark component untouched.
+ */
+import { site } from '@/data/site';
+import Logo from './Logo.astro';
+
+interface Props {
+  size?: 'sm' | 'lg';
+  class?: string;
+}
+
+const { size = 'sm', class: className } = Astro.props;
+---
+
+<span class:list={['mk', `mk-${size}`, className]}>
+  <Logo height={size === 'lg' ? 34 : 26} class="mk-logo" />
+  <span class="mk-rule" aria-hidden="true"></span>
+  <span class="mk-text" aria-hidden="true">
+    <span class="mk-a">Springs</span>
+    <span class="mk-b">&amp; Wireforms</span>
+  </span>
+  <span class="sr-only">{site.brand}</span>
+</span>
+
+<style>
+  .mk {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    line-height: 1;
+  }
+
+  .mk :global(.mk-logo) {
+    flex: none;
+    color: var(--brand-lift);
+  }
+
+  .mk-rule {
+    width: 1px;
+    height: 26px;
+    background: var(--line-2);
+    flex: none;
+  }
+
+  .mk-text {
+    display: grid;
+    gap: 4px;
+  }
+
+  .mk-a {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--text);
+  }
+
+  .mk-b {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  .mk-lg {
+    gap: 14px;
+  }
+
+  .mk-lg .mk-rule {
+    height: 34px;
+  }
+
+  .mk-lg .mk-a {
+    font-size: 1.25rem;
+  }
+
+  .mk-lg .mk-b {
+    font-size: 0.6875rem;
+  }
+
+  @media (max-width: 460px) {
+    .mk-rule,
+    .mk-text {
+      display: none;
+    }
+  }
+</style>
