@@ -1,0 +1,447 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import Todo from '@/components/ui/Todo.astro';
+import { linkTo } from '@/data/routes';
+import { fullAddress, mapUrl, site } from '@/data/site';
+import { mailHref, quoteHref, telHref, whatsappHref } from '@/lib/contact';
+
+const talawadeHref = linkTo('talawade');
+
+const dayOrder = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+] as const;
+
+const hours = dayOrder.map((d) => ({
+  day: d,
+  short: d.slice(0, 3),
+  open: !site.hours.closedDays.includes(d),
+}));
+
+/** What to put in the message, so the first reply can already carry a price. */
+const checklist = [
+  'Drawing, sketch or a photo with two dimensions on it',
+  'Wire diameter, outside diameter and free length, if you know them',
+  'Material and finish, if the drawing calls for one',
+  'Quantity per order and how often you will re-order',
+  'Where the spring sits and what it has to do there',
+];
+---
+
+<section class="ct" aria-labelledby="ct-title" id="contact">
+  <div class="ct-glow" aria-hidden="true"></div>
+
+  <div class="l3-wrap ct-in">
+    <div class="ct-lead l3-reveal">
+      <p class="l3-mono l3-eyebrow">07 — Send it over</p>
+      <h2 id="ct-title" class="ct-h2">
+        Put a drawing
+        <br />
+        in front of us.
+      </h2>
+      <p class="ct-sub">
+        You get a price and a lead time within 24 hours, or a straight no if it is outside what we
+        coil. Either way you will know by tomorrow.
+      </p>
+
+      <div class="ct-ctas">
+        <a class="l3-btn l3-btn-primary" href={quoteHref()}>
+          Request a quote
+          <Icon name="arrow-right" size={18} />
+        </a>
+        <a
+          class="l3-btn l3-btn-wa"
+          href={whatsappHref()}
+          data-event="whatsapp_click"
+          target="_blank"
+          rel="noopener"
+        >
+          <Icon name="message-circle" size={18} />
+          WhatsApp
+        </a>
+      </div>
+
+      <div class="ct-check">
+        <p class="l3-mono ct-check-h">Send this and we can quote in one pass</p>
+        <ul>
+          {checklist.map((c) => (
+            <li>
+              <Icon name="check" size={15} />
+              <span>{c}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+
+    <div class="ct-panel l3-reveal">
+      <div class="ct-block">
+        <p class="l3-mono ct-k">
+          <Icon name="map-pin" size={14} />
+          The unit
+        </p>
+        <address class="ct-addr">
+          <strong>{site.brand}</strong>
+          <span class="ct-legal">{site.brandLine}</span>
+          <span class="ct-street">
+            {site.address.street},<br />
+            {site.address.locality}, {site.address.city},<br />
+            {site.address.region} {site.address.postalCode}, {site.address.country}
+          </span>
+        </address>
+        <p class="ct-area">{site.areaContext}.</p>
+        <a
+          class="l3-link ct-map"
+          href={mapUrl}
+          target="_blank"
+          rel="noopener"
+          aria-label={`Open ${fullAddress} in Google Maps`}
+        >
+          Open in Google Maps
+          <Icon name="arrow-up-right" size={15} />
+        </a>
+        <Todo text="add the factory-gate map pin and coordinates." />
+      </div>
+
+      <div class="ct-block">
+        <p class="l3-mono ct-k">
+          <Icon name="phone" size={14} />
+          Phone &amp; email
+        </p>
+        <ul class="ct-lines">
+          {site.phones.map((p) => (
+            <li>
+              <a href={telHref(p.e164)} data-event="call_click">
+                {p.display}
+              </a>
+              {p.whatsapp && <span class="ct-badge">WhatsApp</span>}
+            </li>
+          ))}
+          {site.emails.map((e) => (
+            <li>
+              <a href={mailHref(e)} data-event="email_click">
+                {e}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <Todo text="confirm the main number and the main email, then add a domain address." />
+      </div>
+
+      <div class="ct-block">
+        <p class="l3-mono ct-k">
+          <Icon name="clock" size={14} />
+          Working hours
+        </p>
+        <ul class="ct-days">
+          {hours.map((h) => (
+            <li class:list={[!h.open && 'is-closed']}>
+              <span class="l3-mono">{h.short}</span>
+            </li>
+          ))}
+        </ul>
+        <p class="ct-hours-line">
+          <strong>9:00 AM – 8:00 PM</strong>
+          <span>Thursday closed</span>
+        </p>
+        <p class="ct-dispatch">
+          <Icon name="truck" size={16} />
+          <span>{site.terms.delivery}</span>
+        </p>
+        {talawadeHref && (
+          <a class="l3-link ct-map" href={talawadeHref}>
+            Talawade &amp; PCMC
+            <Icon name="arrow-up-right" size={15} />
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ct {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    padding-block: var(--sec);
+    border-top: var(--rail);
+    background: var(--void);
+  }
+
+  .ct-glow {
+    position: absolute;
+    z-index: -1;
+    inset: -30% -10% auto -10%;
+    height: 70%;
+    background: radial-gradient(
+      ellipse 45% 100% at 22% 0%,
+      color-mix(in srgb, var(--amber) 13%, transparent),
+      transparent 70%
+    );
+  }
+
+  .ct-in {
+    display: grid;
+    gap: clamp(40px, 5vw, 72px);
+    align-items: start;
+  }
+
+  /* --- left --- */
+
+  .ct-h2 {
+    margin-top: 20px;
+    font-size: clamp(2.25rem, 1.5rem + 3.4vw, 4rem);
+    line-height: 1.02;
+    font-weight: 700;
+    letter-spacing: -0.038em;
+    text-wrap: initial;
+  }
+
+  .ct-sub {
+    margin-top: 22px;
+    max-width: 46ch;
+    color: var(--text-2);
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .ct-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 30px;
+  }
+
+  .ct-check {
+    margin-top: 40px;
+    padding: 22px;
+    border: var(--rail);
+    border-left: 2px solid var(--amber);
+    border-radius: 0 4px 4px 0;
+    background: var(--panel);
+  }
+
+  .ct-check-h {
+    color: var(--amber);
+    font-size: 0.625rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+
+  .ct-check ul {
+    list-style: none;
+    display: grid;
+    gap: 9px;
+  }
+
+  .ct-check li {
+    display: flex;
+    gap: 10px;
+    color: var(--text-2);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  .ct-check li :global(svg) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--amber);
+  }
+
+  /* --- right panel --- */
+
+  .ct-panel {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: var(--rail);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .ct-block {
+    padding: clamp(20px, 2.6vw, 28px);
+    background: var(--ink);
+    min-width: 0;
+  }
+
+  .ct-k {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--amber);
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    margin-bottom: 16px;
+  }
+
+  .ct-addr {
+    display: grid;
+    gap: 6px;
+    font-style: normal;
+  }
+
+  .ct-addr strong {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .ct-legal {
+    color: var(--text-3);
+    font-size: 0.8125rem;
+  }
+
+  .ct-street {
+    margin-top: 8px;
+    color: var(--text-2);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .ct-area {
+    margin-top: 14px;
+    color: var(--text-3);
+    font-size: 0.8125rem;
+    line-height: 1.55;
+  }
+
+  .ct-map {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    margin-top: 6px;
+    font-size: 0.875rem;
+  }
+
+  .ct-lines {
+    list-style: none;
+    display: grid;
+    gap: 2px;
+  }
+
+  .ct-lines li {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .ct-lines a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    text-decoration: underline;
+    text-decoration-color: var(--line-2);
+    text-underline-offset: 0.25em;
+    overflow-wrap: anywhere;
+  }
+
+  .ct-lines a:hover {
+    color: var(--amber);
+    text-decoration-color: var(--amber);
+  }
+
+  .ct-badge {
+    padding: 2px 7px;
+    border: 1px solid color-mix(in srgb, var(--wa) 45%, transparent);
+    border-radius: 2px;
+    color: var(--wa);
+    font-family: var(--font-mono);
+    font-size: 0.5625rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .ct-days {
+    display: flex;
+    gap: 5px;
+    list-style: none;
+  }
+
+  .ct-days li {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    padding: 9px 2px;
+    border: 1px solid var(--line-2);
+    border-radius: 2px;
+    color: var(--steel);
+    font-size: 0.625rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* Closed days are struck through as well as dimmed — never colour alone. */
+  .ct-days li.is-closed {
+    border-style: dashed;
+    border-color: var(--line);
+    color: var(--text-3);
+    text-decoration: line-through;
+  }
+
+  .ct-hours-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+    margin-top: 16px;
+  }
+
+  .ct-hours-line strong {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .ct-hours-line span {
+    color: var(--amber);
+    font-size: 0.8125rem;
+  }
+
+  .ct-dispatch {
+    display: flex;
+    gap: 9px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: var(--rail);
+    color: var(--text-2);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .ct-dispatch :global(svg) {
+    flex: none;
+    margin-top: 2px;
+    color: var(--text-3);
+  }
+
+  @media (min-width: 1020px) {
+    .ct-in {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
+    }
+  }
+
+  @media (max-width: 479.98px) {
+    .ct-ctas > :global(*) {
+      width: 100%;
+    }
+
+    .ct-days li {
+      padding-inline: 0;
+      font-size: 0.5625rem;
+    }
+  }
+</style>

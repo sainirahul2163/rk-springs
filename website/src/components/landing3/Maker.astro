@@ -1,0 +1,427 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import PhotoPlaceholder from '@/components/ui/PhotoPlaceholder.astro';
+import Todo from '@/components/ui/Todo.astro';
+import { linkTo } from '@/data/routes';
+import { site } from '@/data/site';
+import { quoteHref } from '@/lib/contact';
+
+const aboutHref = linkTo('about');
+const qualityHref = linkTo('quality');
+
+/**
+ * What the unit can do for a buyer, framed as outcomes. Every item is a confirmed
+ * capability from CLIENT-PROFILE.md §2 and §3 — nothing here is a new claim.
+ */
+const help = [
+  {
+    icon: 'factory' as const,
+    t: 'Three critical steps, one roof',
+    d: 'Coiling and forming, stress relieving in our own furnace, and end grinding. These are the operations that decide whether a spring holds its free length and sits square — and none of them leaves Talawade.',
+  },
+  {
+    icon: 'shield-check' as const,
+    t: 'We help you choose the wire',
+    d: 'Stainless 302, 304 or 316 where it is damp, oil-tempered where the load is steady, music wire on request where you need higher tensile. Tell us where the spring sits and what it has to do, and we will quote the grade that suits it.',
+  },
+  {
+    icon: 'truck' as const,
+    t: 'Finishing arranged, one delivery',
+    d: 'Plating and finishing are handled through our partners. Name the finish on the drawing and it comes back on one quote and one delivery — you still place a single order with us.',
+  },
+  {
+    icon: 'gauge' as const,
+    t: 'Small, loaded and critical is the day job',
+    d: 'Wire Ø 0.40–2.50 mm, tight tolerances, and springs that have to work first time inside a switch, an instrument or a small assembly. It is the work this unit is set up for.',
+  },
+];
+
+const credentials = [
+  { k: 'Legal entity', v: `${site.legalName} · ${site.legalForm}` },
+  { k: 'GSTIN', v: site.gstin },
+  { k: 'Udyam (MSME)', v: site.udyam },
+  { k: 'Certification', v: 'ZED certified' },
+];
+---
+
+<section class="mk-sec l3-sec" aria-labelledby="maker-title">
+  <div class="l3-wrap">
+    <header class="l3-head l3-reveal">
+      <p class="l3-mono l3-eyebrow">05 — Who makes them</p>
+      <h2 id="maker-title" class="l3-h2">
+        A small unit, run by the man who quotes you.
+      </h2>
+    </header>
+
+    <div class="mk-grid">
+      <article class="mk-card l3-reveal">
+        <PhotoPlaceholder
+          ratio="16 / 9"
+          caption="Rutvik at the coiling machine, and a tray of finished torsion springs."
+          class="mk-photo"
+        />
+
+        <blockquote class="mk-quote">
+          <p>“Quality, and development of critical parts with tight tolerances.”</p>
+          <footer class="mk-quote-foot">
+            The reason customers give when we ask why they came to us.
+          </footer>
+        </blockquote>
+
+        <div class="mk-person">
+          <span class="mk-avatar" aria-hidden="true">
+            R
+          </span>
+          <div>
+            <p class="mk-name">
+              Rutvik
+              <Todo text="confirm surname (probably Kashid)." />
+            </p>
+            <p class="l3-mono mk-role">
+              Proprietor · {site.legalName} · {site.address.locality}, {site.address.city}
+            </p>
+          </div>
+        </div>
+
+        <p class="mk-body">
+          RK Enterprises has been coiling springs in {site.address.locality} since{' '}
+          {site.foundingYear}, in the {site.address.city} industrial belt next to Chikhali, Bhosari
+          MIDC and Chakan. The unit coils and forms, stress-relieves in its own furnace and grinds
+          ends in-house.
+        </p>
+        <p class="mk-body">
+          Everything we run today came by referral — one buyer telling another. This page is the
+          first time the work has been put in front of people who have not met us. That is also why
+          we only take on about <strong>8–10 new parts a month</strong>: it is the number we can
+          develop properly without a job slipping.
+        </p>
+
+        <dl class="mk-creds">
+          {credentials.map((c) => (
+            <div>
+              <dt class="l3-mono">{c.k}</dt>
+              <dd>{c.v}</dd>
+            </div>
+          ))}
+        </dl>
+        <Todo text="add the ZED level and certificate PDF." />
+
+        {(aboutHref || qualityHref) && (
+          <p class="mk-links">
+            {aboutHref && (
+              <a class="l3-link" href={aboutHref}>
+                More about the unit
+              </a>
+            )}
+            {qualityHref && (
+              <a class="l3-link" href={qualityHref}>
+                How we hold quality
+              </a>
+            )}
+          </p>
+        )}
+      </article>
+
+      <aside class="mk-help l3-reveal" aria-labelledby="help-title">
+        <p class="l3-mono mk-help-eyebrow">Working with us</p>
+        <h3 id="help-title" class="mk-help-title">
+          How we help you
+        </h3>
+        <p class="mk-help-lede">
+          Most of what we do never shows on the finished spring. This is the part that decides
+          whether it fits, whether it lasts, and whether it reaches you on time.
+        </p>
+
+        <ul class="mk-help-list">
+          {help.map((h) => (
+            <li>
+              <span class="mk-help-icon" aria-hidden="true">
+                <Icon name={h.icon} size={18} />
+              </span>
+              <span>
+                <strong>{h.t}</strong>
+                <span class="mk-help-note">{h.d}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <a class="mk-help-cta" href={quoteHref('', 'a part I am not sure about')}>
+          <span>
+            <strong>Not sure your part suits us?</strong>
+            <span>Send the drawing — you get a straight answer and a price within 24 hours.</span>
+          </span>
+          <Icon name="arrow-right" size={18} />
+        </a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<style>
+  .mk-sec {
+    background: var(--void);
+  }
+
+  .mk-grid {
+    display: grid;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* --- maker card --- */
+
+  .mk-card {
+    padding: clamp(24px, 3.4vw, 40px);
+    border: var(--rail);
+    border-radius: 5px;
+    background: linear-gradient(170deg, var(--panel), var(--ink) 68%);
+  }
+
+  .mk-card :global(.mk-photo) {
+    margin-bottom: 28px;
+  }
+
+  .mk-quote p {
+    font-size: clamp(1.375rem, 1.1rem + 1.3vw, 2rem);
+    line-height: 1.26;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: var(--text);
+    text-wrap: balance;
+  }
+
+  .mk-quote-foot {
+    margin-top: 14px;
+    color: var(--text-3);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .mk-person {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 28px;
+    padding-top: 26px;
+    border-top: var(--rail);
+  }
+
+  .mk-avatar {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 46px;
+    height: 46px;
+    border-radius: 3px;
+    border: 1px solid var(--amber);
+    background: color-mix(in srgb, var(--amber) 14%, transparent);
+    color: var(--amber);
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .mk-name {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .mk-role {
+    margin-top: 5px;
+    color: var(--text-3);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+  }
+
+  .mk-body {
+    margin-top: 20px;
+    color: var(--text-2);
+    font-size: 1rem;
+    line-height: 1.68;
+    max-width: 64ch;
+    text-wrap: pretty;
+  }
+
+  .mk-body strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .mk-creds {
+    display: grid;
+    gap: 18px 24px;
+    margin-top: 30px;
+    padding-top: 26px;
+    border-top: var(--rail);
+  }
+
+  .mk-creds dt {
+    color: var(--text-3);
+    font-size: 0.5625rem;
+    letter-spacing: 0.15em;
+  }
+
+  .mk-creds dd {
+    margin-top: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--steel);
+    overflow-wrap: anywhere;
+  }
+
+  .mk-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 24px;
+    margin-top: 18px;
+    font-size: 0.9375rem;
+  }
+
+  .mk-links a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  /* --- how we help --- */
+
+  .mk-help {
+    padding: clamp(24px, 3.4vw, 36px);
+    border: 1px solid var(--line-2);
+    border-radius: 5px;
+    background: var(--ink);
+  }
+
+  .mk-help-eyebrow {
+    color: var(--amber);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+  }
+
+  .mk-help-title {
+    margin-top: 12px;
+    font-size: clamp(1.5rem, 1.2rem + 1.1vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.028em;
+  }
+
+  .mk-help-lede {
+    margin-top: 12px;
+    color: var(--text-2);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .mk-help-list {
+    margin-top: 26px;
+    list-style: none;
+  }
+
+  .mk-help-list li {
+    display: flex;
+    gap: 14px;
+    padding-block: 18px;
+    border-top: var(--rail);
+  }
+
+  .mk-help-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    margin-top: 1px;
+    border-radius: 3px;
+    border: 1px solid color-mix(in srgb, var(--amber) 42%, transparent);
+    background: color-mix(in srgb, var(--amber) 10%, transparent);
+    color: var(--amber);
+  }
+
+  .mk-help-list strong {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--text);
+  }
+
+  .mk-help-note {
+    display: block;
+    margin-top: 6px;
+    color: var(--text-2);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .mk-help-cta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 56px;
+    margin-top: 10px;
+    padding: 18px;
+    border: 1px solid color-mix(in srgb, var(--amber) 38%, transparent);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--amber) 8%, transparent);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      background-color 180ms var(--ease-out),
+      border-color 180ms var(--ease-out);
+  }
+
+  .mk-help-cta strong {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--text);
+  }
+
+  .mk-help-cta > span > span {
+    display: block;
+    margin-top: 5px;
+    color: var(--text-2);
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .mk-help-cta > :global(svg) {
+    flex: none;
+    color: var(--amber);
+    transition: transform 180ms var(--ease-out);
+  }
+
+  .mk-help-cta:hover {
+    background: color-mix(in srgb, var(--amber) 15%, transparent);
+    border-color: var(--amber);
+  }
+
+  .mk-help-cta:hover > :global(svg) {
+    transform: translateX(4px);
+  }
+
+  @media (min-width: 560px) {
+    .mk-creds {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1020px) {
+    .mk-grid {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .mk-help {
+      position: sticky;
+      top: calc(var(--hdr) + 28px);
+    }
+  }
+</style>

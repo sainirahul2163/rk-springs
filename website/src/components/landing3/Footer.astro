@@ -1,0 +1,193 @@
+---
+import { footerNav, legalNav } from '@/data/navigation';
+import { linkTo } from '@/data/routes';
+import { site } from '@/data/site';
+import Mark from './Mark.astro';
+
+const columns = footerNav
+  .map((col) => ({
+    heading: col.heading,
+    items: col.items
+      .map((i) => ({ ...i, href: linkTo(i.route) }))
+      .filter((i): i is typeof i & { href: string } => i.href !== null),
+  }))
+  .filter((col) => col.items.length > 0);
+
+const legal = legalNav
+  .map((i) => ({ ...i, href: linkTo(i.route) }))
+  .filter((i): i is typeof i & { href: string } => i.href !== null);
+
+const year = new Date().getFullYear();
+---
+
+<footer class="ft">
+  <div class="l3-wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <Mark size="lg" />
+        <p class="ft-line">
+          Torsion, double torsion, extension and compression springs and wire forms, coiled to your
+          drawing in {site.address.locality}, {site.address.city}. Since {site.foundingYear}.
+        </p>
+      </div>
+
+      <nav class="ft-nav" aria-label="Footer">
+        {columns.map((col) => (
+          <div>
+            <h2 class="l3-mono ft-h">{col.heading}</h2>
+            <ul>
+              {col.items.map((i) => (
+                <li>
+                  <a href={i.href}>{i.label}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    </div>
+
+    <div class="ft-bottom">
+      <p class="ft-legal">
+        © {year} {site.legalName} ({site.legalForm}). {site.brandLine}.
+      </p>
+      <p class="l3-mono ft-ids">
+        <span>GSTIN {site.gstin}</span>
+        <span>Udyam {site.udyam}</span>
+      </p>
+      {legal.length > 0 && (
+        <ul class="ft-legal-nav">
+          {legal.map((i) => (
+            <li>
+              <a href={i.href}>{i.label}</a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+
+    <p class="ft-note">
+      Design preview — this page sits beside the live site for review and is not indexed.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .ft {
+    border-top: var(--rail);
+    background: var(--ink);
+    padding-block: clamp(44px, 5vw, 72px) 32px;
+  }
+
+  .ft-top {
+    display: grid;
+    gap: 40px;
+    padding-bottom: 36px;
+    border-bottom: var(--rail);
+  }
+
+  .ft-line {
+    margin-top: 20px;
+    max-width: 38ch;
+    color: var(--text-2);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .ft-nav {
+    display: grid;
+    gap: 32px 24px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .ft-h {
+    color: var(--amber);
+    font-size: 0.5625rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 14px;
+  }
+
+  .ft-nav ul {
+    list-style: none;
+    display: grid;
+    gap: 1px;
+  }
+
+  .ft-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--text-2);
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: color 160ms var(--ease-out);
+  }
+
+  .ft-nav a:hover {
+    color: var(--amber);
+  }
+
+  .ft-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 28px;
+    padding-top: 28px;
+  }
+
+  .ft-legal {
+    color: var(--text-3);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    margin-right: auto;
+  }
+
+  .ft-ids {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    color: var(--text-3);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+  }
+
+  .ft-legal-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    list-style: none;
+  }
+
+  .ft-legal-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--text-3);
+    font-size: 0.8125rem;
+    text-decoration: underline;
+    text-underline-offset: 0.22em;
+  }
+
+  .ft-legal-nav a:hover {
+    color: var(--amber);
+  }
+
+  .ft-note {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: var(--rail);
+    color: var(--text-3);
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 900px) {
+    .ft-top {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 2.1fr);
+      gap: 56px;
+    }
+  }
+</style>

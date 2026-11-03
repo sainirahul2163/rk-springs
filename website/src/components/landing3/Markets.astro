@@ -1,0 +1,329 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { linkTo } from '@/data/routes';
+import { site } from '@/data/site';
+
+const industries = (
+  [
+    {
+      to: 'switchgear',
+      name: 'Electrical & switchgear',
+      icon: 'zap',
+      d: 'MCB and switch mechanisms — a regular job in the unit. Small torsion springs that have to snap the same way a million times.',
+    },
+    {
+      to: 'instrumentation',
+      name: 'Instrumentation',
+      icon: 'gauge',
+      d: 'Light, fine-wire springs for level and flow instruments, meters and control gear.',
+    },
+    {
+      to: 'automotive',
+      name: 'Automotive',
+      icon: 'car',
+      d: 'Springs and wire forms for vehicle sub-assemblies, made to the tier supplier’s drawing.',
+    },
+    {
+      to: 'furniture',
+      name: 'Furniture',
+      icon: 'armchair',
+      d: 'Torsion and extension springs for seating, recliners and fold mechanisms.',
+    },
+  ] as const
+)
+  .map((x) => ({ ...x, href: linkTo(x.to) }))
+  .filter((x): x is typeof x & { href: string } => x.href !== null);
+
+const materials = [
+  { n: 'Spring steel', g: 'Hard-drawn grades', u: 'General-purpose springs and wire forms' },
+  { n: 'Music wire', g: 'On request', u: 'Higher tensile, fine-wire work' },
+  { n: 'Stainless steel', g: '302 / 304 / 316', u: 'Damp, washdown and corrosive conditions' },
+  { n: 'Oil-tempered wire', g: 'Pre-tempered', u: 'Springs that run under steady load' },
+];
+---
+
+<section class="mkt l3-sec" aria-labelledby="mkt-title">
+  <div class="l3-wrap">
+    <header class="l3-head is-split l3-reveal">
+      <div>
+        <p class="l3-mono l3-eyebrow">04 — Where they end up</p>
+        <h2 id="mkt-title" class="l3-h2">
+          Four industries,
+          <br />
+          one kind of part.
+        </h2>
+      </div>
+      <p class="l3-lede">
+        Our springs are nearly always a small, loaded, hidden component inside somebody else's
+        product. {site.terms.supplyArea}, ex-works {site.address.locality}.
+      </p>
+    </header>
+
+    <ul class="mkt-list l3-reveal">
+      {industries.map((x, i) => (
+        <li>
+          <a class="mkt-row" href={x.href}>
+            <span class="l3-mono mkt-num">{String(i + 1).padStart(2, '0')}</span>
+            <span class="mkt-icon" aria-hidden="true">
+              <Icon name={x.icon} size={22} />
+            </span>
+            <span class="mkt-main">
+              <span class="mkt-name">{x.name}</span>
+              <span class="mkt-d">{x.d}</span>
+            </span>
+            <Icon name="arrow-right" size={20} class="mkt-go" />
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="mat l3-reveal">
+      <h3 class="l3-mono mat-h">Wire we buy</h3>
+      <table class="mat-table">
+        <caption class="sr-only">Materials we coil, and what each is usually chosen for</caption>
+        <thead>
+          <tr>
+            <th scope="col">Material</th>
+            <th scope="col">Grade</th>
+            <th scope="col">Usually chosen for</th>
+          </tr>
+        </thead>
+        <tbody>
+          {materials.map((m) => (
+            <tr>
+              <th scope="row">{m.n}</th>
+              <td class="mat-grade">{m.g}</td>
+              <td>{m.u}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="mat-note">
+        Plating and other finishing go out to partners. Name the finish on the drawing and it comes
+        back on the quote.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .mkt {
+    background: var(--ink);
+    border-block: var(--rail);
+  }
+
+  /* --- industry rows --- */
+
+  .mkt-list {
+    list-style: none;
+    border-top: var(--rail);
+  }
+
+  .mkt-row {
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    padding: 26px 4px;
+    border-bottom: var(--rail);
+    color: inherit;
+    text-decoration: none;
+    transition:
+      padding-inline 220ms var(--ease-out),
+      background-color 220ms var(--ease-out);
+  }
+
+  .mkt-num {
+    color: var(--text-3);
+    font-size: 0.625rem;
+    letter-spacing: 0.16em;
+    align-self: start;
+    padding-top: 6px;
+  }
+
+  .mkt-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    color: var(--amber);
+    transition:
+      border-color 220ms var(--ease-out),
+      background-color 220ms var(--ease-out);
+  }
+
+  .mkt-main {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+  }
+
+  .mkt-name {
+    font-size: clamp(1.1875rem, 1rem + 0.7vw, 1.625rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .mkt-d {
+    color: var(--text-2);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    max-width: 62ch;
+    text-wrap: pretty;
+  }
+
+  .mkt-row :global(.mkt-go) {
+    color: var(--text-3);
+    transition:
+      transform 220ms var(--ease-out),
+      color 220ms var(--ease-out);
+  }
+
+  .mkt-row:hover {
+    background: var(--panel);
+    padding-inline: 16px 10px;
+  }
+
+  .mkt-row:hover .mkt-icon {
+    border-color: var(--amber);
+    background: color-mix(in srgb, var(--amber) 12%, transparent);
+  }
+
+  .mkt-row:hover :global(.mkt-go) {
+    color: var(--amber);
+    transform: translateX(5px);
+  }
+
+  /* --- materials --- */
+
+  .mat {
+    margin-top: clamp(48px, 6vw, 80px);
+    padding: clamp(22px, 3vw, 34px);
+    border: var(--rail);
+    border-radius: 5px;
+    background: var(--panel);
+  }
+
+  .mat-h {
+    color: var(--amber);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 20px;
+  }
+
+  .mat-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .mat-table th,
+  .mat-table td {
+    padding: 14px 16px 14px 0;
+    border-bottom: var(--rail);
+    vertical-align: baseline;
+  }
+
+  .mat-table thead th {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    border-bottom-color: var(--line-2);
+    padding-top: 0;
+  }
+
+  .mat-table tbody th {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .mat-table td {
+    color: var(--text-2);
+    font-size: 0.9375rem;
+  }
+
+  .mat-grade {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem !important;
+    color: var(--steel) !important;
+    white-space: nowrap;
+  }
+
+  .mat-table tbody tr:last-child th,
+  .mat-table tbody tr:last-child td {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .mat-note {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: var(--rail);
+    color: var(--text-3);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    max-width: 62ch;
+  }
+
+  @media (max-width: 719.98px) {
+    .mkt-row {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      padding-block: 22px;
+    }
+
+    .mkt-icon {
+      display: none;
+    }
+
+    .mkt-row:hover {
+      padding-inline: 10px;
+    }
+  }
+
+  @media (max-width: 599.98px) {
+    /* Stacked cards keep the three columns readable on a phone. */
+    .mat-table,
+    .mat-table tbody,
+    .mat-table tr,
+    .mat-table th,
+    .mat-table td {
+      display: block;
+    }
+
+    .mat-table thead {
+      display: none;
+    }
+
+    .mat-table tr {
+      padding-block: 16px;
+      border-bottom: var(--rail);
+    }
+
+    .mat-table tr:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .mat-table tr:first-child {
+      padding-top: 0;
+    }
+
+    .mat-table th,
+    .mat-table td {
+      padding: 0;
+      border: 0;
+    }
+
+    .mat-table td {
+      margin-top: 4px;
+    }
+  }
+</style>

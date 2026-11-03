@@ -1,0 +1,774 @@
+---
+import { Image } from 'astro:assets';
+import heroSpring from '@/assets/polished-stainless-steel-torsion-springs-hero-4k.webp';
+import Icon from '@/components/ui/Icon.astro';
+import { site } from '@/data/site';
+import { quoteHref, whatsappHref } from '@/lib/contact';
+
+/** The four numbers a buyer screens a spring supplier on, in the order they ask them. */
+const readout = [
+  { k: 'Wire diameter', v: 'Ø 0.40–2.50', u: 'mm' },
+  { k: 'Minimum order', v: '5,000–10,000', u: 'pcs' },
+  { k: 'Quotation', v: '≤ 24', u: 'hours' },
+  { k: 'Coiling since', v: String(site.foundingYear), u: 'Talawade' },
+];
+---
+
+<section class="hero" aria-labelledby="hero-title" data-hero>
+  <div class="hero-glow" aria-hidden="true"></div>
+  {/* Wire field: short segments that swing into concentric coils around the pointer. */}
+  <canvas class="hero-field" data-hero-field aria-hidden="true"></canvas>
+  <div class="hero-spot" aria-hidden="true"></div>
+
+  <div class="l3-wrap hero-in">
+    <div class="hero-copy">
+      <p class="l3-mono hero-eyebrow">
+        <span>{site.legalName}</span>
+        <span class="hero-sep" aria-hidden="true">
+          /
+        </span>
+        <span>
+          {site.address.locality}, {site.address.city}
+        </span>
+        <span class="hero-sep" aria-hidden="true">
+          /
+        </span>
+        <span>Est. {site.foundingYear}</span>
+      </p>
+
+      <h1 id="hero-title" class="hero-h1">
+        The small spring
+        <br />
+        your assembly
+        <br />
+        <em>depends on.</em>
+      </h1>
+
+      <p class="hero-sub">
+        Torsion, double torsion, extension and compression springs, and wire forms. Coiled and
+        formed from {site.capability.wireRangeLabel} wire to your drawing — or reverse-engineered
+        from the sample in your hand.
+      </p>
+
+      <div class="hero-ctas">
+        <a class="l3-btn l3-btn-primary" href={quoteHref()}>
+          Get a quote in 24 hours
+          <Icon name="arrow-right" size={18} />
+        </a>
+        <a
+          class="l3-btn l3-btn-wa"
+          href={whatsappHref()}
+          data-event="whatsapp_click"
+          target="_blank"
+          rel="noopener"
+        >
+          <Icon name="message-circle" size={18} />
+          WhatsApp a drawing
+        </a>
+      </div>
+
+      <p class="hero-note">
+        <Icon name="file-text" size={16} />
+        <span>No drawing? Send a photo with two dimensions on it and we will work from that.</span>
+      </p>
+    </div>
+
+    <div class="hero-art">
+      <div class="hero-stage" data-hero-stage>
+        <div class="hero-stage-grid l3-grid-bg" aria-hidden="true"></div>
+        <svg class="hero-marks" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 0h9M0 0v9M100 0h-9M100 0v9M0 100h9M0 100v-9M100 100h-9M100 100v-9"></path>
+        </svg>
+
+        <Image
+          class="hero-img"
+          src={heroSpring}
+          alt="Polished stainless steel double torsion spring with two coils and formed legs"
+          width={1040}
+          widths={[520, 780, 1040, 1560]}
+          sizes="(min-width: 1200px) 560px, (min-width: 760px) 44vw, 88vw"
+          format="webp"
+          quality={94}
+          loading="eager"
+          fetchpriority="high"
+        />
+
+        <p class="l3-mono hero-tag is-tl">Double torsion</p>
+        <p class="l3-mono hero-tag is-tr">LH + RH coil</p>
+        <p class="l3-mono hero-tag is-bl">SS 302 / 304 / 316</p>
+        <p class="l3-mono hero-tag is-br">Made to drawing</p>
+      </div>
+
+      <div class="hero-scale" aria-hidden="true">
+        <span class="hero-scale-line"></span>
+        <span class="l3-mono">Leg span &amp; free angle as per your drawing</span>
+        <span class="hero-scale-line"></span>
+      </div>
+    </div>
+  </div>
+
+  <dl class="hero-readout">
+    <div class="l3-wrap hero-readout-in">
+      {readout.map((r) => (
+        <div class="hero-cell">
+          <dt class="l3-mono">{r.k}</dt>
+          <dd>
+            <span class="hero-val">{r.v}</span>
+            <span class="hero-unit">{r.u}</span>
+          </dd>
+        </div>
+      ))}
+    </div>
+  </dl>
+</section>
+
+{/*
+  Pointer-reactive hero, in two parts.
+
+  1. A field of short wire segments on a staggered grid. Near the pointer each one swings
+     tangential, so the field reads as concentric coils being formed around the cursor, and
+     relaxes back to a resting lie further out. Drawn on one canvas in four batched paths —
+     four stroke() calls a frame, whatever the segment count.
+  2. Two damped springs (different stiffness) chase the pointer and drive the part and its
+     labels through CSS custom properties, so the steel overshoots and settles instead of
+     sliding linearly. A spring maker's hero should move like a spring.
+
+  The loop runs only while there is energy left in the system and stops itself once the field
+  has relaxed and both springs have settled. Nothing is attached on coarse pointers or under
+  reduced motion.
+*/}
+<script is:inline>
+  (function () {
+    const hero = document.querySelector('[data-hero]');
+    const canvas = hero && hero.querySelector('[data-hero-field]');
+    if (!canvas || !window.matchMedia) return;
+    if (!matchMedia('(pointer: fine)').matches) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const ctx = canvas.getContext('2d', { alpha: true });
+    if (!ctx) return;
+
+    const GAP = 46; // grid spacing, px
+    const REACH = 400; // pointer influence radius, px
+    const BUCKETS = [0.06, 0.15, 0.34, 0.74];
+
+    let w = 0,
+      h = 0,
+      dpr = 1;
+    let cols = 0,
+      rows = 0;
+    let pull = null; // smoothed influence per grid point
+    let px = 0,
+      py = 0; // raw pointer
+    let fx = 0,
+      fy = 0; // field centre, trailing the pointer so the coil winds to catch up
+    let tx = 0,
+      ty = 0,
+      inside = false;
+    let ax = 0,
+      ay = 0,
+      avx = 0,
+      avy = 0;
+    let bx = 0,
+      by = 0,
+      bvx = 0,
+      bvy = 0;
+    let frame = 0,
+      idle = 0;
+
+    function layout() {
+      const r = hero.getBoundingClientRect();
+      w = Math.round(r.width);
+      h = Math.round(r.height);
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cols = Math.ceil(w / GAP) + 2;
+      rows = Math.ceil(h / GAP) + 2;
+      const n = cols * rows;
+      if (!pull || pull.length !== n) pull = new Float32Array(n);
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      ctx.lineCap = 'round';
+      let moving = false;
+
+      for (let b = 0; b < BUCKETS.length; b++) {
+        const lo = b / BUCKETS.length;
+        const hi = (b + 1) / BUCKETS.length;
+        ctx.beginPath();
+        ctx.lineWidth = 1 + b * 0.5;
+        ctx.strokeStyle =
+          b === BUCKETS.length - 1
+            ? 'rgba(255,138,61,' + BUCKETS[b] + ')'
+            : 'rgba(168,194,222,' + BUCKETS[b] + ')';
+
+        for (let j = 0; j < rows; j++) {
+          const gy = j * GAP - GAP * 0.5;
+          for (let i = 0; i < cols; i++) {
+            const gx = i * GAP - GAP * 0.5 + (j & 1 ? GAP * 0.5 : 0);
+            const k = i + j * cols;
+
+            const dx = gx - fx;
+            const dy = gy - fy;
+            const d = Math.sqrt(dx * dx + dy * dy);
+            // smooth falloff, then ease the stored value toward it so the field relaxes
+            const t = inside && d < REACH ? 1 - d / REACH : 0;
+            const want = t * t * (3 - 2 * t);
+            const prev = pull[k];
+            const next = prev + (want - prev) * 0.14;
+            if (Math.abs(next - prev) > 0.0015) moving = true;
+            pull[k] = next;
+            if (next < lo || next >= hi || next < 0.004) continue;
+
+            // an arc centred on the pointer: the wire coils around it
+            const len = 3 + next * 26;
+            const ang = Math.atan2(dy, dx);
+            const span = Math.min(len / Math.max(d, 14), 0.55);
+            ctx.moveTo(fx + d * Math.cos(ang - span), fy + d * Math.sin(ang - span));
+            ctx.arc(fx, fy, d, ang - span, ang + span);
+          }
+        }
+        ctx.stroke();
+      }
+      return moving;
+    }
+
+    function tick() {
+      frame = 0;
+      // damped springs chasing the pointer offset
+      avx = (avx + (tx - ax) * 0.055) * 0.86;
+      avy = (avy + (ty - ay) * 0.055) * 0.86;
+      ax += avx;
+      ay += avy;
+      bvx = (bvx + (tx - bx) * 0.03) * 0.9;
+      bvy = (bvy + (ty - by) * 0.03) * 0.9;
+      bx += bvx;
+      by += bvy;
+
+      fx += (px - fx) * 0.17;
+      fy += (py - fy) * 0.17;
+
+      const st = hero.style;
+      st.setProperty('--mx', fx.toFixed(1) + 'px');
+      st.setProperty('--my', fy.toFixed(1) + 'px');
+      st.setProperty('--sx', ax.toFixed(2) + 'px');
+      st.setProperty('--sy', ay.toFixed(2) + 'px');
+      st.setProperty('--tx', bx.toFixed(2) + 'px');
+      st.setProperty('--ty', by.toFixed(2) + 'px');
+
+      const fieldMoving = draw();
+      const settled =
+        Math.abs(avx) + Math.abs(avy) + Math.abs(bvx) + Math.abs(bvy) < 0.02 &&
+        Math.abs(tx - ax) + Math.abs(ty - ay) < 0.4 &&
+        Math.abs(px - fx) + Math.abs(py - fy) < 0.5;
+      idle = fieldMoving || !settled ? 0 : idle + 1;
+      if (idle < 12) frame = requestAnimationFrame(tick);
+    }
+
+    function wake() {
+      idle = 0;
+      if (!frame) frame = requestAnimationFrame(tick);
+    }
+
+    hero.addEventListener(
+      'pointermove',
+      function (e) {
+        if (!w) layout();
+        const r = hero.getBoundingClientRect();
+        px = e.clientX - r.left;
+        py = e.clientY - r.top;
+        // offset from centre, scaled — this is what the springs chase
+        tx = (px / w - 0.5) * 34;
+        ty = (py / h - 0.5) * 34;
+        if (!inside) {
+          inside = true;
+          fx = px;
+          fy = py;
+          canvas.setAttribute('data-live', '');
+          hero.setAttribute('data-live', '');
+        }
+        wake();
+      },
+      { passive: true },
+    );
+
+    hero.addEventListener('pointerleave', function () {
+      inside = false;
+      tx = 0;
+      ty = 0;
+      canvas.removeAttribute('data-live');
+      hero.removeAttribute('data-live');
+      wake();
+    });
+
+    let resizeFrame = 0;
+    addEventListener(
+      'resize',
+      function () {
+        if (resizeFrame) return;
+        resizeFrame = requestAnimationFrame(function () {
+          resizeFrame = 0;
+          layout();
+          wake();
+        });
+      },
+      { passive: true },
+    );
+
+    layout();
+  })();
+</script>
+
+<style>
+  .hero {
+    /* Pointer state, written once per animation frame by the script at the end of this file.
+       --mx/--my: the pointer. --sx/--sy and --tx/--ty: two damped springs that chase it at
+       different stiffnesses, which is what gives the part its overshoot and settle. */
+    --mx: 50%;
+    --my: 50%;
+    --sx: 0px;
+    --sy: 0px;
+    --tx: 0px;
+    --ty: 0px;
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    border-bottom: var(--rail);
+  }
+
+  .hero-field {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 500ms var(--ease-out);
+  }
+
+  /* Held a little below full strength so the coil never competes with the copy over it. */
+  .hero-field[data-live] {
+    opacity: 0.88;
+  }
+
+  .hero-glow {
+    position: absolute;
+    z-index: -1;
+    top: -14%;
+    right: -12%;
+    width: min(1080px, 94vw);
+    aspect-ratio: 1;
+    pointer-events: none;
+    transform: translate3d(calc(var(--sx) * -2.1), calc(var(--sy) * -2.1), 0);
+    background:
+      radial-gradient(
+        circle at 50% 50%,
+        color-mix(in srgb, var(--amber) 16%, transparent),
+        transparent 58%
+      ),
+      radial-gradient(
+        circle at 62% 38%,
+        color-mix(in srgb, #3f6ea8 22%, transparent),
+        transparent 62%
+      );
+    filter: blur(14px);
+  }
+
+  .hero-in {
+    display: grid;
+    gap: clamp(36px, 5vw, 56px);
+    padding-block: clamp(44px, 6vw, 88px) clamp(40px, 5vw, 72px);
+    align-items: center;
+  }
+
+  /* --- copy --- */
+
+  .hero-eyebrow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 10px;
+    color: var(--text-3);
+    margin-bottom: 26px;
+  }
+
+  .hero-sep {
+    color: var(--amber);
+  }
+
+  .hero-h1 {
+    font-size: clamp(2.65rem, 1.5rem + 5.2vw, 5.25rem);
+    line-height: 0.98;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    text-wrap: initial;
+  }
+
+  .hero-h1 em {
+    font-style: normal;
+    color: var(--amber);
+  }
+
+  .hero-sub {
+    margin-top: 26px;
+    max-width: 48ch;
+    color: var(--text-2);
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 34px;
+  }
+
+  .hero-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-top: 26px;
+    max-width: 44ch;
+    color: var(--text-3);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .hero-note :global(svg) {
+    flex: none;
+    margin-top: 2px;
+    color: var(--amber);
+  }
+
+  /* --- art --- */
+
+  .hero-art {
+    min-width: 0;
+    width: 100%;
+    max-width: 620px;
+    justify-self: center;
+  }
+
+  .hero-stage {
+    position: relative;
+    aspect-ratio: 1 / 0.92;
+    display: grid;
+    place-items: center;
+    padding: 9%;
+    border: var(--rail);
+    border-radius: 4px;
+    background:
+      radial-gradient(
+        ellipse 62% 58% at 50% 48%,
+        color-mix(in srgb, var(--amber) 11%, transparent),
+        transparent 72%
+      ),
+      linear-gradient(160deg, var(--panel), var(--ink) 72%);
+    overflow: hidden;
+  }
+
+  .hero-stage-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    transform: translate3d(calc(var(--sx) * -0.55), calc(var(--sy) * -0.55), 0);
+    mask-image: radial-gradient(ellipse 72% 68% at 50% 50%, transparent 24%, #000 86%);
+  }
+
+  .hero-marks {
+    position: absolute;
+    inset: 11px;
+    transition: opacity 240ms var(--ease-out);
+    width: calc(100% - 22px);
+    height: calc(100% - 22px);
+    fill: none;
+    stroke: var(--amber);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    opacity: 0.85;
+  }
+
+  .hero-marks path {
+    vector-effect: non-scaling-stroke;
+  }
+
+  .hero-img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1006 / 885;
+    object-fit: contain;
+    filter: drop-shadow(0 26px 44px rgb(0 0 0 / 0.6));
+    transform: translate3d(var(--sx), var(--sy), 0);
+  }
+
+  /* A light carried with the pointer: screen-blended, so it lifts the grid and the steel. */
+  .hero-spot {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    width: 520px;
+    height: 520px;
+    margin: -260px 0 0 -260px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--amber) 34%, transparent),
+      color-mix(in srgb, var(--steel) 12%, transparent) 40%,
+      transparent 64%
+    );
+    mix-blend-mode: screen;
+    opacity: 0;
+    transform: translate3d(var(--mx), var(--my), 0);
+    transition: opacity 420ms var(--ease-out);
+    pointer-events: none;
+  }
+
+  .hero[data-live] .hero-spot {
+    opacity: 0.55;
+  }
+
+  .hero[data-live] .hero-marks {
+    opacity: 1;
+    stroke-width: 1.5;
+  }
+
+  .hero-tag {
+    position: absolute;
+    transform: translate3d(var(--tx), var(--ty), 0);
+    color: var(--text-3);
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+    white-space: nowrap;
+  }
+
+  .is-tl {
+    top: 18px;
+    left: 20px;
+    color: var(--amber);
+  }
+  .is-tr {
+    top: 18px;
+    right: 20px;
+  }
+  .is-bl {
+    bottom: 18px;
+    left: 20px;
+  }
+  .is-br {
+    bottom: 18px;
+    right: 20px;
+  }
+
+  .hero-scale {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 14px;
+    color: var(--text-3);
+  }
+
+  .hero-scale .l3-mono {
+    font-size: 0.625rem;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+
+  .hero-scale-line {
+    flex: 1;
+    height: 5px;
+    border-top: 1px solid var(--line-2);
+    border-left: 1px solid var(--line-2);
+    border-right: 1px solid var(--line-2);
+  }
+
+  /* --- readout rail --- */
+
+  .hero-readout {
+    border-top: var(--rail);
+    background: color-mix(in srgb, var(--ink) 70%, transparent);
+  }
+
+  .hero-readout-in {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hero-cell {
+    padding: 20px 0 22px;
+    min-width: 0;
+  }
+
+  .hero-cell dt {
+    color: var(--text-3);
+    font-size: 0.625rem;
+    letter-spacing: 0.14em;
+  }
+
+  .hero-cell dd {
+    margin-top: 9px;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .hero-val {
+    font-family: var(--font-mono);
+    font-size: clamp(0.9375rem, 0.72rem + 1.1vw, 1.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hero-unit {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+
+  /* Hairline separators drawn between cells only. */
+  .hero-cell + .hero-cell {
+    border-left: var(--rail);
+    padding-left: 20px;
+  }
+
+  .hero-cell:nth-child(3) {
+    border-left: 0;
+    padding-left: 0;
+  }
+
+  .hero-cell:nth-child(n + 3) {
+    border-top: var(--rail);
+  }
+
+  @media (min-width: 720px) {
+    .hero-readout-in {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .hero-cell {
+      padding-block: 24px 26px;
+    }
+
+    .hero-cell:nth-child(3) {
+      border-left: var(--rail);
+      padding-left: 20px;
+    }
+
+    .hero-cell:nth-child(n + 3) {
+      border-top: 0;
+    }
+  }
+
+  @media (min-width: 760px) {
+    .hero-in {
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+      gap: clamp(28px, 4vw, 64px);
+    }
+
+    .hero-art {
+      justify-self: end;
+    }
+  }
+
+  @media (max-width: 479.98px) {
+    .hero-ctas > :global(*) {
+      width: 100%;
+    }
+
+    .hero-tag {
+      font-size: 0.5625rem;
+      letter-spacing: 0.1em;
+    }
+
+    .is-tl,
+    .is-tr {
+      top: 12px;
+    }
+    .is-bl,
+    .is-br {
+      bottom: 12px;
+    }
+    .is-tl,
+    .is-bl {
+      left: 12px;
+    }
+    .is-tr,
+    .is-br {
+      right: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-field,
+    .hero-spot {
+      display: none;
+    }
+
+    .hero-glow,
+    .hero-stage-grid,
+    .hero-img,
+    .hero-tag {
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-img {
+      animation: hero-settle 900ms var(--ease-out) both;
+    }
+
+    .hero-copy > * {
+      animation: hero-in 700ms var(--ease-out) both;
+    }
+
+    .hero-copy > :nth-child(2) {
+      animation-delay: 60ms;
+    }
+    .hero-copy > :nth-child(3) {
+      animation-delay: 120ms;
+    }
+    .hero-copy > :nth-child(4) {
+      animation-delay: 180ms;
+    }
+    .hero-copy > :nth-child(5) {
+      animation-delay: 240ms;
+    }
+  }
+
+  @keyframes hero-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* scale/rotate rather than transform, so the parallax translate still composes. */
+  @keyframes hero-settle {
+    from {
+      opacity: 0;
+      scale: 0.965;
+      rotate: -1.4deg;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+      rotate: 0deg;
+    }
+  }
+</style>
