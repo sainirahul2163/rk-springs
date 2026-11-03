@@ -244,3 +244,188 @@ Added in Phase 6:
 - `npm run check` passed (0 errors/warnings/hints); `npm run build` passed; HTML audit: 40 pages, 0 errors. Production and development browser checks completed. Captures: `website/.screens/factory-desktop.jpg` and `website/.screens/factory-mobile.jpg`. No commit, push or deployment in this refinement.
 
 - GitHub follow-up (28 Oct 2026): Rahul requested that the factory/contact redesign be committed and pushed. Re-ran `npm run check` and `npm run build` successfully; HTML audit: 40 pages, 0 errors. Commit scope is this review entry, `HomeFactory.astro` and its homepage integration. The earlier hero/preview-removal commit is already on `origin/landing-redesign`. Unrelated local files remain excluded; no merge to `main` or deployment command.
+
+## 16. `/landing3/` homepage concept (3 Nov 2026)
+
+- **Status: ready for visual review. No deployment, no commit.** The client rejected the current homepage look, so `/landing3/` holds a third, deliberately different concept. **The live `/` is untouched** — no homepage file, shared component, token or data file was edited. The only change to an existing file is one line in `astro.config.mjs` adding `/landing3/` to `sitemapExclude`.
+- The page is `noindex, nofollow` with a self-referencing canonical and is kept out of the sitemap, so it cannot compete with `/` in search.
+- **Deliberate token exception.** At Rahul's explicit instruction ("ignore the colour palette"), this page sets aside the blue-and-white tokens of AGENTS.md §6 and CURSOR-BUILD-PROMPT.md §4. Its palette — graphite base, warm drawing-paper panels, a single amber annotation accent — is declared once under a `.l3` scope in `Landing3Layout.astro` and is used nowhere else. Verified: the built homepage CSS bundles contain zero references to the new variables.
+- **Concept: an engineering sheet, not a brochure.** Sections in order: hero with the real spring photo in a CAD-style viewport plus a four-figure readout rail (wire range, MOQ, 24 h quote, since 2017); three proof statements; a seven-product catalogue using the existing SVG technical drawings re-tinted for a dark sheet; the capability data rendered as a drawing frame with zone markers, an annotated part view, a first-angle projection symbol and an ISO 7200-style title block; a six-step process rail; industries and a materials table; a "who makes them" block; a "what we don't do" block; calculators and guides; contact.
+- **No new facts.** Every value is read from `site.ts` and `navigation.ts`. The quote "Quality, and development of critical parts with tight tolerances" is CLIENT-PROFILE §5 verbatim, attributed as the reason customers give. The 8–10 new parts per month figure is CLIENT-PROFILE §3 capacity, framed as attention per job. The referral-only line is CLIENT-PROFILE §5.
+- **"What we don't do" is new editorial, not a new claim.** It states the limits already in CLIENT-PROFILE: no wire above 2.50 mm, no rolling-shutter or agriculture springs, no in-house plating, no ISO 9001 or IATF 16949 (ZED only), no testing laboratory, no export today. Nothing here asserts a capability.
+- Open client TODOs are surfaced through `<Todo>` as usual (surname, ZED level and PDF, machine list, map pin, main phone, main email). They render in development and review builds only; the production build contains zero `data-todo` occurrences.
+- **Performance:** zero client JavaScript (0 `<script>` tags in the built page). 99.8 KB raw / 17.3 KB gzipped, lighter than the current homepage at 132.2 KB / 22.3 KB. Reuses the already-installed Plex Sans 500/700 and Plex Mono 500 cuts — no new dependency. Scroll reveals use `animation-timeline: view()` behind `@supports` and `prefers-reduced-motion`, so content is simply visible where that is unsupported.
+- **Accessibility:** exactly one H1; no links without an accessible name; no horizontal overflow at 375 px (document scrollWidth equals viewport width); all interactive targets at least 44 px after raising the footer, maker and header link heights; product cards are fully clickable (333 × 404 px) via an overlay span rather than nested interactive elements; closed days are marked with a dashed border and strike-through, never colour alone; dark-page text pairs were contrast-checked (body 7.6:1, amber 8.2:1, dimmest text 5.5:1, amber-on-paper uses a darkened ink at 5.2:1).
+- The dev-only `<Todo>` and `<PhotoPlaceholder>` components ship light-on-white for the live site, so they are re-tinted for the dark page inside the `.l3` scope — the client review build is exactly where they are visible.
+- Files: `website/src/pages/landing3.astro`, `website/src/layouts/Landing3Layout.astro`, `website/src/components/landing3/*` (Header, Footer, Mark, Hero, Proof, Catalogue, SpecSheet, Process, Markets, Maker, Resources, Contact).
+- Validation: `npm run check` passed (0 errors, warnings or hints; Prettier clean); `npm run build` passed; HTML audit: 41 pages, 0 errors. Console on `/landing3/` is clean.
+
+### 16.1 Real logo adopted on `/landing3/` (3 Nov 2026)
+
+- Rahul supplied the client's actual logo: a photograph of a physical blue cut-out sign (401 × 249 px, white background, drop shadow, uneven colour). It replaces the temporary coil-glyph wordmark on `/landing3/` only. The live site's `Wordmark.astro` and `/favicon.svg` are **untouched**, so `/` still shows the placeholder until the client approves this.
+- **Brand colour measured, not guessed:** the ink sampled to RGB(10, 50, 98) = **`#0A3262`**, a deep navy. The visually-apparent lighter blue was anti-aliasing against the white card.
+- **Redrawn as vector rather than cut out.** The photo was masked on blue-dominance (which rejects the grey drop shadow), upsampled 4×, boundary-traced, and the geometry measured by least squares. Findings: the R's bowl is a **concentric ellipse pair** (outer rx 46.0 / ry 36.2, tangent to the cap line; inner rx 16.9 / ry 11.7) — circle fits failed, ellipses fit to ~0.5 units. The K is a chevron whose arms taper slightly, with a rounded outer point; its parameters were fitted by maximising area overlap.
+- Fidelity of the rebuild against the traced original: **R 96.1%, K 93.8% area overlap (IoU)**. The remainder is the physical sign's own hand-cut irregularity, which is precisely what the redraw removes. Result is **315 bytes of SVG**, resolution-independent, no raster logo shipped to the page.
+- **Colour adaptation.** Brand navy on the graphite page measures 2.3:1 — unusable for the mark. Two tokens were added, both scoped to `.l3`: `--brand: #0a3262` for the light paper panels (11.3:1 on `--paper`) and `--brand-lift: #7fa9de` for the mark on dark (8.2:1 on `--void`). Amber remains the annotation accent, so blue now means *identity* and amber means *technical layer* — a deliberate two-colour system rather than three competing accents. Verified: the homepage CSS bundles contain zero occurrences of the new colours or tokens.
+- The mark also appears in the drawing sheet's title block in true brand navy, which is how a real engineering title block is signed.
+- **Brand assets added** under `website/public/brand/`, usable beyond this site (letterhead, IndiaMART, Justdial, WhatsApp profile, signage): `rk-logo.svg` (navy), `rk-logo-white.svg` (knockout for dark), `favicon-rk.svg` (navy tile, mark knocked out — referenced by `/landing3/` only), and `rk-logo-photo-transparent.png` (the original photo background-removed and flattened to the brand navy, 1220 × 564).
+- Validation: `npm run check` passed (0 errors/warnings/hints, Prettier clean); `npm run build` passed; HTML audit: 41 pages, 0 errors. Page weight 17.4 KB gzipped, still below the current homepage's 22.3 KB, and still 0 KB of JavaScript. All four brand assets serve 200.
+- Open: the client has not supplied a logo **source file**. This vector is a faithful reconstruction from a photo, not the original artwork — worth asking for the AI/CDR/PDF if the sign-maker still has it, before this is used for print.
+
+### 16.2 "What we don't do" replaced with "How we help you" (3 Nov 2026)
+
+- Rahul's direction: a prospect should never be shown what the supplier cannot do; the page should lead with capability and help. The negative block was removed from `/landing3/` and rebuilt as a positive capability section. This reverses the earlier editorial choice recorded in §16.
+- **New section — "How we help you"** (eyebrow "Working with us"), four benefit-framed items, each one a confirmed capability from CLIENT-PROFILE §2–§3, not a new claim:
+  1. *Three critical steps, one roof* — coiling and forming, stress relieving in our own furnace, end grinding; the operations that decide whether a spring holds free length and sits square.
+  2. *We help you choose the wire* — stainless 302/304/316 where damp, oil-tempered under steady load, music wire on request for higher tensile; grade quoted to the application.
+  3. *Finishing arranged, one delivery* — plating and finishing through partners, returned on one quote and one delivery, single order placed with RK.
+  4. *Small, loaded and critical is the day job* — Ø 0.40–2.50 mm, tight tolerances, parts that must work first time in a switch, instrument or small assembly.
+- Closes with an amber CTA panel: "Not sure your part suits us? Send the drawing — you get a straight answer and a price within 24 hours." This keeps the honest fast-qualification benefit of the old block without listing a single negative.
+- **Nothing was made less truthful.** The factual envelope still appears where a buyer needs it — the spec sheet still states the wire range, the MOQ and "Through partners" for plating. Only the framing changed, from enumerating exclusions to stating capability.
+- Three other lines were reframed the same way: the spec-sheet footer now reads "Anywhere inside this envelope, send it over… you will have an answer and a price within 24 hours" (was a list of three product types not made); the spec-sheet partner note now reads "Name the finish on the drawing; it comes back on your quote" (was "We do not plate in-house"); the catalogue's eighth cell now ends "send the drawing — you will have an answer and a price within 24 hours" (was "we will tell you straight whether we can make it").
+- Fixed a rendering bug found during review: "since 2017" rendered as "since2017" because Astro trims whitespace around a line-broken expression. A scan of the whole rendered page for word/digit fusions found no others (the only matches were inside the GSTIN, the email address and "WhatsApp").
+- Validation: `npm run check` passed (0 errors/warnings/hints, Prettier clean); `npm run build` passed; HTML audit: 41 pages, 0 errors. No horizontal overflow at 375 px in the new section (document scrollWidth equals viewport). Still 0 `<script>` tags; page 17.7 KB gzipped.
+
+### 16.3 Catalogue parts rendered as lit steel (3 Nov 2026)
+
+- Rahul's note: the product grid "uses sample generated images" and should show real, high-quality,
+  photographic parts. The flat line drawings did read as generic clip-art on the dark panel.
+- **What was built.** The seven technical drawings are now repainted as lit steel instead of being
+  redrawn: the stroke takes a vertical steel gradient (which gives each coil its cylindrical form)
+  and runs through an SVG `feSpecularLighting` filter that turns a flat stroke into a round, lit
+  wire. New `WireDefs.astro` holds the two gradients and two filters, rendered once per page; the
+  existing `src/components/diagrams/*` are untouched and the live site is unaffected.
+- Per-part tuning: a wire gauge in viewBox units (close-wound torsion and extension take a thinner
+  stroke or the coils merge; compression, conical and wire forms carry a heavier wire) and an
+  optical scale so the seven parts read at comparable size in the grid. Centre lines are hidden —
+  they belong on the spec sheet, not on a product render. Steel tone is neutral grey, matched to the
+  real photograph sharing the same row.
+- **Cost: +0.8 KB gzipped** for the whole treatment (17.7 → 18.5 KB), because it is vector, not
+  bitmaps. Still 0 `<script>` tags and still under the live homepage's 22.3 KB.
+- **These are renders, not photographs, and are not presented as photographs.** No stock image and
+  no generated product photo was used, per AGENTS.md §8. The one genuine photograph the client has
+  supplied — the polished double torsion spring — now appears on card 02 as a real product shot.
+- **Photo slots are data-driven.** `photos` in `Catalogue.astro` maps a diagram key to an imported
+  image; any product without an entry falls back to its render. Adopting a real photo is: drop the
+  file in `src/assets/products/`, import it, add one line. No layout work.
+- **`PHOTO-SHOOT-BRIEF.md` added at the repo root** — a 45-minute phone shoot the client can do
+  himself: window side-light, white paper sweep, settings, a 7-shot product list and an 8-shot
+  factory list, plus the warning not to send by WhatsApp (which compresses away the detail) and the
+  outstanding non-photo items (logo source file, ZED PDF, machine list, map pin).
+- Validation: `npm run check` passed (0 errors/warnings/hints, Prettier clean); `npm run build`
+  passed; HTML audit: 41 pages, 0 errors. No horizontal overflow at 375 px in the grid; all seven
+  renders fit their cards on a phone. Reviewed at 900 px and 1440 px.
+
+### 16.4 Real product photographs adopted on `/landing3/` (3 Nov 2026)
+
+- Rahul supplied six product photographs in `website/public/brand/`. With the double torsion
+  photo already held, all seven catalogue cards now carry a real photograph; the rendered steel
+  illustrations from §16.3 remain in the code as the fallback for any card without one.
+- **Each photo was background-removed, defringed and upscaled**, not used as supplied:
+  - Five were shot on white. Keyed by near-white distance, with a size filter so large near-white
+    regions (the backdrop *and* enclosed loop interiors) go transparent while small specular
+    highlights on the wire stay opaque, plus adjacency handling so JPEG ringing beside the key is
+    treated as backdrop rather than left as white dots.
+  - The matte is contracted and feathered rather than un-premultiplied; un-premultiplying was
+    blowing ringing pixels out to white.
+  - **Defringe:** every non-opaque pixel takes the colour of its nearest opaque neighbour. Without
+    this the old white backdrop sits in the RGB of transparent pixels and bleeds back in whenever
+    the image is resampled — it showed as white speckle around every coil.
+  - The wire form was the hard one: grey backdrop, a cast shadow, and a demonstration mandrel that
+    is not RK's product. Keyed on smooth-and-light regions wherever they occur (a border flood fill
+    cannot reach inside the clip's closed loop), then restricted to the bright zinc so the mandrel
+    and shadow drop out.
+  - Upscaled to a 1600 px long edge with Lanczos, sharpened on the colour channels only — sharpening
+    alpha puts bright speckle on the silhouette.
+  - The spiral spring is a black-oxide part and read as a silhouette on the dark card, so its
+    midtones were lifted (mean luminance 35 → 61). No other photo was colour-graded.
+- Masters stored as WebP with alpha in `src/assets/products/` (51–353 KB each, down from 0.3–2.0 MB
+  as PNG). Astro serves 8–28 KB variants at phone size. The six supplied originals were moved to
+  `src/assets/products/source/` — they were unreferenced in `public/` and would have been deployed
+  and indexable.
+- Card art boxes are now a fixed 196 px so every card's title sits on the same line regardless of a
+  photo's aspect ratio, with a small per-part optical scale.
+- **The page got lighter, not heavier: 18.5 → 15.6 KB gzipped**, because seven inline SVG drawings
+  left the markup. Still 0 `<script>` tags.
+- **Provenance to confirm with the client.** These are studio shots on white seamless, not bench
+  photos from Talawade. Worth confirming they are RK's own parts, or that RK has the right to use
+  them, before launch — AGENTS.md §8 rules out stock photography, and original images are also what
+  earns the Google Business Profile and image-search value. `PHOTO-SHOOT-BRIEF.md` still stands for
+  getting bench photos of the real parts.
+- Validation: `npm run check` passed (0 errors/warnings/hints, Prettier clean); `npm run build`
+  passed; HTML audit: 41 pages, 0 errors. At 375 px: no horizontal overflow, all 7 images load, and
+  the browser selects the 292 px variants rather than the masters.
+
+### 16.5 Pointer-reactive hero (3 Nov 2026)
+
+- Rahul's brief: the hero is too simple; make it react to the cursor, in a way that suits the
+  industry, without making the page lag.
+- **The interaction is a CAD probe**, which is the on-brand choice for a spring maker — the part sits
+  in a viewport and the cursor behaves like a measuring probe over it:
+  - A fine amber crosshair with a target ring tracks the pointer across the stage.
+  - A live coordinate readout (`X +012.4  Y −008.1 mm`) in the bottom-left corner, the stage mapped
+    to a 120 × 110 mm sheet with the datum at centre. It reads out the viewport, exactly as CAD
+    does; it asserts nothing about the part.
+  - A light you carry with the cursor: a screen-blended radial that lifts the blueprint grid and
+    the steel as it passes.
+  - Depth parallax at four rates — backdrop glow −26 px, grid −7 px, the part +13 px, the corner
+    tags +19 px — so the part separates from the frame as you move.
+  - The corner crop marks brighten and thicken while the probe is in the frame.
+- **How it stays cheap.** One passive `pointermove` listener on the stage, which only stores the
+  coordinates. A single `requestAnimationFrame` per frame does one `getBoundingClientRect` read and
+  then writes four custom properties (`--mx`, `--my`, `--nx`, `--ny`) on the hero section. Every
+  effect downstream is a `transform` or an `opacity`, so the work is the compositor's and nothing
+  re-lays-out. No library, no scroll listener, no per-element JS.
+- **Measured, not assumed.** Driving synthetic pointer events at ~120 Hz for one second: frame
+  interval median 16.7 ms, p95 17.3 ms, versus 16.7/16.8 ms idle — a held 60 fps. One frame of 69
+  exceeded 20 ms, attributable to the measurement harness starting its own interval.
+- **Cost: 1,760 B of inline JS (720 B gzipped)**, the page's only script. Against the AGENTS.md §4
+  budget of under 100 KB that is 0.7%, and there is no extra request because it is inline.
+- **Does nothing where it should not.** The script returns before attaching any listener when the
+  pointer is coarse or the user prefers reduced motion — verified at 375 px, where it writes no
+  custom property and sets no state, so phones do no work at all. A `prefers-reduced-motion: reduce`
+  block also resets every parallax transform; that path is enforced in code and CSS but was not
+  browser-emulated in this session.
+- The hero image's entry animation was switched from `transform` to the individual `scale` and
+  `rotate` properties, so its `both` fill no longer overrides the parallax translate.
+- Validation: `npm run check` passed (0 errors/warnings/hints, ESLint and Prettier clean);
+  `npm run build` passed; HTML audit: 41 pages, 0 errors. Page 16.2 KB gzipped. No horizontal
+  overflow in the hero at 375 px.
+
+### 16.6 Hero interaction rebuilt as a wire field (3 Nov 2026)
+
+- Rahul rejected the §16.5 CAD probe as not good enough. Fair: a 1 px crosshair and a coordinate
+  readout are a clever idea but almost nothing to *look* at, and the effect was confined to the
+  small viewport box rather than the whole hero. Replaced, not tuned.
+- **The new idea is the company's own process.** Move the pointer anywhere in the hero and the
+  wire coils around it:
+  - A staggered grid of ~750 points covers the whole hero. Each draws a short arc **centred on the
+    pointer**, so the field resolves into true concentric rings — a coil being wound, not dashes
+    being tilted. Arc length and brightness fall off with distance over a 400 px reach, and the
+    stored influence eases back so the coil relaxes rather than snapping when the pointer leaves.
+  - The field centre trails the pointer, so the coil winds to catch up instead of being welded to
+    the cursor.
+  - **Two damped springs** (stiffness 0.055 / 0.03) chase the pointer and drive the part and its
+    labels, so the steel overshoots and settles. A spring maker's hero should move like a spring;
+    the previous linear parallax did not.
+  - A screen-blended light travels with the pointer, lifting the grid and glinting off the part,
+    and the viewport's crop marks brighten while the pointer is in the hero.
+- **Why it does not cost anything.** Whatever the grid size, the canvas draws in **four batched
+  paths — four `stroke()` calls per frame**, bucketed by influence. The DOM side is only
+  `transform` and `opacity`, driven through custom properties, so nothing re-lays-out. One passive
+  listener; one `getBoundingClientRect` per move.
+- **Measured.** Driving synthetic pointer events at ~120 Hz across the hero, with 748 grid points on
+  a 2880 × 1750 canvas at DPR 2: frame interval median 16.7 ms, p95 18.1 ms, and **0 of 79 frames
+  over 20 ms** — identical to the idle baseline. A held 60 fps.
+- **It stops when you stop.** The loop ends once the field has relaxed and both springs have
+  settled: 0 `requestAnimationFrame` callbacks in the 1.5 s after settling, so no CPU is burnt
+  while the page sits idle.
+- **Nothing on phones.** With a coarse pointer or reduced motion the script returns before
+  attaching anything — verified at 375 px: the canvas never sizes its backing store, no custom
+  property is written, no state is set.
+- Field held at 0.88 opacity with the brightest band at 0.74 so the coil never competes with the
+  copy it passes under; the text renders above the canvas and stays fully legible.
+- Cost: 5,559 B inline JS (**1,937 B gzipped**), the page's only script — about 2% of the
+  AGENTS.md §4 budget, with no extra request. Page 17.4 KB gzipped.
+- Validation: `npm run check` passed (0 errors/warnings/hints, ESLint and Prettier clean);
+  `npm run build` passed; HTML audit: 41 pages, 0 errors. No horizontal overflow at 375 px.
