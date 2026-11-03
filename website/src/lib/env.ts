@@ -1,31 +1,35 @@
 /** Build-time environment helpers. */
+import { site } from '@/data/site';
 
 // Build-time only (Node); avoids pulling in @types/node for one variable.
 declare const process: { env: Record<string, string | undefined> };
 
-export const SITE_URL = (import.meta.env.PUBLIC_SITE_URL || import.meta.env.SITE || '').replace(
-  /\/+$/,
-  '',
-);
+/**
+ * Canonical origin for every absolute URL (canonical, og:url, JSON-LD, sitemap, robots).
+ * Always the final domain from site.ts, in every environment. PUBLIC_SITE_URL no longer
+ * changes URLs, so a stale value (e.g. a *.vercel.app address) cannot leak into canonicals.
+ */
+export const SITE_URL = site.origin;
 
-if (process.env.VERCEL_ENV === 'production' && !import.meta.env.PUBLIC_SITE_URL) {
-  throw new Error('PUBLIC_SITE_URL is required for production deploys.');
-}
+/** Local only: any PUBLIC_SITE_URL value rehearses an indexable production build. */
+const LOCAL_PRODUCTION = Boolean(import.meta.env.PUBLIC_SITE_URL);
 
 /** Show TODO(client) markers and photo placeholders (dev, or an explicit client-review build). */
 export const SHOW_TODOS = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_TODOS === 'true';
 
 /**
- * Only a production build with a real site URL, on Vercel's production environment (or outside
- * Vercel), may be indexed. Preview deployments and local builds are always noindex.
+ * Only a production build may be indexed:
+ * - on Vercel, the production environment (preview and development stay noindex);
+ * - outside Vercel, a local build with PUBLIC_SITE_URL set (to rehearse production).
+ * A client-review build (PUBLIC_SHOW_TODOS) is never indexable.
  */
 export const INDEXABLE =
   import.meta.env.PROD &&
-  Boolean(import.meta.env.PUBLIC_SITE_URL) &&
-  (process.env.VERCEL_ENV === undefined || process.env.VERCEL_ENV === 'production') &&
+  (process.env.VERCEL_ENV === undefined
+    ? LOCAL_PRODUCTION
+    : process.env.VERCEL_ENV === 'production') &&
   import.meta.env.PUBLIC_SHOW_TODOS !== 'true';
 
 export function absoluteUrl(path: string): string {
-  const base = SITE_URL || 'http://localhost:4321';
-  return new URL(path, `${base}/`).toString();
+  return new URL(path, `${SITE_URL}/`).toString();
 }

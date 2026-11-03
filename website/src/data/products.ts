@@ -12,11 +12,14 @@ import { site } from './site';
 
 export interface ProductPage {
   route: RouteId;
-  /** Page title without the brand suffix (keep ≤ 35 characters). */
+  /** Page title without the brand suffix (≤ 47 characters; see formatTitle). */
   title: string;
   description: string;
   h1: string;
+  /** Singular product noun for template headings, e.g. "torsion spring". */
+  noun: string;
   lede: string;
+  /** Plural, as used in prose and WhatsApp context, e.g. "torsion springs". */
   context: string;
   rfqQuery: string;
   diagram: DiagramKey;
@@ -72,11 +75,12 @@ const sharedFaqs = {
 
 export const torsion: ProductPage = {
   route: 'torsion',
-  title: 'Torsion Springs in Pune',
+  title: 'Torsion Spring Manufacturer in Pune',
   description:
-    'Torsion springs, wire Ø 0.40–2.50 mm, made to your drawing or sample in Talawade, Pune. Left- or right-hand wind. Quote within 24 hours.',
-  h1: 'Torsion springs',
+    'Torsion springs made to your drawing or sample in Talawade, Pune. Wire Ø 0.40–2.50 mm, left- or right-hand wind, legs to drawing. Quote within 24 hours.',
+  h1: 'Custom torsion springs, made in Pune',
   lede: 'Legs rotate around the coil axis to store and return torque. Our highest-volume spring. Made to your drawing or sample in Talawade, Pune.',
+  noun: 'torsion spring',
   context: 'torsion springs',
   rfqQuery: '?type=torsion',
   diagram: 'torsion',
@@ -155,16 +159,18 @@ export const torsion: ProductPage = {
       description: 'MCB and switch levers.',
     },
     { to: 'automotive', label: 'Automotive', description: 'Detents, returns and locks.' },
+    { to: 'furniture', label: 'Furniture', description: 'Folds, lids and ratchets.' },
   ],
 };
 
 export const doubleTorsion: ProductPage = {
   route: 'doubleTorsion',
-  title: 'Double Torsion Springs',
+  title: 'Double Torsion Spring Manufacturer in Pune',
   description:
-    'Double torsion springs with a centre loop, wire Ø 0.40–2.50 mm, made to drawing or sample in Talawade, Pune. Quote within 24 hours.',
-  h1: 'Double torsion springs',
+    'Double torsion springs with a centre loop and LH + RH coils, made to drawing or sample in Talawade, Pune. Wire Ø 0.40–2.50 mm. Quote within 24 hours.',
+  h1: 'Custom double torsion springs, made in Pune',
   lede: 'Two opposite-wound coils joined by a centre loop, from one length of wire. Balanced torque on both sides. A speciality of our unit.',
+  noun: 'double torsion spring',
   context: 'double torsion springs',
   rfqQuery: '?type=double-torsion',
   diagram: 'doubleTorsion',
@@ -242,11 +248,12 @@ export const doubleTorsion: ProductPage = {
 
 export const extension: ProductPage = {
   route: 'extension',
-  title: 'Extension Springs in Pune',
+  title: 'Tension & Extension Spring Manufacturer, Pune',
   description:
     'Tension and extension springs, wire Ø 0.40–2.50 mm, hooks to your drawing. Made in Talawade, Pune. Quote within 24 hours.',
-  h1: 'Tension / extension springs',
+  h1: 'Tension and extension springs, made in Pune',
   lede: 'Close-wound springs that resist a pull. Usually made with initial tension, so the coils stay shut until a minimum load is applied.',
+  noun: 'extension spring',
   context: 'extension springs',
   rfqQuery: '?type=extension',
   diagram: 'extension',
@@ -321,11 +328,12 @@ export const extension: ProductPage = {
 
 export const compression: ProductPage = {
   route: 'compression',
-  title: 'Compression Springs, Pune',
+  title: 'Compression Spring Manufacturer in Pune',
   description:
     'Compression springs, wire Ø 0.40–2.50 mm, closed and ground ends on request. Made to drawing or sample in Talawade, Pune.',
-  h1: 'Compression springs',
+  h1: 'Custom compression springs, made in Pune',
   lede: 'Open-coiled springs that push back when you compress them. Ends can be open, closed, or closed and ground so the spring stands flat.',
+  noun: 'compression spring',
   context: 'compression springs',
   rfqQuery: '?type=compression',
   diagram: 'compression',
@@ -408,11 +416,12 @@ export const compression: ProductPage = {
 
 export const conical: ProductPage = {
   route: 'conical',
-  title: 'Conical Springs in Pune',
+  title: 'Conical Spring Manufacturer in Pune',
   description:
     'Conical (tapered) compression springs, wire Ø 0.40–2.50 mm, made to your drawing or sample in Talawade, Pune. Quote within 24 hours.',
-  h1: 'Conical springs',
+  h1: 'Conical compression springs, made in Pune',
   lede: 'Tapered compression springs. The coils nest into each other, so the solid height can be as low as a few wire diameters.',
+  noun: 'conical spring',
   context: 'conical springs',
   rfqQuery: '?type=conical',
   diagram: 'conical',
@@ -453,6 +462,11 @@ export const conical: ProductPage = {
       label: 'Compression spring calculator',
       description: 'A first-pass rate for cylindrical coils.',
     },
+    {
+      to: 'measure',
+      label: 'How to measure a spring',
+      description: 'Large OD, small OD, free length and coils.',
+    },
   ],
   howWeMake: [
     {
@@ -477,11 +491,12 @@ export const conical: ProductPage = {
 
 export const spiral: ProductPage = {
   route: 'spiral',
-  title: 'Spiral Springs in Pune',
+  title: 'Spiral Spring Manufacturer in Pune',
   description:
     'Spiral springs made to your drawing or sample in Talawade, Pune. Wire Ø 0.40–2.50 mm. Quote within 24 hours.',
   h1: 'Spiral springs',
   lede: 'Spiral springs made to your drawing or sample. We need you to confirm whether the parts you want are wire spirals or flat-strip power springs before this page can be the last word.',
+  noun: 'spiral spring',
   context: 'spiral springs',
   rfqQuery: '?type=spiral',
   diagram: 'spiral',

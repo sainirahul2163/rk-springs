@@ -18,9 +18,9 @@
 | Area context | Talawade, Pimpri-Chinchwad (PCMC) industrial belt, close to Chikhali, Bhosari MIDC and Chakan |
 | Geo coordinates | TODO(client): map pin from the factory gate |
 | Phone / WhatsApp | +91 72620 92185 (TODO(client): confirm this is the main number) · +91 97679 01954 (second number) |
-| Email | rkent102017@gmail.com · rutvikkashid.rkent@gmail.com. TODO(client): pick the main one; plan a domain email such as sales@<domain> |
+| Email | rkent102017@gmail.com · rutvikkashid.rkent@gmail.com. TODO(client): pick the main one; plan a domain email such as sales@rksprings.com (not published until it exists) |
 | Hours | Mon–Wed and Fri–Sun, 9:00 AM – 8:00 PM · **Thursday closed** |
-| Domain | TODO: not bought yet. Candidates with no WHOIS record on 4 Oct 2026: rksprings.com, rksprings.in. Use the env var `PUBLIC_SITE_URL` |
+| Domain | **rksprings.com** (final, chosen 23 Oct 2026; purchase and DNS still to do). Canonical host **https://www.rksprings.com**; the bare domain redirects to `www`. Set in `website/src/data/site.ts` (`site.origin`) |
 | Logo | TODO(client): file pending. Use a temporary text wordmark |
 | Existing listings | IndiaMART (TODO(client): link) · Justdial "RK Enterprises", Pune 411062 (claimed; probably theirs). The Justdial "R K Spring Works, Bhosari" listing is **not** theirs |
 
@@ -98,7 +98,7 @@
 - [ ] Machine list and name-plate photos
 - [ ] Factory map pin and coordinates
 - [ ] Main phone number and main email
-- [ ] Domain purchase
+- [ ] Domain purchase: **rksprings.com** decided; buy it and point DNS at Vercel
 - [ ] Top 5 products
 - [ ] Sample and production lead times
 - [ ] Team size

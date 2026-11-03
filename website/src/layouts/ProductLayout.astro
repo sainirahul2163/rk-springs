@@ -12,6 +12,7 @@ import SectionHeader from '@/components/ui/SectionHeader.astro';
 import SpecTable from '@/components/ui/SpecTable.astro';
 import Todo from '@/components/ui/Todo.astro';
 import type { ProductPage } from '@/data/products';
+import { getRoute } from '@/data/routes';
 import { quoteHref, whatsappHref } from '@/lib/contact';
 import PageLayout from './PageLayout.astro';
 
@@ -20,6 +21,9 @@ interface Props {
 }
 
 const { product: p } = Astro.props;
+// Name the product in the section headings (keyword in an H2, varied wording, no stuffing).
+const Noun = p.noun.charAt(0).toUpperCase() + p.noun.slice(1);
+const a = /^[aeiou]/i.test(p.noun) ? 'an' : 'a';
 ---
 
 <PageLayout
@@ -28,7 +32,7 @@ const { product: p } = Astro.props;
   description={p.description}
   context={p.context}
   faqs={p.faqs}
-  product={{ name: p.h1, description: p.description }}
+  product={{ name: getRoute(p.route).label, description: p.description }}
 >
   <Section tone="grid" flush class="pt-6 pb-12">
     <div class="product-hero">
@@ -62,7 +66,12 @@ const { product: p } = Astro.props;
   </Section>
 
   <Section labelledby="spec-title">
-    <SectionHeader id="spec-title" index={1} eyebrow="Specification" title="Quick spec" />
+    <SectionHeader
+      id="spec-title"
+      index={1}
+      eyebrow="Specification"
+      title={`${Noun} specification`}
+    />
     <SpecTable rows={p.specs} class="mt-8" />
     <div class="mt-4">
       <Todo text="confirm end, hook or leg types actually formed, and any size limits." />
@@ -74,7 +83,7 @@ const { product: p } = Astro.props;
       id="about-title"
       index={2}
       eyebrow="Engineering"
-      title="What it is and how it works"
+      title={`What ${a} ${p.noun} is and how it works`}
     />
     <div class="prose mt-8 max-w-[46rem]">
       <slot name="about" />
@@ -82,7 +91,7 @@ const { product: p } = Astro.props;
   </Section>
 
   <Section labelledby="types-title">
-    <SectionHeader id="types-title" index={3} eyebrow="Variants" title="Types and ends" />
+    <SectionHeader id="types-title" index={3} eyebrow="Variants" title={`Types of ${p.context}`} />
     <div class="mt-8">
       <slot name="types" />
     </div>
@@ -93,7 +102,7 @@ const { product: p } = Astro.props;
       id="materials-title"
       index={4}
       eyebrow="Materials"
-      title="What we coil it from"
+      title={`${Noun} materials we use`}
       lede="Only the grades we actually buy. Tell us the environment and we will pick from this list."
     />
     <div class="mt-8">
@@ -102,7 +111,12 @@ const { product: p } = Astro.props;
   </Section>
 
   <Section labelledby="tips-title">
-    <SectionHeader id="tips-title" index={5} eyebrow="Design" title="What to put on your drawing" />
+    <SectionHeader
+      id="tips-title"
+      index={5}
+      eyebrow="Design"
+      title={`What to put on ${a} ${p.noun} drawing`}
+    />
     <div class="tips">
       <ol class="tips-list">
         {p.drawingNotes.map((item, i) => (
@@ -119,7 +133,7 @@ const { product: p } = Astro.props;
   </Section>
 
   <Section tone="surface" labelledby="apps-title">
-    <SectionHeader id="apps-title" index={6} eyebrow="Use" title="Where this spring is used" />
+    <SectionHeader id="apps-title" index={6} eyebrow="Use" title={`Where ${p.context} are used`} />
     <div class="prose mt-8 max-w-[46rem]">
       <slot name="applications" />
     </div>
@@ -129,7 +143,7 @@ const { product: p } = Astro.props;
   </Section>
 
   <Section labelledby="make-title">
-    <SectionHeader id="make-title" index={7} eyebrow="Process" title="How we make it" />
+    <SectionHeader id="make-title" index={7} eyebrow="Process" title={`How we make ${p.context}`} />
     <p class="mt-8 max-w-[46rem] text-lead text-slate">{p.processNote}</p>
     {p.howWeMake && p.howWeMake.length > 0 && (
       <RelatedLinks class="mt-8" title="How we make it" links={p.howWeMake} />
@@ -175,7 +189,7 @@ const { product: p } = Astro.props;
   </Section>
 
   <Section labelledby="faq-title">
-    <SectionHeader id="faq-title" index={9} eyebrow="Questions" title="FAQ" />
+    <SectionHeader id="faq-title" index={9} eyebrow="Questions" title={`${Noun} FAQ`} />
     <FAQ items={p.faqs} class="mt-8" />
   </Section>
 

@@ -7,8 +7,8 @@ import ToolLayout from '@/layouts/ToolLayout.astro';
 
 <ToolLayout
   route="rateConverter"
-  title="Spring Rate Converter"
-  description="Convert spring rate between N/mm, kgf/mm and lbf/in, plus force, length and N·mm/° units."
+  title="Spring Rate Converter: N/mm, kgf/mm, lbf/in"
+  description="Free spring rate converter: N/mm, kgf/mm and lbf/in, plus force, length and torsion-rate (N·mm/°) units. Metric first, for drawings and quotes."
   h1="Spring rate converter"
   lede="N/mm, kgf/mm and lbf/in on one page, plus force, length and torque-per-degree. We quote in metric."
   context="a spring"
@@ -43,6 +43,11 @@ import ToolLayout from '@/layouts/ToolLayout.astro';
         to: 'extensionCalc',
         label: 'Extension spring calculator',
         description: 'Rate for a close-wound tension spring.',
+      },
+      {
+        to: 'torsion',
+        label: 'Torsion springs',
+        description: 'Where the N·mm/° rate units apply.',
       },
       {
         to: 'rfq',

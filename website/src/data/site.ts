@@ -24,6 +24,15 @@ export const site = {
   gstin: '27BDSPK0577Q1ZL',
   udyam: 'UDYAM-MH-26-0706268',
 
+  /**
+   * Final domain, chosen by the client on 23 Oct 2026. `www` is the one canonical host;
+   * the bare domain 308-redirects to it (vercel.json). PUBLIC_SITE_URL can still override.
+   */
+  domain: 'rksprings.com',
+  origin: 'https://www.rksprings.com',
+  /** IndexNow key (public by design; the same value is served at /<key>.txt). */
+  indexNowKey: 'bd9d2b2fcc9721684fc2fb79e97dc478',
+
   address: {
     street: 'Sr. No. 166, Sai Krupa Society, Sahyog Nagar',
     locality: 'Talawade',
