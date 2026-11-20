@@ -29,9 +29,9 @@ const { route, title, description, h1, lede, context, faqs } = Astro.props;
   tool={{ name: h1, description }}
 >
   <section class="container-page pt-6 pb-8">
-    <p class="eyebrow mb-3 text-blue-700">Engineering tool</p>
+    <p class="eyebrow eyebrow-rule mb-3 text-amber">Engineering tool</p>
     <h1 class="max-w-[46rem] text-h1">{h1}</h1>
-    {lede && <p class="mt-4 max-w-[46rem] text-lead text-slate">{lede}</p>}
+    {lede && <p class="mt-4 max-w-[46rem] text-lead text-text-2">{lede}</p>}
   </section>
   <section class="container-page pb-12" aria-label="Calculator">
     <slot />

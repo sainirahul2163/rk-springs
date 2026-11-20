@@ -227,7 +227,7 @@ export function RfqForm({ sourcePage, turnstileSiteKey, whatsappHref, search }: 
         else void submit();
       }}
     >
-      <p className="text-small font-medium text-slate">
+      <p className="text-small font-medium text-text-3">
         Step {step} of 2 — {step === 1 ? 'your details' : 'optional specs'}
       </p>
 
@@ -346,11 +346,11 @@ export function RfqForm({ sourcePage, turnstileSiteKey, whatsappHref, search }: 
                     className="flex items-center justify-between gap-3 text-small"
                   >
                     <span>
-                      {file.name} <span className="text-slate">({formatBytes(file.size)})</span>
+                      {file.name} <span className="text-text-3">({formatBytes(file.size)})</span>
                     </span>
                     <button
                       type="button"
-                      className="min-h-11 px-3 text-blue-700 underline"
+                      className="min-h-11 px-3 text-amber underline"
                       onClick={() => setFiles(files.filter((_, idx) => idx !== i))}
                     >
                       {`Remove ${file.name}`}
@@ -378,7 +378,7 @@ export function RfqForm({ sourcePage, turnstileSiteKey, whatsappHref, search }: 
           />
           <CheckField name="consent" checked={consent} onChange={setConsent} error={errors.consent}>
             I agree that RK Enterprises may use my details and drawings to quote and supply parts.{' '}
-            <a href="/privacy-policy/" className="text-blue-700 underline">
+            <a href="/privacy-policy/" className="text-amber underline">
               Privacy policy
             </a>
             .
@@ -389,7 +389,7 @@ export function RfqForm({ sourcePage, turnstileSiteKey, whatsappHref, search }: 
           <h2 id={step2Title} tabIndex={-1} className="text-h3">
             Optional dimensions
           </h2>
-          <p className="text-slate">
+          <p className="text-text-3">
             Skip any field you do not know. A drawing or sample is enough for a first quote.
           </p>
           <TypeSketch type={type} />

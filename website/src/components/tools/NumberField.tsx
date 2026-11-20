@@ -37,7 +37,7 @@ export function NumberField({
     <div className="grid gap-1.5">
       <label htmlFor={id} className="field-label">
         {label}
-        {unit && <span className="font-normal text-slate"> ({unit})</span>}
+        {unit && <span className="font-normal text-text-3"> ({unit})</span>}
       </label>
       <div className="relative">
         <input
@@ -61,7 +61,7 @@ export function NumberField({
         {unit && (
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-3 flex items-center font-mono text-[0.875rem] text-slate"
+            className="pointer-events-none absolute inset-y-0 right-3 flex items-center font-mono text-[0.875rem] text-text-3"
           >
             {unit}
           </span>

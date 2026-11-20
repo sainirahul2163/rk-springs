@@ -37,9 +37,9 @@ const a = /^[aeiou]/i.test(p.noun) ? 'an' : 'a';
   <Section tone="grid" flush class="pt-6 pb-12">
     <div class="product-hero">
       <div>
-        <p class="eyebrow mb-3 text-blue-700">Made to drawing or sample</p>
+        <p class="eyebrow eyebrow-rule mb-3 text-amber">Made to drawing or sample</p>
         <h1 class="text-h1">{p.h1}</h1>
-        <p class="mt-4 max-w-[40rem] text-lead text-slate">{p.lede}</p>
+        <p class="mt-4 max-w-[40rem] text-lead text-text-2">{p.lede}</p>
         <div class="mt-8 flex flex-wrap gap-3">
           <Button href={quoteHref(p.rfqQuery, p.context)} iconRight="arrow-right">
             Get a quote in 24 hours
@@ -144,7 +144,7 @@ const a = /^[aeiou]/i.test(p.noun) ? 'an' : 'a';
 
   <Section labelledby="make-title">
     <SectionHeader id="make-title" index={7} eyebrow="Process" title={`How we make ${p.context}`} />
-    <p class="mt-8 max-w-[46rem] text-lead text-slate">{p.processNote}</p>
+    <p class="mt-8 max-w-[46rem] text-lead text-text-2">{p.processNote}</p>
     {p.howWeMake && p.howWeMake.length > 0 && (
       <RelatedLinks class="mt-8" title="How we make it" links={p.howWeMake} />
     )}
@@ -221,9 +221,9 @@ const a = /^[aeiou]/i.test(p.noun) ? 'an' : 'a';
 
   .product-fig {
     padding: 16px 20px;
-    border: 1px solid var(--color-grid);
+    border: 1px solid var(--color-line-2);
     border-radius: var(--radius-card);
-    color: var(--color-navy-900);
+    color: var(--color-text);
   }
 
   .tips {
@@ -242,7 +242,7 @@ const a = /^[aeiou]/i.test(p.noun) ? 'an' : 'a';
   .tips-list {
     display: grid;
     gap: 0;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-line);
   }
 
   .tips-list li {
@@ -252,13 +252,13 @@ const a = /^[aeiou]/i.test(p.noun) ? 'an' : 'a';
     align-items: baseline;
     min-height: 44px;
     padding: 10px 0;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-line);
   }
 
   .tips-n {
     font-family: var(--font-mono);
     font-size: 0.8125rem;
-    color: var(--color-blue-700);
+    color: var(--color-amber);
   }
 
   .rfq-check {

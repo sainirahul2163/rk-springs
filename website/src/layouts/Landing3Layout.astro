@@ -82,33 +82,10 @@ const extraFonts = [
        * Every text pair below clears WCAG 2.2 AA (4.5:1).
        * ------------------------------------------------------------- */
       .l3 {
-        --void: #08090b;
-        --ink: #0d0f12;
-        --panel: #14171c;
-        --panel-2: #1b1f26;
-        --line: #272c34;
-        --line-2: #3a414d;
-
-        --paper: #f2f1ed;
-        --paper-2: #e6e4dd;
-        --text: #f2f1ed;
-        --text-2: #9aa3b0;
-        --text-3: #808997;
-
-        --amber: #ff8a3d;
-        --amber-2: #e8690b;
-        /* Amber dark enough to read as text on --paper (5.2:1). */
-        --amber-ink: #a84300;
-
-        /* Brand navy sampled from the client's logo. Unusable as text on graphite
-         * (2.3:1), so it is reserved for the paper panels, and `--brand-lift` — the
-         * same hue raised in lightness — carries the mark on dark (8.2:1). */
-        --brand: #0a3262;
-        --brand-lift: #7fa9de;
-        --steel: #cfdcea;
-        --wa: #25d366;
-
-        --rail: 1px solid var(--line);
+        /*
+         * Layout rhythm for this page. The colours it uses now live in
+         * `src/styles/global.css` — the engineering-sheet palette is the site's palette.
+         */
         --pad: 20px;
         --gutter: clamp(20px, 4vw, 56px);
         --maxw: 1320px;
@@ -124,7 +101,6 @@ const extraFonts = [
       /* The live site's mobile action bar is not rendered here. */
       html.l3-root {
         --mobile-bar-h: 0px;
-        background: #08090b;
         scroll-padding-top: calc(var(--hdr) + 24px);
       }
 
@@ -279,11 +255,11 @@ const extraFonts = [
 
       .l3-btn-primary {
         background: var(--amber);
-        color: #16120d;
+        color: var(--color-on-amber);
       }
 
       .l3-btn-primary:hover {
-        background: #ffa166;
+        background: var(--color-amber-hover);
         transform: translateY(-1px);
       }
 
@@ -344,7 +320,7 @@ const extraFonts = [
       }
 
       .l3-drawing.on-paper {
-        color: #2b3139;
+        color: var(--color-ink);
         --dim-color: var(--amber-ink);
         --dim-label-color: var(--amber-ink);
         --dim-label-bg: var(--paper);
@@ -359,39 +335,6 @@ const extraFonts = [
           24px 24px,
           24px 24px;
         background-position: center center;
-      }
-
-      /* ----- review-build helpers, re-tinted for the dark sheet -----
-       * <Todo> and <PhotoPlaceholder> ship light-on-white for the live site. They render
-       * only in dev and client-review builds — which is exactly what the client looks at —
-       * so they are restyled here rather than left glaring on a black page.
-       */
-      .l3 .todo[data-todo] {
-        background: color-mix(in srgb, var(--amber) 9%, var(--ink));
-        border-color: color-mix(in srgb, var(--amber) 42%, transparent);
-        color: var(--amber);
-      }
-
-      .l3 .photo-ph .photo-ph-box {
-        background-color: var(--panel);
-        background-image:
-          linear-gradient(var(--line) 1px, transparent 1px),
-          linear-gradient(90deg, var(--line) 1px, transparent 1px);
-        background-size:
-          24px 24px,
-          24px 24px;
-        border-color: var(--line-2);
-        border-radius: 4px;
-      }
-
-      .l3 .photo-ph .photo-ph-inner {
-        background: var(--panel-2);
-        border: 1px solid var(--line-2);
-        color: var(--text-3);
-      }
-
-      .l3 .photo-ph .photo-ph-cap {
-        color: var(--text-3);
       }
 
       /* ---------------- scroll reveal (0 KB JS) ---------------- */

@@ -539,3 +539,96 @@ Full record in `SEO-WORK-LOG.md`. What changed, for content review:
 Not re-measured in this pass: Lighthouse and mobile LCP/CLS for the new homepage. Worth running
 `npm run lh` before launch, since the hero art and the pointer-driven wire field differ from the
 page the §5 numbers were taken on.
+
+## 19. The engineering-sheet theme applied to the whole site (20 Nov 2026)
+
+- **Status: ready for review. Not deployed, not merged.** The homepage design was approved, so its
+  look now carries across every other page: the graphite sheet, drawing-paper panels, the single
+  amber annotation accent, mono labels, hairline rules and the real RK monogram. No page's copy,
+  facts, structure or SEO changed — this was a re-skin, not a rewrite.
+
+### How it was done (and why nothing broke)
+
+- The palette moved out of the homepage's scoped block and into `src/styles/global.css` as the
+  site's tokens. Because the build had followed AGENTS.md §6 — every component referencing tokens,
+  never a hex — changing the tokens re-skinned most of the site at once, and the remaining work was
+  pointing each component at the right *semantic* token.
+- The token set is named by surface and role, not by hue: `void → sheet → panel → panel-2` for the
+  dark surfaces, `paper → paper-2` for light panels, `text / text-2 / text-3` on dark, `ink / slate`
+  on paper, `amber` (and `amber-ink` on paper) for the accent, `brand / brand-lift` for identity,
+  `steel` for technical drawings, `line / line-2` for hairlines and `control` for the boundary of an
+  interactive control.
+- `Section` keeps its tone names, so no page needed editing: `white → sheet`, `surface → sheet band`,
+  `tint → panel`, `dark/grid → blueprint grid`, plus a new `paper` tone that flips text, links and
+  drawings for long reading on a light panel.
+- 58 files were converted: the chrome (header, mega-menu, mobile nav, skip link, breadcrumbs,
+  footer, mobile action bar, CTA band), the primitives (section, button, badge, card, section
+  header, chips, Todo, photo placeholder), the content components (spec and materials tables,
+  hours, FAQ, process steps, trust bar, callouts, key takeaways, table of contents, related links,
+  article meta, company details, location map), the five page layouts, the five React islands
+  (calculators and both forms) and fourteen pages with their own styles.
+
+### Decisions worth your attention
+
+1. **The build spec's blue-and-white palette (CURSOR-BUILD-PROMPT.md §4, AGENTS.md §6) is
+   superseded.** It predates the client's choice of this design. The rule it encodes — tokens only,
+   no hex in components — still holds and is still enforced; only the values changed. Those two
+   documents should be updated to match, which is a separate edit to the planning docs.
+2. **The real logo is now the site-wide mark.** `Wordmark` renders the monogram lockup the homepage
+   uses, so the header and footer carry the client's own logo instead of the temporary coil glyph.
+   `Logo` and `Mark` moved to `src/components/layout/`. The favicon is `/brand/favicon-rk.svg` on
+   every page, and `theme-color` is the sheet's graphite.
+3. **`/landing3/`, the parked blue-and-white homepage, still looks exactly as designed.** It sets
+   `theme="blue"`, which re-points the semantic tokens at the old scale for that page only — so the
+   shared components render in the original palette there without a single component knowing about
+   it. `HomeHero` and `HomeFactory`, used only on that page, keep the legacy tokens directly.
+4. **The homepage keeps its own header and footer.** They now look the same as the shared ones
+   (same lockup, same translucent graphite bar, same amber CTA), but the shared header also carries
+   the Springs mega-menu and a Resources link, and the shared footer the full link columns. Worth
+   unifying — I left it alone because it would change the design you approved.
+5. **Long technical reading stays on the dark sheet**, not on paper. The `paper` tone is built and
+   documented for panels that need it; the homepage's spec sheet is the example. Say the word if
+   you want articles and product pages on paper instead.
+
+### Accessibility
+
+Every text pair in use was measured, not assumed (ratios against the surface each one sits on):
+
+| Pair | Ratio |
+|---|---|
+| body text on sheet / on panel | 17.6 : 1 · 15.9 : 1 |
+| lede (text-2) on sheet / on panel | 7.8 : 1 · 7.1 : 1 |
+| captions (text-3) on sheet / on panel | 5.6 : 1 · 5.1 : 1 |
+| amber eyebrow on sheet / on panel | 8.5 : 1 · 7.7 : 1 |
+| H3 and monogram (brand-lift) on sheet | 8.2 : 1 |
+| primary button label on amber / on hover | 8.0 : 1 · 9.4 : 1 |
+| WhatsApp label on green | 8.6 : 1 |
+| error / success / warning on sheet | 7.4 : 1 · 10.2 : 1 · 10.7 : 1 |
+| body / secondary / accent / monogram on paper | 13.1 : 1 · 5.7 : 1 · 5.4 : 1 · 11.3 : 1 |
+| technical drawing (steel) on sheet | 14.3 : 1 |
+
+The first measurement found form inputs and outline buttons outlined in a hairline at 1.75 : 1,
+below the 3 : 1 that WCAG 2.2 SC 1.4.11 asks of a control's boundary. They now use a dedicated
+`control` token at 3.8 : 1 on panel and 4.2 : 1 on the sheet. Decorative dividers stay as hairlines,
+which that rule exempts. The focus ring is amber at 8.5 : 1, and amber-ink on paper.
+
+### Share cards
+
+`scripts/make-og.mjs` drew its card in the blue-and-white tokens. It is now drawn in the sheet
+palette — graphite card, amber spine, the real monogram, the page's own technical drawing in steel
+with amber dimensions on the blueprint grid — and all 38 cards plus the default were re-rendered.
+
+### Validation (20 Nov 2026)
+
+| Gate | Result |
+|---|---|
+| `npm run check` | 0 errors, 0 warnings, 0 hints; ESLint and Prettier clean |
+| `npm test` | 62 passed |
+| `npm run test:e2e` | 44 passed |
+| `PUBLIC_SITE_URL=… npm run build` → `audit-html` | 41 pages (38 indexable), 38 sitemap URLs, 0 errors, 0 warnings |
+| Legacy tokens outside the preview | none (grep over every `.astro`, `.tsx` and `.css`) |
+| Hex values in components | none outside `global.css`, the preview's own two components and the homepage's spec sheet |
+| Reviewed in the browser | homepage, springs hub, torsion product page, measuring guide, compression calculator, RFQ, contact, ordering, switchgear industry page, 404, styleguide, and `/landing3/` — at 1280 px, plus the product page at 375 px |
+
+Not re-measured: Lighthouse and mobile LCP/CLS. The change is CSS-only and ships no new JavaScript
+or requests, but `npm run lh` is still worth running before launch.

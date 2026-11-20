@@ -46,46 +46,58 @@ if (import.meta.env.DEV !== true && import.meta.env.PUBLIC_SHOW_TODOS !== 'true'
 
 const colours: { group: string; items: { token: string; use: string; dark?: boolean }[] }[] = [
   {
-    group: 'Navy and blue',
+    group: 'Sheet (dark surfaces)',
     items: [
-      { token: 'navy-950', use: 'Footer', dark: true },
-      { token: 'navy-900', use: 'Headings, dark sections', dark: true },
-      { token: 'blue-800', use: 'Secondary dark', dark: true },
-      { token: 'blue-700', use: 'Links, icons, outline buttons', dark: true },
-      { token: 'action-600', use: 'Primary buttons, focus ring', dark: true },
-      { token: 'action-700', use: 'Primary hover', dark: true },
-      { token: 'blue-400', use: 'Accents on dark' },
-      { token: 'blue-300', use: 'Body text on dark' },
-      { token: 'blue-100', use: 'Pressed states' },
-      { token: 'blue-50', use: 'Tints, zebra rows' },
-      { token: 'grid', use: 'Blueprint grid lines' },
+      { token: 'void', use: 'Page', dark: true },
+      { token: 'sheet', use: 'Section band, card figures', dark: true },
+      { token: 'panel', use: 'Cards, inputs, tints', dark: true },
+      { token: 'panel-2', use: 'Hover and zebra rows', dark: true },
+      { token: 'line', use: 'Hairlines, dividers', dark: true },
+      { token: 'line-2', use: 'Input borders, meaningful outlines', dark: true },
     ],
   },
   {
-    group: 'Neutrals',
+    group: 'Paper (light panels)',
     items: [
-      { token: 'ink', use: 'Body text', dark: true },
-      { token: 'slate', use: 'Secondary text', dark: true },
-      { token: 'border-strong', use: 'Input borders', dark: true },
-      { token: 'border', use: 'Dividers' },
-      { token: 'surface', use: 'Alternate sections' },
-      { token: 'white', use: 'Page' },
+      { token: 'paper', use: 'Drawing-paper panel' },
+      { token: 'paper-2', use: 'Paper zebra rows' },
+    ],
+  },
+  {
+    group: 'Text',
+    items: [
+      { token: 'text', use: 'Headings and body on the sheet' },
+      { token: 'text-2', use: 'Body and ledes on the sheet' },
+      { token: 'text-3', use: 'Captions, hints, meta' },
+      { token: 'ink', use: 'Body text on paper', dark: true },
+      { token: 'slate', use: 'Secondary text on paper', dark: true },
+    ],
+  },
+  {
+    group: 'Accent and identity',
+    items: [
+      { token: 'amber', use: 'Eyebrows, primary button, focus ring' },
+      { token: 'amber-hover', use: 'Primary button hover' },
+      { token: 'amber-ink', use: 'Accent on paper', dark: true },
+      { token: 'brand', use: 'Monogram on paper', dark: true },
+      { token: 'brand-lift', use: 'Monogram and H3 on the sheet' },
+      { token: 'steel', use: 'Technical drawings on the sheet' },
     ],
   },
   {
     group: 'Status',
     items: [
-      { token: 'success', use: 'Success', dark: true },
-      { token: 'warning', use: 'Warnings, TODO markers', dark: true },
-      { token: 'error', use: 'Errors', dark: true },
+      { token: 'success', use: 'Success' },
+      { token: 'warning', use: 'Warnings, TODO markers' },
+      { token: 'error', use: 'Errors' },
       { token: 'whatsapp', use: 'WhatsApp button only' },
     ],
   },
 ];
 
 const type = [
-  { cls: 'text-h1', label: 'H1 · clamp 32–56 / 600', sample: 'Precision spring manufacturer' },
-  { cls: 'text-h2', label: 'H2 · clamp 26–40 / 600', sample: 'Double torsion springs' },
+  { cls: 'text-h1', label: 'H1 · clamp 32–56 / 700', sample: 'Precision spring manufacturer' },
+  { cls: 'text-h2', label: 'H2 · clamp 28–44 / 700', sample: 'Double torsion springs' },
   { cls: 'text-h3', label: 'H3 · 22 / 600', sample: 'Centre loop and leg forms' },
   { cls: 'text-lead', label: 'Lead · 19 / 400', sample: 'Made to your drawing or sample.' },
   {
@@ -179,7 +191,7 @@ const home = linkTo('home') ?? '/';
       as="h1"
       eyebrow="Design system"
       title="Style guide"
-      lede="Blue-and-white engineering-blueprint system. Tokens are referenced by name only; values live in global.css and may change when the logo arrives."
+      lede="The engineering-sheet system: a graphite base, drawing-paper panels and one amber annotation accent. Components reference tokens by name only; the values live in global.css."
     />
     <p class="mt-6">
       <a href={home} class="link">
@@ -236,7 +248,7 @@ const home = linkTo('home') ?? '/';
           ))}
           <div class="sg-type">
             <dt class="sg-token">Eyebrow · Mono 13 / 500 / caps</dt>
-            <dd class="eyebrow text-blue-700">01 · Products</dd>
+            <dd class="eyebrow text-amber">01 · Products</dd>
           </div>
           <div class="sg-type">
             <dt class="sg-token">Spec value · Mono tabular</dt>
@@ -550,7 +562,7 @@ const home = linkTo('home') ?? '/';
                 ]}
               />
             </ResultPanel>
-            <p class="text-small text-slate">Sample values for layout only.</p>
+            <p class="text-small text-text-2">Sample values for layout only.</p>
           </div>
         </div>
       </section>
@@ -695,7 +707,7 @@ const home = linkTo('home') ?? '/';
 
   .sg-sec {
     padding-block: 48px;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-line);
   }
 
   .sg-sec:first-child {
@@ -706,13 +718,13 @@ const home = linkTo('home') ?? '/';
   .sg-h3 {
     font-size: 1.125rem;
     font-weight: 600;
-    color: var(--color-navy-900);
+    color: var(--color-text);
   }
 
   .sg-token {
     font-family: var(--font-mono);
     font-size: 0.8125rem;
-    color: var(--color-slate);
+    color: var(--color-text-3);
   }
 
   .sg-swatches {
@@ -732,31 +744,32 @@ const home = linkTo('home') ?? '/';
     place-items: end start;
     height: 72px;
     padding: 8px 10px;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-card);
-    color: var(--color-navy-900);
+    /* Default label sits on a light swatch; `dark` swatches take a light label. */
+    color: var(--color-sheet);
     font-weight: 600;
   }
 
   .sg-chip-dark {
-    color: var(--color-white);
-    border-color: transparent;
+    color: var(--color-text);
+    border-color: var(--color-line-2);
   }
 
   .sg-use {
     font-size: var(--text-small);
-    color: var(--color-ink);
+    color: var(--color-text-2);
   }
 
   .sg-type {
     display: grid;
     gap: 6px;
     padding-bottom: 20px;
-    border-bottom: 1px dashed var(--color-border);
+    border-bottom: 1px dashed var(--color-line);
   }
 
   .sg-heading {
-    color: var(--color-navy-900);
+    color: var(--color-text);
   }
 
   .sg-row {
@@ -769,7 +782,8 @@ const home = linkTo('home') ?? '/';
   .sg-dark {
     padding: 20px;
     border-radius: var(--radius-card);
-    background: var(--color-navy-900);
+    background: var(--color-sheet);
+    border: 1px solid var(--color-line);
   }
 
   .sg-drawings {
@@ -792,8 +806,8 @@ const home = linkTo('home') ?? '/';
 
   .sg-fig {
     padding: 16px;
-    border: 1px solid var(--color-grid);
+    border: 1px solid var(--color-line-2);
     border-radius: var(--radius-card);
-    color: var(--color-navy-900);
+    color: var(--color-text);
   }
 </style>

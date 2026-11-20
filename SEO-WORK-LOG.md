@@ -275,3 +275,36 @@ preview at `/landing3/`. Design review notes are in `CONTENT-REVIEW.md` §18; th
 - The homepage palette (graphite and amber) and its favicon (`/brand/favicon-rk.svg`) differ from
   the rest of the site. Decide whether to roll them site-wide; adopting the real logo site-wide means
   re-running `npm run og` so the icons and the schema logo are rebuilt from it.
+
+---
+
+## 20 Nov 2026: site-wide re-skin to the engineering-sheet theme
+
+Design work, recorded here because it touches the share cards, the icons and two head tags. Full
+notes in `CONTENT-REVIEW.md` §19.
+
+### Unchanged
+
+- Every title, meta description, canonical, robots meta, heading and word of copy.
+- The JSON-LD graph, the sitemap and its `lastmod` dates. The pages' content did not change, only
+  their presentation, so the dates were deliberately left alone.
+- Internal links, breadcrumbs and anchor text.
+
+### Changed
+
+- **Share cards.** `scripts/make-og.mjs` drew its card in the old blue-and-white tokens; it now
+  draws in the sheet palette and uses the real monogram. All 38 cards and `og-default.png` were
+  re-rendered and committed. Re-run `npm run og` after any future H1 change, as before.
+- **Icons and the schema logo are the real mark now.** Every page serves `/brand/favicon-rk.svg`,
+  and `npm run og` renders `favicon.ico`, `apple-touch-icon.png`, `icon-192/512.png` and `logo.png`
+  — the image the Organization schema points at — from that same file instead of the temporary coil
+  glyph. The web manifest points at it too. `theme-color` is the sheet graphite (`#08090b`); the
+  parked `/landing3/` preview keeps white.
+- `public/favicon.svg`, the temporary mark, is no longer referenced anywhere. Left in place for now;
+  delete it once you are happy with the new icons.
+
+### Verification
+
+`npm run check` 0/0/0 · Vitest 62 · Playwright 44 · build 41 pages (38 indexable), 38 sitemap URLs,
+0 errors and 0 warnings · no `localhost` or `vercel.app` leak · no visible `TODO(client)` in the
+production HTML.

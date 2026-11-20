@@ -137,7 +137,7 @@ export function EnquiryForm({ sourcePage, turnstileSiteKey, whatsappHref }: Enqu
       />
       <CheckField name="consent" checked={consent} onChange={setConsent} error={errors.consent}>
         I agree that RK Enterprises may use my details to reply.{' '}
-        <a href="/privacy-policy/" className="text-blue-700 underline">
+        <a href="/privacy-policy/" className="text-amber underline">
           Privacy policy
         </a>
         .

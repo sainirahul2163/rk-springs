@@ -159,38 +159,39 @@ async function renderCard({ h1, section, domain, chips, brand, legal }) {
     drawing.removeAttribute('height');
     drawing.classList.add('og-drawing');
   }
-  const glyph = document.querySelector('.wm-glyph')?.cloneNode(true) ?? null;
+  const glyph = document.querySelector('.wm-glyph, .mk-logo')?.cloneNode(true) ?? null;
 
   const style = document.createElement('style');
   style.textContent = `
-    html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: var(--color-white); }
+    html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: var(--color-void); }
     *, *::before, *::after { animation: none !important; transition: none !important; }
     .og { position: relative; box-sizing: border-box; width: 1200px; height: 630px; padding: 40px;
-      font-family: var(--font-sans); color: var(--color-ink); }
+      font-family: var(--font-sans); color: var(--color-text); background: var(--color-void); }
     .og-frame { position: absolute; inset: 40px; display: grid; grid-template-columns: 600px 1fr;
       grid-template-rows: 100%; overflow: hidden;
-      border: 2px solid var(--color-navy-900); background: var(--color-white); }
+      border: 1px solid var(--color-line-2); background: var(--color-sheet); }
     .og-left { display: flex; flex-direction: column; padding: 40px 40px 32px 48px; min-width: 0; min-height: 0;
-      border-left: 8px solid var(--color-action-600); }
-    .og-brand { display: flex; align-items: center; gap: 14px; color: var(--color-navy-900);
+      border-left: 8px solid var(--color-amber); }
+    .og-brand { display: flex; align-items: center; gap: 14px; color: var(--color-text);
       font-weight: 600; font-size: 24px; letter-spacing: -0.005em; }
-    .og-brand svg { width: 40px; height: 40px; --wm-accent: var(--color-action-600); }
+    .og-brand svg { width: 44px; height: auto; color: var(--color-brand-lift); --wm-accent: var(--color-amber); }
     .og-eyebrow { margin-top: 36px; font-family: var(--font-mono); font-size: 18px;
-      letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-blue-700); }
-    .og-title { margin: 14px 0 0; font-weight: 600; color: var(--color-navy-900);
-      letter-spacing: -0.02em; line-height: 1.08; font-size: var(--og-size, 58px); }
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-amber); }
+    .og-title { margin: 14px 0 0; font-weight: 700; color: var(--color-text);
+      letter-spacing: -0.03em; line-height: 1.06; font-size: var(--og-size, 58px); }
     .og-foot { margin-top: auto; }
     .og-chips { display: flex; flex-wrap: wrap; gap: 8px; }
     .og-chip { font-family: var(--font-mono); font-size: 16px; padding: 6px 10px;
-      border: 1px solid var(--color-grid); border-radius: 4px; color: var(--color-blue-800);
-      background: var(--color-blue-50); }
-    .og-domain { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--color-border);
+      border: 1px solid var(--color-line-2); border-radius: 3px; color: var(--color-text-2);
+      background: var(--color-panel); }
+    .og-domain { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--color-line);
       display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-      font-family: var(--font-mono); font-size: 17px; color: var(--color-slate); white-space: nowrap; }
-    .og-domain b { color: var(--color-action-700); font-weight: 400; font-size: 20px; }
+      font-family: var(--font-mono); font-size: 17px; color: var(--color-text-3); white-space: nowrap; }
+    .og-domain b { color: var(--color-amber); font-weight: 400; font-size: 20px; }
     .og-right { position: relative; display: grid; place-items: center; padding: 28px;
-      border-left: 1px solid var(--color-grid); color: var(--color-navy-900); }
-    .og-drawing { width: 100%; height: 100%; max-height: 470px; }
+      border-left: 1px solid var(--color-line); color: var(--color-steel); }
+    .og-drawing { width: 100%; height: 100%; max-height: 470px; color: var(--color-steel);
+      --dim-color: var(--color-amber); --dim-label-color: var(--color-amber); --dim-label-bg: transparent; }
   `;
 
   const card = document.createElement('div');
@@ -282,8 +283,8 @@ await shoot(
   join(publicDir, 'og-default.png'),
 );
 
-// Square icons and the schema.org logo, rendered from favicon.svg.
-const svg = readFileSync(join(publicDir, 'favicon.svg'), 'utf8');
+// Square icons and the schema.org logo, rendered from the real brand mark.
+const svg = readFileSync(join(publicDir, 'brand', 'favicon-rk.svg'), 'utf8');
 const pngs = {};
 for (const size of [32, 48, 180, 192, 512]) {
   const iconPage = await context.newPage();

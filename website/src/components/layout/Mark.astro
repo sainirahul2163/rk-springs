@@ -1,22 +1,22 @@
 ---
 /**
- * Lockup for the dark preview: the real RK monogram plus the brand name.
- * The mark carries the brand blue lifted for contrast on graphite; the live
- * blue-and-white site keeps its own Wordmark component untouched.
+ * The site lockup: the real RK monogram plus the brand name. Used by the homepage directly
+ * and by every other page through `Wordmark`. The monogram carries the brand blue lifted for
+ * contrast on graphite (8.2:1 on the sheet).
  */
 import { site } from '@/data/site';
 import Logo from './Logo.astro';
 
 interface Props {
   size?: 'sm' | 'lg';
-  class?: string;
+  class?: string | undefined;
 }
 
 const { size = 'sm', class: className } = Astro.props;
 ---
 
 <span class:list={['mk', `mk-${size}`, className]}>
-  <Logo height={size === 'lg' ? 34 : 26} class="mk-logo" />
+  <Logo height={size === 'lg' ? 34 : 26} class="mk-logo wm-glyph" />
   <span class="mk-rule" aria-hidden="true"></span>
   <span class="mk-text" aria-hidden="true">
     <span class="mk-a">Springs</span>

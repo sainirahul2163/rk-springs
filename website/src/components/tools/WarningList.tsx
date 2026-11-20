@@ -11,7 +11,7 @@ export function WarningList({ warnings }: { warnings: readonly CalcWarning[] }) 
       {warnings.map((w) => (
         <li
           key={w.id}
-          className="flex gap-2 rounded-[var(--radius-control)] border border-warning bg-white px-3 py-2 text-[0.9375rem] text-ink"
+          className="flex gap-2 rounded-[var(--radius-control)] border border-warning bg-panel px-3 py-2 text-[0.9375rem] text-text-2"
         >
           <svg
             width="18"

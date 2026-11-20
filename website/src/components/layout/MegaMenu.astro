@@ -32,7 +32,7 @@ const items = [...products, wireFormsItem].filter((p) => linkTo(p.route));
       ))}
     </ul>
     <div class="mega-side">
-      <p class="eyebrow text-blue-700">Not sure which spring?</p>
+      <p class="eyebrow text-amber">Not sure which spring?</p>
       <p class="mega-side-text">
         Send us your drawing, a photo or the old spring. We will tell you what it is and quote
         within 24 hours.
@@ -52,9 +52,9 @@ const items = [...products, wireFormsItem].filter((p) => linkTo(p.route));
     position: absolute;
     inset-inline: 0;
     top: 100%;
-    background: var(--color-white);
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
+    background: var(--color-sheet);
+    border-top: 1px solid var(--color-line);
+    border-bottom: 1px solid var(--color-line);
     box-shadow: var(--shadow-menu);
   }
 
@@ -78,15 +78,15 @@ const items = [...products, wireFormsItem].filter((p) => linkTo(p.route));
     padding: 12px;
     border: 1px solid transparent;
     border-radius: var(--radius-card);
-    color: var(--color-navy-900);
+    color: var(--color-text);
     transition:
       border-color 150ms var(--ease-out),
       background-color 150ms var(--ease-out);
   }
 
   a.mega-item:hover {
-    border-color: var(--color-grid);
-    background: var(--color-blue-50);
+    border-color: var(--color-line-2);
+    background: var(--color-panel);
   }
 
   a.mega-item:hover .mega-name {
@@ -96,7 +96,7 @@ const items = [...products, wireFormsItem].filter((p) => linkTo(p.route));
 
   .mega-fig {
     display: block;
-    color: var(--color-navy-900);
+    color: var(--color-steel);
     padding: 6px 8px;
   }
 
@@ -117,7 +117,7 @@ const items = [...products, wireFormsItem].filter((p) => linkTo(p.route));
   .mega-blurb {
     font-size: 0.8438rem;
     line-height: 1.45;
-    color: var(--color-slate);
+    color: var(--color-text-3);
   }
 
   .mega-side {
@@ -125,12 +125,12 @@ const items = [...products, wireFormsItem].filter((p) => linkTo(p.route));
     align-content: start;
     gap: 10px;
     padding: 16px 0 16px 24px;
-    border-left: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-line);
   }
 
   .mega-side-text {
     font-size: 0.9375rem;
-    color: var(--color-ink);
+    color: var(--color-text-2);
   }
 
   .mega-side-link {
@@ -139,12 +139,14 @@ const items = [...products, wireFormsItem].filter((p) => linkTo(p.route));
     gap: 6px;
     min-height: 44px;
     font-weight: 500;
-    color: var(--color-blue-700);
+    color: var(--color-text);
     text-decoration: underline;
-    text-underline-offset: 0.2em;
+    text-decoration-color: var(--color-line-2);
+    text-underline-offset: 0.25em;
   }
 
   .mega-side-link:hover {
-    color: var(--color-action-700);
+    color: var(--color-amber);
+    text-decoration-color: var(--color-amber);
   }
 </style>

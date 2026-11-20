@@ -23,19 +23,19 @@ const {
 } = Astro.props;
 ---
 
-<section class="cta bp-grid-dark section-y" data-surface="dark" aria-labelledby={`${id}-title`}>
+<section class="cta bp-grid section-y" aria-labelledby={`${id}-title`}>
   <div class="container-page cta-inner">
     <div class="max-w-[42rem]">
-      <p class="eyebrow mb-3 text-blue-300">Request for quotation</p>
-      <h2 id={`${id}-title`} class="text-h2 text-white">
+      <p class="eyebrow eyebrow-rule mb-3 text-amber">Request for quotation</p>
+      <h2 id={`${id}-title`} class="text-h2 text-text">
         {title}
       </h2>
-      <p class="mt-4 text-lead text-blue-300">{text}</p>
+      <p class="mt-4 text-lead text-text-2">{text}</p>
     </div>
     <div class="cta-actions">
       <Button
         href={quoteHref(rfqQuery, context)}
-        variant="inverse"
+        variant="primary"
         size="lg"
         iconRight="arrow-right"
       >
@@ -80,16 +80,16 @@ const {
     gap: 8px;
     min-height: 44px;
     padding-inline: 4px;
-    color: var(--color-white);
+    color: var(--color-text);
     font-family: var(--font-mono);
     font-weight: 500;
     text-decoration: underline;
-    text-decoration-color: var(--color-blue-400);
+    text-decoration-color: var(--color-line-2);
     text-underline-offset: 0.25em;
   }
 
   .cta-phone:hover {
-    color: var(--color-blue-300);
+    color: var(--color-text-2);
   }
 
   @media (min-width: 1024px) {
