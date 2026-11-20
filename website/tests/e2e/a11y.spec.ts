@@ -106,6 +106,40 @@ test('compression calculator fields are labelled and reachable by keyboard', asy
   await expect(page.getByRole('textbox', { name: /Outer diameter/ })).toBeFocused();
 });
 
+/**
+ * The catalogue art sits in a fixed-height box. It once escaped it — an auto-sized grid row took
+ * the photo's natural height, so the part painted over its own title and the next card — so this
+ * asserts the rendered image (transform included) stays inside the card it belongs to.
+ */
+test.describe('catalogue art stays inside its card', () => {
+  for (const width of [375, 900, 1512, 1920]) {
+    test(`${width}px`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto('/');
+      await page.locator('.cat-art').first().waitFor();
+      const spills = await page.evaluate(() =>
+        [...document.querySelectorAll('.cat-art')].map((art) => {
+          const el = art.querySelector('img, svg');
+          if (!el) return 0;
+          const a = el.getBoundingClientRect();
+          const card = art.closest('.cat-card')!.getBoundingClientRect();
+          return Math.round(
+            Math.max(0, card.top - a.top) +
+              Math.max(0, a.bottom - card.bottom) +
+              Math.max(0, card.left - a.left) +
+              Math.max(0, a.right - card.right),
+          );
+        }),
+      );
+      expect(spills.length).toBeGreaterThan(0);
+      expect(
+        Math.max(...spills),
+        `art spills ${Math.max(...spills)}px out of its card`,
+      ).toBeLessThanOrEqual(1);
+    });
+  }
+});
+
 const widths = [360, 390, 768, 1024, 1280, 1440];
 const overflowPages = [
   { name: 'home', path: '/' },

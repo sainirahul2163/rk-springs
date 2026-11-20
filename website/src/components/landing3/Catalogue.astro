@@ -57,8 +57,16 @@ const photos: Partial<Record<string, { src: ImageMetadata; alt: string }>> = {
  * Wire gauge per spring, in viewBox units. Close-wound types (torsion, extension) take a
  * thinner stroke or adjacent coils merge; open-pitch types carry a heavier wire.
  */
-/** Optical balance so the seven parts read at a comparable size in the grid. */
-const artScale: Record<string, number> = {
+/**
+ * Optical balance so the seven parts read at a comparable size in the grid: each photo frames
+ * its part with a different margin, so some need to sit larger in the box than others.
+ *
+ * These are relative weights, not absolute scales. They are normalised below so the largest is
+ * exactly 1 and every part is then scaled *down* from a photo already fitted to the art box —
+ * which keeps the balance the eye sees while making it impossible for a part to paint outside
+ * its card.
+ */
+const artWeight: Record<string, number> = {
   torsion: 1.22,
   doubleTorsion: 1,
   extension: 1,
@@ -67,6 +75,11 @@ const artScale: Record<string, number> = {
   spiral: 1.06,
   wireForm: 1.04,
 };
+
+const maxWeight = Math.max(...Object.values(artWeight));
+const artScale = Object.fromEntries(
+  Object.entries(artWeight).map(([k, v]) => [k, +(v / maxWeight).toFixed(3)]),
+) as Record<string, number>;
 
 const gauge: Record<string, number> = {
   torsion: 4.6,
@@ -212,6 +225,13 @@ const catalogue = [...products, wireFormsItem].map((p, i) => ({
   .cat-art {
     position: relative;
     display: grid;
+    /*
+     * One row, tied to this box's own height. Without it the implicit row is auto-sized, so it
+     * grows to the photo's natural height (279 px against a 196 px box) — and a percentage
+     * max-height on the art then resolves against that overflowing row instead of this box,
+     * which is how the parts came to paint over their own title and the next card.
+     */
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
     place-items: center;
     margin: 18px 0 22px;
     padding-block: 6px;
@@ -223,13 +243,15 @@ const catalogue = [...products, wireFormsItem].map((p, i) => ({
     position: relative;
     width: 100%;
     height: auto;
+    /* Fit the box first, then apply the optical scale, which is never above 1. */
+    max-width: 100%;
+    max-height: 100%;
     transform: scale(var(--art-scale, 1));
     transition: transform 320ms var(--ease-out);
   }
 
   .cat-card :global(.cat-photo) {
-    max-width: 100%;
-    max-height: 100%;
+    height: 100%;
     object-fit: contain;
     filter: drop-shadow(0 14px 16px rgb(0 0 0 / 0.55));
   }

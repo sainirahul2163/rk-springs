@@ -632,3 +632,28 @@ with amber dimensions on the blueprint grid — and all 38 cards plus the defaul
 
 Not re-measured: Lighthouse and mobile LCP/CLS. The change is CSS-only and ships no new JavaScript
 or requests, but `npm run lh` is still worth running before launch.
+
+## 20. Catalogue product photos escaping their cards (20 Nov 2026)
+
+- **Reported from the live site:** on the homepage catalogue the parts painted over their own
+  titles and into the next card — the tension spring covered "Tension / extension springs", the
+  compression spring crossed into card 04, the torsion spring's leg ran past the card edge.
+- **Cause.** The art box is `height: 196px` with `display: grid`, but its single row was implicit
+  and therefore **auto-sized**, so the row grew to each photo's natural height — 279 px against a
+  196 px box. The `max-height: 100%` meant to contain the photo then resolved against that
+  overflowing row instead of the box, so it never clamped anything. Measured in the browser: the
+  row computed to 278.7 px and the image overflowed its card by 83 px.
+- **Fix, in two parts:**
+  1. `grid-template: minmax(0, 1fr) / minmax(0, 1fr)` ties the row to the box's own height, so a
+     percentage inside resolves against 184 px as intended.
+  2. The per-part optical scale is now a set of **relative weights, normalised so the largest is
+     exactly 1**. Each photo is fitted to the box first and then scaled *down* from there. The
+     balance the eye sees is unchanged — torsion still reads largest, at the same ratio to the
+     others — but a part can no longer be scaled past the edge of its own card.
+- Verified at 360, 390, 768, 1024, 1280, 1512, 1920 px: every one of the seven parts sits inside
+  its card, 0 px spill, and no horizontal page overflow. A sweep of every `img` and `svg` on the
+  homepage, a product page and the springs hub found nothing else overflowing its parent.
+- **Regression test added** (`tests/e2e/a11y.spec.ts`, four widths). It was checked against the
+  broken code first: it fails at all four widths there — including 375 px, so this was happening on
+  phones as well — and passes on the fix.
+- `npm run check` 0/0/0; `npm run build` 41 pages, 0 errors, 0 warnings; Vitest 62; Playwright 48.
