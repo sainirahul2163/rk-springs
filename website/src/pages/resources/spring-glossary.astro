@@ -20,9 +20,9 @@ const glossary = glossaryTerms.map((t) => ({
 >
   <article class="container-page pb-16">
     <header class="max-w-[46rem] pt-6 pb-8">
-      <p class="eyebrow mb-3 text-blue-700">Resource</p>
+      <p class="eyebrow eyebrow-rule mb-3 text-amber">Resource</p>
       <h1 class="text-h1">Spring glossary</h1>
-      <p class="mt-4 text-lead text-slate">
+      <p class="mt-4 text-lead text-text-2">
         {glossaryTerms.length} terms. Each has an anchor so a product page or a guide can link
         straight to it. Definitions are general engineering language, not lab claims.
       </p>
@@ -92,15 +92,15 @@ const glossary = glossaryTerms.map((t) => ({
     min-height: 44px;
     display: inline-grid;
     place-items: center;
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-control);
-    color: var(--color-blue-700);
+    color: var(--color-amber);
     font-family: var(--font-mono);
     font-weight: 500;
   }
 
   .letters a:hover {
-    background: var(--color-blue-50);
+    background: var(--color-panel);
   }
 
   .letter-block {
@@ -110,17 +110,17 @@ const glossary = glossaryTerms.map((t) => ({
 
   .term {
     padding: 16px 0;
-    border-bottom: 1px solid var(--color-grid);
+    border-bottom: 1px solid var(--color-line-2);
   }
 
   dt {
     font-weight: 600;
-    color: var(--color-navy-900);
+    color: var(--color-text);
     scroll-margin-top: calc(var(--header-h) + 16px);
   }
 
   dd {
     margin-top: 6px;
-    color: var(--color-ink);
+    color: var(--color-text-2);
   }
 </style>

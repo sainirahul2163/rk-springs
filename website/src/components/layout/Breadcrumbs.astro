@@ -36,9 +36,10 @@ const items = trail(route);
     align-items: center;
     gap: 2px 0;
     font-family: var(--font-mono);
-    font-size: 0.8125rem;
-    letter-spacing: 0.02em;
-    color: var(--color-slate);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-3);
   }
 
   li {
@@ -49,24 +50,29 @@ const items = trail(route);
   li + li::before {
     content: '/';
     margin-inline: 10px;
-    color: var(--color-border-strong);
+    color: var(--color-line-2);
   }
 
   a {
     display: inline-flex;
     align-items: center;
     min-height: 32px;
-    color: var(--color-blue-700);
+    color: var(--color-text-2);
     text-decoration: underline;
+    text-decoration-color: var(--color-line-2);
     text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
+    text-underline-offset: 0.25em;
+    transition:
+      color 160ms var(--ease-out),
+      text-decoration-color 160ms var(--ease-out);
   }
 
   a:hover {
-    color: var(--color-action-700);
+    color: var(--color-amber);
+    text-decoration-color: var(--color-amber);
   }
 
   [aria-current='page'] {
-    color: var(--color-ink);
+    color: var(--color-text);
   }
 </style>

@@ -53,7 +53,7 @@ const { class: className } = Astro.props;
     display: grid;
     place-items: center;
     aspect-ratio: 16 / 9;
-    border: 1px solid var(--color-grid);
+    border: 1px solid var(--color-line-2);
     border-radius: var(--radius-card);
     overflow: hidden;
   }
@@ -66,7 +66,7 @@ const { class: className } = Astro.props;
   .ring,
   .hair {
     fill: none;
-    stroke: var(--color-action-600);
+    stroke: var(--color-amber);
     stroke-width: 1;
   }
 
@@ -75,7 +75,7 @@ const { class: className } = Astro.props;
   }
 
   .dot {
-    fill: var(--color-action-600);
+    fill: var(--color-amber);
   }
 
   .loc-label {
@@ -84,20 +84,20 @@ const { class: className } = Astro.props;
     bottom: 14px;
     display: grid;
     gap: 2px;
-    background: var(--color-white);
-    border: 1px solid var(--color-border);
+    background: var(--color-panel);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-control);
     padding: 8px 12px;
   }
 
   .loc-label .eyebrow {
-    color: var(--color-blue-700);
+    color: var(--color-amber);
   }
 
   .loc-place {
     font-family: var(--font-mono);
     font-size: 0.9375rem;
-    color: var(--color-navy-900);
+    color: var(--color-text);
   }
 
   .loc-cap {
@@ -106,6 +106,6 @@ const { class: className } = Astro.props;
     gap: 12px;
     margin-top: 14px;
     font-size: 0.9375rem;
-    color: var(--color-ink);
+    color: var(--color-text-2);
   }
 </style>

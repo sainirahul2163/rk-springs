@@ -102,8 +102,8 @@ const cells: { k: string; v: string; wide?: boolean }[] = [
 <style>
   .ftr {
     margin-top: auto;
-    background: var(--color-navy-950);
-    color: var(--color-blue-300);
+    background: var(--color-sheet);
+    color: var(--color-text-2);
     padding-top: 64px;
     padding-bottom: calc(24px + var(--mobile-bar-h));
   }
@@ -163,14 +163,14 @@ const cells: { k: string; v: string; wide?: boolean }[] = [
   }
 
   .ftr-contact :global(svg) {
-    color: var(--color-blue-400);
+    color: var(--color-amber);
     flex: none;
   }
 
   .ftr-contact a {
-    color: var(--color-white);
+    color: var(--color-text);
     text-decoration: underline;
-    text-decoration-color: var(--color-blue-400);
+    text-decoration-color: var(--color-amber);
     text-underline-offset: 0.2em;
     min-height: 32px;
     display: inline-flex;
@@ -178,11 +178,11 @@ const cells: { k: string; v: string; wide?: boolean }[] = [
   }
 
   .ftr-contact a:hover {
-    color: var(--color-blue-300);
+    color: var(--color-text-2);
   }
 
   .ftr-head {
-    color: var(--color-white);
+    color: var(--color-text);
     margin-bottom: 12px;
   }
 
@@ -195,11 +195,11 @@ const cells: { k: string; v: string; wide?: boolean }[] = [
     align-items: center;
     min-height: 36px;
     font-size: 0.9375rem;
-    color: var(--color-blue-300);
+    color: var(--color-text-2);
   }
 
   .ftr :global(a.ftr-link:hover) {
-    color: var(--color-white);
+    color: var(--color-text);
     text-decoration: underline;
     text-underline-offset: 0.2em;
   }
@@ -208,14 +208,14 @@ const cells: { k: string; v: string; wide?: boolean }[] = [
   .tblock {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    border: 1px solid color-mix(in srgb, var(--color-blue-300) 45%, transparent);
+    border: 1px solid var(--color-line-2);
     font-family: var(--font-mono);
   }
 
   .tb-cell {
     padding: 10px 12px;
-    border-right: 1px solid color-mix(in srgb, var(--color-blue-300) 45%, transparent);
-    border-bottom: 1px solid color-mix(in srgb, var(--color-blue-300) 45%, transparent);
+    border-right: 1px solid var(--color-line-2);
+    border-bottom: 1px solid var(--color-line-2);
     margin: 0 -1px -1px 0;
   }
 
@@ -227,13 +227,13 @@ const cells: { k: string; v: string; wide?: boolean }[] = [
     font-size: 0.6875rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--color-blue-300);
+    color: var(--color-text-2);
   }
 
   .tb-cell dd {
     margin-top: 2px;
     font-size: 0.875rem;
-    color: var(--color-white);
+    color: var(--color-text);
     overflow-wrap: anywhere;
   }
 

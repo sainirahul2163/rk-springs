@@ -15,15 +15,18 @@ export type BaseProps = SEOProps & {
   context?: string | undefined;
   /** Hide the mobile action bar (the RFQ page has its own submit). */
   hideActionBar?: boolean | undefined;
-  /** Extra class on <html> (used by /landing so its theme stays isolated). */
-  htmlClass?: string | undefined;
+  /**
+   * Palette. 'sheet' is the site's engineering-sheet theme; 'blue' re-points the tokens at the
+   * earlier blue-and-white scale and is used only by the `/landing3/` design preview.
+   */
+  theme?: 'sheet' | 'blue' | undefined;
 };
 
-const { context, hideActionBar = false, htmlClass, ...seo } = Astro.props as BaseProps;
+const { context, hideActionBar = false, theme = 'sheet', ...seo } = Astro.props as BaseProps;
 ---
 
 <!doctype html>
-<html lang="en-IN" class:list={[hideActionBar && 'no-mab', htmlClass]}>
+<html lang="en-IN" class:list={[hideActionBar && 'no-mab', theme === 'blue' && 'theme-blue']}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -45,10 +48,10 @@ const { context, hideActionBar = false, htmlClass, ...seo } = Astro.props as Bas
       });
     </script>
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/brand/favicon-rk.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
-    <meta name="theme-color" content="white" />
+    <meta name="theme-color" content={theme === 'blue' ? '#ffffff' : '#08090b'} />
     <meta name="format-detection" content="telephone=no" />
     <slot name="head" />
   </head>

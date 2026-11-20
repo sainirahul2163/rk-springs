@@ -11,7 +11,7 @@ Pages flagged **draft-gated** are built but excluded from the production build, 
 
 | # | URL | Template | Phase | Status | Client input it depends on |
 |---|---|---|---|---|---|
-| 1 | `/` | Home | 2 | draft | ZED level/PDF, map pin, main phone |
+| 1 | `/` | Home — engineering-sheet design since 20 Nov 2026 (§18) | 2 | draft | ZED level/PDF, map pin, main phone |
 | 2 | `/springs/` | Hub | 2 | draft | — |
 | 3 | `/springs/torsion-springs/` | Product | 2 | draft | Leg types made, finishes via partners, max OD/length |
 | 4 | `/springs/double-torsion-springs/` | Product | 2 | draft | Same as torsion + centre-loop limits |
@@ -53,6 +53,7 @@ Pages flagged **draft-gated** are built but excluded from the production build, 
 | 40 | `/terms/` | Legal | 2 | draft | Legal review |
 | 41 | `404` | Utility (noindex) | 2 | draft | — |
 | — | `/styleguide/` | Internal (noindex) | 1 | draft | Logo (wordmark and favicon are temporary) |
+| — | `/landing3/` | Design preview (noindex) — the earlier blue-and-white homepage, §18 | — | draft | — |
 
 ## 2. Open TODO(client) items
 
@@ -138,6 +139,7 @@ Added in Phase 6:
 - Product pages are 900–1,300 words. They explain common engineering facts (wind direction, hook failure, spring index) without claiming a lab, CNC list, ISO, PPAP or named customers.
 - Two-wheeler work is mentioned only as a common application of the type, with a TODO before we treat it as a regular RK product.
 - Industry, tool and resource teasers on Home render as cards; they are not links until those pages exist.
+- Homepage hero visual updated 25 Oct 2026 with the supplied spring isolated on transparency and restored technical callouts for the wire range, left/right coils, centre loop and leg span. The original hero copy and all other homepage sections are unchanged.
 
 ## 6. Phase 3 notes
 
@@ -185,7 +187,251 @@ Added in Phase 6:
 - Lighthouse is `npm run lh`: gzip on the preview server (as Vercel does), fresh Chrome per page, median of 3 simulated-mobile runs.
 - No `TODO(client)` is visible in the production HTML. `npm run todo` still lists 49 markers for you.
 
-## 11. SEO pass (23 Oct 2026)
+## 11. `/landing/` homepage redesign (21 Oct 2026; removed 25 Oct 2026)
+
+- The client did not like the original homepage look, so `/landing/` now holds a new homepage layout for review. **The live `/` is untouched.** It's noindex and kept out of the sitemap, so it can't compete with `/` in search.
+- Layout follows a typical industrial-supplier homepage. A dark blueprint hero with the double torsion drawing redrawn white-on-navy. A row of key figures (wire range, 24 h quote, usual batch, since 2017). A registrations strip (ZED, Udyam, GSTIN). Datasheet-style product cards, with torsion and double torsion marked "Specialist". A shop-floor capability block with a to-scale wire-gauge drawing. Then industries, a six-step process, an RFQ checklist with direct contact details, the factory block and the FAQ.
+- Every fact comes from `site.ts`, `navigation.ts` and `faqs.ts`. No new claims. "Our highest-volume parts" is based on CLIENT-PROFILE §2, which ranks products by volume.
+- Zero client JS. Only token colours, no hex values. The hero drawing's reveal animation is turned off on this page because it sometimes left the drawing blank when it ran off-screen on phones.
+- Files: `src/pages/landing.astro`, `src/components/landing/*`, `src/styles/landing.css`.
+- Removed on 25 Oct 2026 at Rahul’s request, including its dedicated components/styles, route registry entry, sitemap exclusion and smoke-test entry. The notes above describe the former preview.
+
+## 12. `/landing2/` homepage concept (removed 25 Oct 2026)
+
+- The uncommitted alternative homepage concept has been removed at Rahul’s request, together with `/landing/`. Neither preview is part of the current site.
+
+## 13. Homepage hero visual refinement (25 Oct 2026)
+
+- **Status: ready for visual review.** This is a bounded refinement of the homepage hero from `c063221`, not a new build phase. No deployment or publication.
+- Studied the current hero and [Jai Shree Group](https://jaishreegroup.com/) for its layered industrial geometry and motion treatment. RK uses original open wire contours in the existing blue-and-white tokens.
+- Replaced the rectangular blueprint grid, title block, dimension arrows and all technical callouts with a soft blue backdrop and fine SVG wire turns behind the supplied photo. A simple “Double torsion spring” caption sits below the photo; there are no labels over the spring.
+- Preserved the heading, supporting copy, CTA markup, trust facts, image source, image dimensions, alt text and image delivery settings. The real photo remains stationary and unchanged. No new factual claims or client TODOs.
+- Background turns move through a small compression/release range over 16–18 seconds. A keyboard-accessible native checkbox pauses/resumes the motion, with a visible focus ring and 44 px label target. Animation is enabled only under `prefers-reduced-motion: no-preference`; reduced-motion styles keep a static composition and hide the unnecessary control. Mobile renders only one of the two wire groups.
+- Zero additional client JavaScript and no dependencies. All new colours reference existing tokens. No stock or generated photos, filters, canvas, or animation libraries.
+- Reviewed the local hero at 360, 390, 768, 1024, 1280 and 1440 px. No horizontal overflow observed. Checked the production desktop/mobile composition, photo clearance, caption placement, pause via click, resume via keyboard, focus visibility and control heights. Reduced-motion behaviour was reviewed in CSS; browser preference emulation was not available. Preview captures: `website/.screens/hero-desktop.jpg` and `website/.screens/hero-mobile.jpg` (gitignored).
+- Validation: `npm run check` passed (0 errors, warnings or hints); `npm run build` passed; `audit-html` reported 42 pages and 0 errors. The existing local noindex configuration produces 0 sitemap URLs. `npm run js-budget` passed (homepage 6.9 KB under the script's counting method, including inline schema). Mobile 4G LCP/CLS were not remeasured in this visual pass.
+- Scope: `website/src/components/home/HomeHero.astro` and this review entry only. Existing `/landing2/` work and prior review-file edits are preserved; `/landing/` and the rest of the homepage are untouched.
+
+- Headline follow-up (25 Oct 2026): changed the main headline to “Your design. Our springs.” at Rahul’s request, with “Spring & wire-form manufacturer in Pune” below it within the same H1. This reflects the confirmed made-to-drawing capability. Supporting copy, CTAs, photo and motion are unchanged. Reviewed at 1280 px and 390 px with no overflow and exactly one H1. `npm run check` and `npm run build` passed; HTML audit: 42 pages, 0 errors. Ready for review.
+
+- Motion visibility follow-up (25 Oct 2026): Rahul could not perceive the background movement. Browser inspection confirmed it was running, with reduced-motion off and pause unchecked; the original movement was too faint and slow. Increased the bounded wire flex from ±2° to ±5°, shortened each half-cycle to 8–10 seconds, slightly strengthened the token-based line gradient, and added a short travelling highlight along one contour per group. The photo remains stationary. All effects stay CSS/SVG-only, pause together, and remain disabled for reduced-motion users. Verified changing transform matrices and highlight offsets, pause/resume, and desktop/mobile appearance. `npm run check` and `npm run build` passed; HTML audit: 42 pages, 0 errors. Ready for review.
+
+- Hero photo quality follow-up (25 Oct 2026): the supplied source is 1006 × 885 px. Created a non-generative 3840 × 3378 px upscale with Lanczos resampling, light sharpening and lossless WebP storage at `website/src/assets/polished-stainless-steel-torsion-springs-hero-4k.webp` (2.61 MiB). This is an upscale, not a native 4K photograph, and does not recover missing captured detail. Original PNG is retained unchanged; product geometry, lighting, framing and transparency are preserved. Raised hero WebP delivery quality from 84 to 98 and added 560/840/1120/1680/2240 px responsive outputs with explicit sizes; the full master is not downloaded by ordinary page views. Output image sizes are approximately 65/112/163/277/409 KiB. Reviewed production desktop (1280 px, DPR 2; 1120 px resource selected) and mobile (390 px) with loaded images and no overflow. `npm run check` and `npm run build` passed; HTML audit: 42 pages, 0 errors. Photo asset and hero image props only; no dependencies or JavaScript added. Ready for review.
+
+- Development-preview fix (25 Oct 2026): the running Astro server at `localhost:4325` returned HTTP 500 for the new 4K image import even though the asset existed and production builds passed. Restarted the existing development server on the same port to clear its stale module-resolution state. Verified HTTP 200 and the loaded hero image in a browser at the exact URL from Rahul’s screenshot, with no error overlay. No source change was needed.
+
+- Responsive annotation restoration (25 Oct 2026): restored CENTRE LOOP, LH COIL, RH COIL, WIRE RANGE (using the confirmed `site.capability.wireRangeLabel`) and LEG SPAN around the real hero photo at Rahul’s request. The former title box remains removed. Added a square stage with a fixed coordinate system, 4% horizontal photo clearance, short SVG callout leaders, and a simple split leg-span rule below the photo. Labels use HTML text with container-relative sizing and an 11 px minimum; they remain separate from the product and do not move with the decorative animation. Updated responsive image size hints to match the 92%-width photo. No image asset, headline, supporting copy, CTA, or other page changes.
+- Annotation validation: browser review at 320, 360, 390, 768, 1024, 1280 and 1440 px; all five labels stay within the stage, with no horizontal overflow. Reviewed callout endpoints and image clearance on phones, tablet and desktop, plus the development preview at `localhost:4325`. `npm run check` passed (0 errors/warnings/hints); `npm run build` passed; HTML audit: 42 pages, 0 errors. Updated captures: `website/.screens/hero-labels-desktop.jpg` and `website/.screens/hero-labels-mobile.jpg`. Ready for review; no deployment.
+
+- Hero viewport and control refinement (25 Oct 2026): removed the pause/resume checkbox, label and their styles at Rahul’s request. The CSS/SVG wire effect now runs once and settles by 4.8 seconds, with the travelling highlight fading out; reduced-motion users keep a static background. No persistent animation remains that requires a pause control.
+- Reduced hero padding and copy spacing; removed oversized trust-block reserved heights; made trust facts compact; sized the art to the available viewport height with a lower bound that protects annotation legibility. Two-column composition now starts at 768 px, with compact tablet typography/buttons and short-screen spacing. CTA touch targets remain at least 44 px. The real photo, headline, supporting copy, links and all five labels remain present. Mobile keeps a readable vertical flow rather than clipping or shrinking the full content into one screen.
+- Verified full hero bottom at or above the viewport bottom in the development preview at 768×650, 768×768, 768×1024, 1024×650, 1024×768, 1280×600, 1280×650, 1280×720, 1366×768 and 1440×900. In particular, the complete hero ends at 720 px on a 1280×720 laptop. Mobile 360/390 px retains a natural vertical layout, with no horizontal overflow or awkward trust-label wrapping; the narrowest 320 px trust list uses one column. Confirmed no pause control remains and the background settles to its final transform. `npm run check` and `npm run build` pass; HTML audit: 42 pages, 0 errors. Screenshot: `website/.screens/hero-fit-laptop.jpg`. Scope remains HomeHero and these notes; no deployment. Ready for review.
+
+
+## 14. Remove alternative homepage previews (25 Oct 2026)
+
+- Removed `/landing/` and the uncommitted `/landing2/` concept at Rahul’s explicit request. Deleted their dedicated Astro pages, components, CSS and landing2 data. Removed preview route registrations, sitemap exclusions, the former landing smoke-test entry and the unused layout theme-class prop.
+- Retained the completed homepage hero work from this chat, including its original photo and non-generative upscale, responsive annotations, revised headline, compact viewport layout and one-time wire animation. Unrelated `.claude/` and `SEO-MASTER-PLAYBOOK.md` files remain outside the commit.
+- Validation: `npm run check` and `npm run build` pass. The HTML audit reports 40 pages and 0 errors. Neither preview appears in build output. Local development HTTP checks: `/` → 200; `/landing/` → 404; `/landing2/` → 404. No remaining preview references in runtime source, config or tests.
+- Publish scope: commit and push the current `landing-redesign` branch to GitHub, as requested. No deployment command or merge into `main`.
+
+
+## 15. Homepage factory/contact section redesign (25 Oct 2026)
+
+- **Status: ready for visual review.** Replaced the homepage factory section’s full-page blueprint grid with a deep navy gradient and quiet SVG wire contours. Added a larger location heading, a white address/contact panel, and a contrasting working-hours panel. The design uses existing tokens, borders and inline SVG only; no shadows, photos, client JavaScript or dependencies were added.
+- Extracted the section into `website/src/components/home/HomeFactory.astro` and replaced only its former markup/styles in `website/src/pages/index.astro`. The hero, all other homepage sections, shared components, metadata and JSON-LD are untouched.
+- Preserved the brand/legal line, full address, both phone numbers, both email addresses, GSTIN, Udyam, weekly schedule, phone/WhatsApp/email actions and the Talawade/PCMC page link. All facts still come from `site.ts`; main-phone and main-email client TODOs remain in development only. Hours are grouped in the weekly table, with Thursday closure called out in text. The dispatch line uses the confirmed ex-works terms. No unconfirmed map pin, live opening status or new business claim.
+- Visual/responsive checks at 320, 360, 390, 768, 900, 1024, 1280 and 1440 px found no horizontal overflow or overflowing contact/table content. Contact links have 44 px targets; action buttons have 48 px targets. Checked keyboard focus on the white panel and explicitly retained an action-blue outline there. Light text uses approved blue/white tokens on the dark background; the white panel retains dark text. Static decoration requires no motion preference override.
+- `npm run check` passed (0 errors/warnings/hints); `npm run build` passed; HTML audit: 40 pages, 0 errors. Production and development browser checks completed. Captures: `website/.screens/factory-desktop.jpg` and `website/.screens/factory-mobile.jpg`. No commit, push or deployment in this refinement.
+
+- GitHub follow-up (28 Oct 2026): Rahul requested that the factory/contact redesign be committed and pushed. Re-ran `npm run check` and `npm run build` successfully; HTML audit: 40 pages, 0 errors. Commit scope is this review entry, `HomeFactory.astro` and its homepage integration. The earlier hero/preview-removal commit is already on `origin/landing-redesign`. Unrelated local files remain excluded; no merge to `main` or deployment command.
+
+## 16. `/landing3/` homepage concept (3 Nov 2026)
+
+- **Status: ready for visual review. No deployment, no commit.** The client rejected the current homepage look, so `/landing3/` holds a third, deliberately different concept. **The live `/` is untouched** — no homepage file, shared component, token or data file was edited. The only change to an existing file is one line in `astro.config.mjs` adding `/landing3/` to `sitemapExclude`.
+- The page is `noindex, nofollow` with a self-referencing canonical and is kept out of the sitemap, so it cannot compete with `/` in search.
+- **Deliberate token exception.** At Rahul's explicit instruction ("ignore the colour palette"), this page sets aside the blue-and-white tokens of AGENTS.md §6 and CURSOR-BUILD-PROMPT.md §4. Its palette — graphite base, warm drawing-paper panels, a single amber annotation accent — is declared once under a `.l3` scope in `Landing3Layout.astro` and is used nowhere else. Verified: the built homepage CSS bundles contain zero references to the new variables.
+- **Concept: an engineering sheet, not a brochure.** Sections in order: hero with the real spring photo in a CAD-style viewport plus a four-figure readout rail (wire range, MOQ, 24 h quote, since 2017); three proof statements; a seven-product catalogue using the existing SVG technical drawings re-tinted for a dark sheet; the capability data rendered as a drawing frame with zone markers, an annotated part view, a first-angle projection symbol and an ISO 7200-style title block; a six-step process rail; industries and a materials table; a "who makes them" block; a "what we don't do" block; calculators and guides; contact.
+- **No new facts.** Every value is read from `site.ts` and `navigation.ts`. The quote "Quality, and development of critical parts with tight tolerances" is CLIENT-PROFILE §5 verbatim, attributed as the reason customers give. The 8–10 new parts per month figure is CLIENT-PROFILE §3 capacity, framed as attention per job. The referral-only line is CLIENT-PROFILE §5.
+- **"What we don't do" is new editorial, not a new claim.** It states the limits already in CLIENT-PROFILE: no wire above 2.50 mm, no rolling-shutter or agriculture springs, no in-house plating, no ISO 9001 or IATF 16949 (ZED only), no testing laboratory, no export today. Nothing here asserts a capability.
+- Open client TODOs are surfaced through `<Todo>` as usual (surname, ZED level and PDF, machine list, map pin, main phone, main email). They render in development and review builds only; the production build contains zero `data-todo` occurrences.
+- **Performance:** zero client JavaScript (0 `<script>` tags in the built page). 99.8 KB raw / 17.3 KB gzipped, lighter than the current homepage at 132.2 KB / 22.3 KB. Reuses the already-installed Plex Sans 500/700 and Plex Mono 500 cuts — no new dependency. Scroll reveals use `animation-timeline: view()` behind `@supports` and `prefers-reduced-motion`, so content is simply visible where that is unsupported.
+- **Accessibility:** exactly one H1; no links without an accessible name; no horizontal overflow at 375 px (document scrollWidth equals viewport width); all interactive targets at least 44 px after raising the footer, maker and header link heights; product cards are fully clickable (333 × 404 px) via an overlay span rather than nested interactive elements; closed days are marked with a dashed border and strike-through, never colour alone; dark-page text pairs were contrast-checked (body 7.6:1, amber 8.2:1, dimmest text 5.5:1, amber-on-paper uses a darkened ink at 5.2:1).
+- The dev-only `<Todo>` and `<PhotoPlaceholder>` components ship light-on-white for the live site, so they are re-tinted for the dark page inside the `.l3` scope — the client review build is exactly where they are visible.
+- Files: `website/src/pages/landing3.astro`, `website/src/layouts/Landing3Layout.astro`, `website/src/components/landing3/*` (Header, Footer, Mark, Hero, Proof, Catalogue, SpecSheet, Process, Markets, Maker, Resources, Contact).
+- Validation: `npm run check` passed (0 errors, warnings or hints; Prettier clean); `npm run build` passed; HTML audit: 41 pages, 0 errors. Console on `/landing3/` is clean.
+
+### 16.1 Real logo adopted on `/landing3/` (3 Nov 2026)
+
+- Rahul supplied the client's actual logo: a photograph of a physical blue cut-out sign (401 × 249 px, white background, drop shadow, uneven colour). It replaces the temporary coil-glyph wordmark on `/landing3/` only. The live site's `Wordmark.astro` and `/favicon.svg` are **untouched**, so `/` still shows the placeholder until the client approves this.
+- **Brand colour measured, not guessed:** the ink sampled to RGB(10, 50, 98) = **`#0A3262`**, a deep navy. The visually-apparent lighter blue was anti-aliasing against the white card.
+- **Redrawn as vector rather than cut out.** The photo was masked on blue-dominance (which rejects the grey drop shadow), upsampled 4×, boundary-traced, and the geometry measured by least squares. Findings: the R's bowl is a **concentric ellipse pair** (outer rx 46.0 / ry 36.2, tangent to the cap line; inner rx 16.9 / ry 11.7) — circle fits failed, ellipses fit to ~0.5 units. The K is a chevron whose arms taper slightly, with a rounded outer point; its parameters were fitted by maximising area overlap.
+- Fidelity of the rebuild against the traced original: **R 96.1%, K 93.8% area overlap (IoU)**. The remainder is the physical sign's own hand-cut irregularity, which is precisely what the redraw removes. Result is **315 bytes of SVG**, resolution-independent, no raster logo shipped to the page.
+- **Colour adaptation.** Brand navy on the graphite page measures 2.3:1 — unusable for the mark. Two tokens were added, both scoped to `.l3`: `--brand: #0a3262` for the light paper panels (11.3:1 on `--paper`) and `--brand-lift: #7fa9de` for the mark on dark (8.2:1 on `--void`). Amber remains the annotation accent, so blue now means *identity* and amber means *technical layer* — a deliberate two-colour system rather than three competing accents. Verified: the homepage CSS bundles contain zero occurrences of the new colours or tokens.
+- The mark also appears in the drawing sheet's title block in true brand navy, which is how a real engineering title block is signed.
+- **Brand assets added** under `website/public/brand/`, usable beyond this site (letterhead, IndiaMART, Justdial, WhatsApp profile, signage): `rk-logo.svg` (navy), `rk-logo-white.svg` (knockout for dark), `favicon-rk.svg` (navy tile, mark knocked out — referenced by `/landing3/` only), and `rk-logo-photo-transparent.png` (the original photo background-removed and flattened to the brand navy, 1220 × 564).
+- Validation: `npm run check` passed (0 errors/warnings/hints, Prettier clean); `npm run build` passed; HTML audit: 41 pages, 0 errors. Page weight 17.4 KB gzipped, still below the current homepage's 22.3 KB, and still 0 KB of JavaScript. All four brand assets serve 200.
+- Open: the client has not supplied a logo **source file**. This vector is a faithful reconstruction from a photo, not the original artwork — worth asking for the AI/CDR/PDF if the sign-maker still has it, before this is used for print.
+
+### 16.2 "What we don't do" replaced with "How we help you" (3 Nov 2026)
+
+- Rahul's direction: a prospect should never be shown what the supplier cannot do; the page should lead with capability and help. The negative block was removed from `/landing3/` and rebuilt as a positive capability section. This reverses the earlier editorial choice recorded in §16.
+- **New section — "How we help you"** (eyebrow "Working with us"), four benefit-framed items, each one a confirmed capability from CLIENT-PROFILE §2–§3, not a new claim:
+  1. *Three critical steps, one roof* — coiling and forming, stress relieving in our own furnace, end grinding; the operations that decide whether a spring holds free length and sits square.
+  2. *We help you choose the wire* — stainless 302/304/316 where damp, oil-tempered under steady load, music wire on request for higher tensile; grade quoted to the application.
+  3. *Finishing arranged, one delivery* — plating and finishing through partners, returned on one quote and one delivery, single order placed with RK.
+  4. *Small, loaded and critical is the day job* — Ø 0.40–2.50 mm, tight tolerances, parts that must work first time in a switch, instrument or small assembly.
+- Closes with an amber CTA panel: "Not sure your part suits us? Send the drawing — you get a straight answer and a price within 24 hours." This keeps the honest fast-qualification benefit of the old block without listing a single negative.
+- **Nothing was made less truthful.** The factual envelope still appears where a buyer needs it — the spec sheet still states the wire range, the MOQ and "Through partners" for plating. Only the framing changed, from enumerating exclusions to stating capability.
+- Three other lines were reframed the same way: the spec-sheet footer now reads "Anywhere inside this envelope, send it over… you will have an answer and a price within 24 hours" (was a list of three product types not made); the spec-sheet partner note now reads "Name the finish on the drawing; it comes back on your quote" (was "We do not plate in-house"); the catalogue's eighth cell now ends "send the drawing — you will have an answer and a price within 24 hours" (was "we will tell you straight whether we can make it").
+- Fixed a rendering bug found during review: "since 2017" rendered as "since2017" because Astro trims whitespace around a line-broken expression. A scan of the whole rendered page for word/digit fusions found no others (the only matches were inside the GSTIN, the email address and "WhatsApp").
+- Validation: `npm run check` passed (0 errors/warnings/hints, Prettier clean); `npm run build` passed; HTML audit: 41 pages, 0 errors. No horizontal overflow at 375 px in the new section (document scrollWidth equals viewport). Still 0 `<script>` tags; page 17.7 KB gzipped.
+
+### 16.3 Catalogue parts rendered as lit steel (3 Nov 2026)
+
+- Rahul's note: the product grid "uses sample generated images" and should show real, high-quality,
+  photographic parts. The flat line drawings did read as generic clip-art on the dark panel.
+- **What was built.** The seven technical drawings are now repainted as lit steel instead of being
+  redrawn: the stroke takes a vertical steel gradient (which gives each coil its cylindrical form)
+  and runs through an SVG `feSpecularLighting` filter that turns a flat stroke into a round, lit
+  wire. New `WireDefs.astro` holds the two gradients and two filters, rendered once per page; the
+  existing `src/components/diagrams/*` are untouched and the live site is unaffected.
+- Per-part tuning: a wire gauge in viewBox units (close-wound torsion and extension take a thinner
+  stroke or the coils merge; compression, conical and wire forms carry a heavier wire) and an
+  optical scale so the seven parts read at comparable size in the grid. Centre lines are hidden —
+  they belong on the spec sheet, not on a product render. Steel tone is neutral grey, matched to the
+  real photograph sharing the same row.
+- **Cost: +0.8 KB gzipped** for the whole treatment (17.7 → 18.5 KB), because it is vector, not
+  bitmaps. Still 0 `<script>` tags and still under the live homepage's 22.3 KB.
+- **These are renders, not photographs, and are not presented as photographs.** No stock image and
+  no generated product photo was used, per AGENTS.md §8. The one genuine photograph the client has
+  supplied — the polished double torsion spring — now appears on card 02 as a real product shot.
+- **Photo slots are data-driven.** `photos` in `Catalogue.astro` maps a diagram key to an imported
+  image; any product without an entry falls back to its render. Adopting a real photo is: drop the
+  file in `src/assets/products/`, import it, add one line. No layout work.
+- **`PHOTO-SHOOT-BRIEF.md` added at the repo root** — a 45-minute phone shoot the client can do
+  himself: window side-light, white paper sweep, settings, a 7-shot product list and an 8-shot
+  factory list, plus the warning not to send by WhatsApp (which compresses away the detail) and the
+  outstanding non-photo items (logo source file, ZED PDF, machine list, map pin).
+- Validation: `npm run check` passed (0 errors/warnings/hints, Prettier clean); `npm run build`
+  passed; HTML audit: 41 pages, 0 errors. No horizontal overflow at 375 px in the grid; all seven
+  renders fit their cards on a phone. Reviewed at 900 px and 1440 px.
+
+### 16.4 Real product photographs adopted on `/landing3/` (3 Nov 2026)
+
+- Rahul supplied six product photographs in `website/public/brand/`. With the double torsion
+  photo already held, all seven catalogue cards now carry a real photograph; the rendered steel
+  illustrations from §16.3 remain in the code as the fallback for any card without one.
+- **Each photo was background-removed, defringed and upscaled**, not used as supplied:
+  - Five were shot on white. Keyed by near-white distance, with a size filter so large near-white
+    regions (the backdrop *and* enclosed loop interiors) go transparent while small specular
+    highlights on the wire stay opaque, plus adjacency handling so JPEG ringing beside the key is
+    treated as backdrop rather than left as white dots.
+  - The matte is contracted and feathered rather than un-premultiplied; un-premultiplying was
+    blowing ringing pixels out to white.
+  - **Defringe:** every non-opaque pixel takes the colour of its nearest opaque neighbour. Without
+    this the old white backdrop sits in the RGB of transparent pixels and bleeds back in whenever
+    the image is resampled — it showed as white speckle around every coil.
+  - The wire form was the hard one: grey backdrop, a cast shadow, and a demonstration mandrel that
+    is not RK's product. Keyed on smooth-and-light regions wherever they occur (a border flood fill
+    cannot reach inside the clip's closed loop), then restricted to the bright zinc so the mandrel
+    and shadow drop out.
+  - Upscaled to a 1600 px long edge with Lanczos, sharpened on the colour channels only — sharpening
+    alpha puts bright speckle on the silhouette.
+  - The spiral spring is a black-oxide part and read as a silhouette on the dark card, so its
+    midtones were lifted (mean luminance 35 → 61). No other photo was colour-graded.
+- Masters stored as WebP with alpha in `src/assets/products/` (51–353 KB each, down from 0.3–2.0 MB
+  as PNG). Astro serves 8–28 KB variants at phone size. The six supplied originals were moved to
+  `src/assets/products/source/` — they were unreferenced in `public/` and would have been deployed
+  and indexable.
+- Card art boxes are now a fixed 196 px so every card's title sits on the same line regardless of a
+  photo's aspect ratio, with a small per-part optical scale.
+- **The page got lighter, not heavier: 18.5 → 15.6 KB gzipped**, because seven inline SVG drawings
+  left the markup. Still 0 `<script>` tags.
+- **Provenance to confirm with the client.** These are studio shots on white seamless, not bench
+  photos from Talawade. Worth confirming they are RK's own parts, or that RK has the right to use
+  them, before launch — AGENTS.md §8 rules out stock photography, and original images are also what
+  earns the Google Business Profile and image-search value. `PHOTO-SHOOT-BRIEF.md` still stands for
+  getting bench photos of the real parts.
+- Validation: `npm run check` passed (0 errors/warnings/hints, Prettier clean); `npm run build`
+  passed; HTML audit: 41 pages, 0 errors. At 375 px: no horizontal overflow, all 7 images load, and
+  the browser selects the 292 px variants rather than the masters.
+
+### 16.5 Pointer-reactive hero (3 Nov 2026)
+
+- Rahul's brief: the hero is too simple; make it react to the cursor, in a way that suits the
+  industry, without making the page lag.
+- **The interaction is a CAD probe**, which is the on-brand choice for a spring maker — the part sits
+  in a viewport and the cursor behaves like a measuring probe over it:
+  - A fine amber crosshair with a target ring tracks the pointer across the stage.
+  - A live coordinate readout (`X +012.4  Y −008.1 mm`) in the bottom-left corner, the stage mapped
+    to a 120 × 110 mm sheet with the datum at centre. It reads out the viewport, exactly as CAD
+    does; it asserts nothing about the part.
+  - A light you carry with the cursor: a screen-blended radial that lifts the blueprint grid and
+    the steel as it passes.
+  - Depth parallax at four rates — backdrop glow −26 px, grid −7 px, the part +13 px, the corner
+    tags +19 px — so the part separates from the frame as you move.
+  - The corner crop marks brighten and thicken while the probe is in the frame.
+- **How it stays cheap.** One passive `pointermove` listener on the stage, which only stores the
+  coordinates. A single `requestAnimationFrame` per frame does one `getBoundingClientRect` read and
+  then writes four custom properties (`--mx`, `--my`, `--nx`, `--ny`) on the hero section. Every
+  effect downstream is a `transform` or an `opacity`, so the work is the compositor's and nothing
+  re-lays-out. No library, no scroll listener, no per-element JS.
+- **Measured, not assumed.** Driving synthetic pointer events at ~120 Hz for one second: frame
+  interval median 16.7 ms, p95 17.3 ms, versus 16.7/16.8 ms idle — a held 60 fps. One frame of 69
+  exceeded 20 ms, attributable to the measurement harness starting its own interval.
+- **Cost: 1,760 B of inline JS (720 B gzipped)**, the page's only script. Against the AGENTS.md §4
+  budget of under 100 KB that is 0.7%, and there is no extra request because it is inline.
+- **Does nothing where it should not.** The script returns before attaching any listener when the
+  pointer is coarse or the user prefers reduced motion — verified at 375 px, where it writes no
+  custom property and sets no state, so phones do no work at all. A `prefers-reduced-motion: reduce`
+  block also resets every parallax transform; that path is enforced in code and CSS but was not
+  browser-emulated in this session.
+- The hero image's entry animation was switched from `transform` to the individual `scale` and
+  `rotate` properties, so its `both` fill no longer overrides the parallax translate.
+- Validation: `npm run check` passed (0 errors/warnings/hints, ESLint and Prettier clean);
+  `npm run build` passed; HTML audit: 41 pages, 0 errors. Page 16.2 KB gzipped. No horizontal
+  overflow in the hero at 375 px.
+
+### 16.6 Hero interaction rebuilt as a wire field (3 Nov 2026)
+
+- Rahul rejected the §16.5 CAD probe as not good enough. Fair: a 1 px crosshair and a coordinate
+  readout are a clever idea but almost nothing to *look* at, and the effect was confined to the
+  small viewport box rather than the whole hero. Replaced, not tuned.
+- **The new idea is the company's own process.** Move the pointer anywhere in the hero and the
+  wire coils around it:
+  - A staggered grid of ~750 points covers the whole hero. Each draws a short arc **centred on the
+    pointer**, so the field resolves into true concentric rings — a coil being wound, not dashes
+    being tilted. Arc length and brightness fall off with distance over a 400 px reach, and the
+    stored influence eases back so the coil relaxes rather than snapping when the pointer leaves.
+  - The field centre trails the pointer, so the coil winds to catch up instead of being welded to
+    the cursor.
+  - **Two damped springs** (stiffness 0.055 / 0.03) chase the pointer and drive the part and its
+    labels, so the steel overshoots and settles. A spring maker's hero should move like a spring;
+    the previous linear parallax did not.
+  - A screen-blended light travels with the pointer, lifting the grid and glinting off the part,
+    and the viewport's crop marks brighten while the pointer is in the hero.
+- **Why it does not cost anything.** Whatever the grid size, the canvas draws in **four batched
+  paths — four `stroke()` calls per frame**, bucketed by influence. The DOM side is only
+  `transform` and `opacity`, driven through custom properties, so nothing re-lays-out. One passive
+  listener; one `getBoundingClientRect` per move.
+- **Measured.** Driving synthetic pointer events at ~120 Hz across the hero, with 748 grid points on
+  a 2880 × 1750 canvas at DPR 2: frame interval median 16.7 ms, p95 18.1 ms, and **0 of 79 frames
+  over 20 ms** — identical to the idle baseline. A held 60 fps.
+- **It stops when you stop.** The loop ends once the field has relaxed and both springs have
+  settled: 0 `requestAnimationFrame` callbacks in the 1.5 s after settling, so no CPU is burnt
+  while the page sits idle.
+- **Nothing on phones.** With a coarse pointer or reduced motion the script returns before
+  attaching anything — verified at 375 px: the canvas never sizes its backing store, no custom
+  property is written, no state is set.
+- Field held at 0.88 opacity with the brightest band at 0.74 so the coil never competes with the
+  copy it passes under; the text renders above the canvas and stays fully legible.
+- Cost: 5,559 B inline JS (**1,937 B gzipped**), the page's only script — about 2% of the
+  AGENTS.md §4 budget, with no extra request. Page 17.4 KB gzipped.
+- Validation: `npm run check` passed (0 errors/warnings/hints, ESLint and Prettier clean);
+  `npm run build` passed; HTML audit: 41 pages, 0 errors. No horizontal overflow at 375 px.
+
+## 17. SEO pass (23 Oct 2026)
 
 Full record in `SEO-WORK-LOG.md`. What changed, for content review:
 
@@ -205,4 +451,184 @@ Full record in `SEO-WORK-LOG.md`. What changed, for content review:
   - [ ] GBP / IndiaMART / Justdial / LinkedIn URLs for `site.sameAs`.
   - [ ] `sales@rksprings.com` once it exists.
   - [ ] Client OK on allowing AI training crawlers in `robots.txt` (allowed by default, per the blueprint).
-  - [ ] `SEO-MASTER-PLAYBOOK.md` was mentioned but is not in the repo; push it so it can be checked against this pass.
+  - [x] `SEO-MASTER-PLAYBOOK.md` is now in the repo (committed on `landing-redesign`), so it can be checked against this pass.
+
+## 18. Homepage swap: `/landing3/` design promoted to `/` (20 Nov 2026)
+
+- **Status: ready for review. Not deployed, not merged to `main`.** At Rahul's instruction the two
+  homepages changed places: the engineering-sheet concept from §16 is now `/`, and the earlier
+  blue-and-white homepage is now the noindex preview at `/landing3/`. Both designs are unchanged;
+  this was a move, not a redesign.
+- **Files:** `src/pages/index.astro` and `src/pages/landing3.astro` swapped their contents and
+  layouts (`Landing3Layout` ↔ `BaseLayout`). The section components stay where they are — the live
+  homepage is still assembled from `src/components/landing3/*` and the preview from
+  `src/components/home/*`. Renaming those folders was left out on purpose: it would churn the diff
+  without changing a single rendered byte. Worth doing later.
+
+### What was kept so the homepage's SEO did not move
+
+- **Title and meta description are the old homepage's, unchanged:** "Spring Manufacturer in Pune |
+  RK Springs & Wireforms" and the 147-character description. They are the keyword targets from
+  build spec §5 and the 23 Oct SEO pass, and they belong to the URL, not to the design.
+- Canonical `https://www.rksprings.com/`, `index, follow`, and the sitemap entry are unchanged.
+  `lastmod` for `/` moves to 2026-11-20 in `page-dates.ts`, because the visible copy really changed.
+- `/landing3/` stays `noindex, nofollow`, stays out of the sitemap (`astro.config.mjs`), and now
+  carries its own preview title, so it cannot compete with `/`.
+- **New H1 on the homepage:** "The small spring your assembly depends on." The old
+  "Your design. Our springs. / Spring & wire-form manufacturer in Pune" moves to the preview.
+
+### What genuinely changed, and why
+
+- **No more `FAQPage` schema on `/`.** The new homepage has no visible FAQ section, and schema must
+  describe what is on the page. The FAQ content itself is unchanged on the product, location and
+  ordering pages, and `homeFaqs` still renders on the preview. If you want the FAQ block back on
+  the homepage it has to be designed into the new layout first; the schema follows the content.
+- **Two hub links added to the homepage copy** (`components/landing3/Resources.astro`): "All spring
+  calculators" → `/tools/` and "All spring design guides" → `/resources/`. The 23 Oct pass added
+  those links on purpose; without them both hubs would have been reachable from navigation only,
+  which `audit-html` warns about. Nothing else in the design was touched.
+- **Analytics parity:** `Landing3Layout` now renders `<Analytics />` and the `data-event` click
+  listener that `BaseLayout` has. The homepage header already carried `data-event="call_click"`
+  attributes that fired nothing. GA4 and Clarity still load only when their env vars are set.
+- **The mobile action bar is deliberately not on the homepage.** Its header is sticky and carries
+  the phone number and "Request a quote", so the function survives; the bar would sit over a layout
+  that was not designed for it. Flagging it because the old homepage had Call / WhatsApp / Quote
+  pinned to the bottom on phones.
+
+### Share cards (`npm run og`, committed in `public/og/`)
+
+- The card template is drawn in the blue-and-white tokens and is rendered **on top of** a real page.
+  The homepage is now dark, so a `FORCE_BORROW` set in `scripts/make-og.mjs` renders the home card
+  on `/springs/double-torsion-springs/` instead. Only the H1 and the eyebrow come from the page
+  itself, so the card is honest; it shows the double torsion drawing and the brand mark.
+- The borrow fallback for pages with no drawing of their own moved from `/` to
+  `/springs/double-torsion-springs/` for the same reason — about 18 cards used to be rendered on the
+  old homepage.
+- **Bug fixed:** `make-og` stripped HTML tags from an H1 with no space, so a headline split over
+  `<span>` or `<br>` fused into "The small springyour assemblydepends on.". `audit-html` strips with
+  a space, so the two fingerprints could never match and `/` was reported as a stale card no matter
+  how often the cards were rebuilt. Both now use the same rule. The build is at **0 warnings** for
+  the first time since the SEO pass.
+
+### Open points for you
+
+1. **Two palettes on one site.** The homepage uses the `.l3` graphite-and-amber palette; every other
+   page is blue and white. That was fine for a review page and is a real inconsistency now, and it
+   sits outside AGENTS.md §6 and build spec §4. Either roll the new palette through the site, or
+   keep the homepage as a deliberately different front door.
+2. **Favicon and theme colour.** The homepage serves `/brand/favicon-rk.svg` (the client's real
+   logo) with a dark theme colour; the rest of the site still serves the temporary coil mark on
+   white. Decide which is the site-wide mark — adopting the real logo means re-running `npm run og`
+   to re-render the icons and the schema logo.
+3. The `landing3` names (folder, `.l3` class, the `/landing3/` URL) now describe the live homepage
+   and the preview respectively. Renaming is cosmetic and can wait.
+
+### Validation (20 Nov 2026)
+
+| Gate | Result |
+|---|---|
+| `npm run check` (astro check, ESLint, Prettier) | 0 errors, 0 warnings, 0 hints |
+| `npm test` (Vitest) | 62 passed |
+| `npm run test:e2e` (Playwright) | 44 passed |
+| `PUBLIC_SITE_URL=… npm run build` → `audit-html` | 41 pages (38 indexable), 38 sitemap URLs, **0 errors, 0 warnings** |
+| `npm run js-budget` | 0 KB of external JS on content pages; homepage 9.2 KB inline by the script's method (JSON-LD included). Largest island unchanged: RFQ 332 KB |
+| Homepage weight | 98.1 KB raw / 18.8 KB gzipped (the preview, i.e. the old homepage, is 127.8 KB / 21.0 KB) |
+| Overflow | 360, 390, 768, 1024, 1280, 1440 px on `/` — no horizontal scroll |
+| Keyboard | New homepage skip link and `<details>` menu covered by a new Playwright test; the shared-header mega-menu and mobile-nav tests now run on `/springs/torsion-springs/`, which still has that header |
+
+Not re-measured in this pass: Lighthouse and mobile LCP/CLS for the new homepage. Worth running
+`npm run lh` before launch, since the hero art and the pointer-driven wire field differ from the
+page the §5 numbers were taken on.
+
+## 19. The engineering-sheet theme applied to the whole site (20 Nov 2026)
+
+- **Status: ready for review. Not deployed, not merged.** The homepage design was approved, so its
+  look now carries across every other page: the graphite sheet, drawing-paper panels, the single
+  amber annotation accent, mono labels, hairline rules and the real RK monogram. No page's copy,
+  facts, structure or SEO changed — this was a re-skin, not a rewrite.
+
+### How it was done (and why nothing broke)
+
+- The palette moved out of the homepage's scoped block and into `src/styles/global.css` as the
+  site's tokens. Because the build had followed AGENTS.md §6 — every component referencing tokens,
+  never a hex — changing the tokens re-skinned most of the site at once, and the remaining work was
+  pointing each component at the right *semantic* token.
+- The token set is named by surface and role, not by hue: `void → sheet → panel → panel-2` for the
+  dark surfaces, `paper → paper-2` for light panels, `text / text-2 / text-3` on dark, `ink / slate`
+  on paper, `amber` (and `amber-ink` on paper) for the accent, `brand / brand-lift` for identity,
+  `steel` for technical drawings, `line / line-2` for hairlines and `control` for the boundary of an
+  interactive control.
+- `Section` keeps its tone names, so no page needed editing: `white → sheet`, `surface → sheet band`,
+  `tint → panel`, `dark/grid → blueprint grid`, plus a new `paper` tone that flips text, links and
+  drawings for long reading on a light panel.
+- 58 files were converted: the chrome (header, mega-menu, mobile nav, skip link, breadcrumbs,
+  footer, mobile action bar, CTA band), the primitives (section, button, badge, card, section
+  header, chips, Todo, photo placeholder), the content components (spec and materials tables,
+  hours, FAQ, process steps, trust bar, callouts, key takeaways, table of contents, related links,
+  article meta, company details, location map), the five page layouts, the five React islands
+  (calculators and both forms) and fourteen pages with their own styles.
+
+### Decisions worth your attention
+
+1. **The build spec's blue-and-white palette (CURSOR-BUILD-PROMPT.md §4, AGENTS.md §6) is
+   superseded.** It predates the client's choice of this design. The rule it encodes — tokens only,
+   no hex in components — still holds and is still enforced; only the values changed. Those two
+   documents should be updated to match, which is a separate edit to the planning docs.
+2. **The real logo is now the site-wide mark.** `Wordmark` renders the monogram lockup the homepage
+   uses, so the header and footer carry the client's own logo instead of the temporary coil glyph.
+   `Logo` and `Mark` moved to `src/components/layout/`. The favicon is `/brand/favicon-rk.svg` on
+   every page, and `theme-color` is the sheet's graphite.
+3. **`/landing3/`, the parked blue-and-white homepage, still looks exactly as designed.** It sets
+   `theme="blue"`, which re-points the semantic tokens at the old scale for that page only — so the
+   shared components render in the original palette there without a single component knowing about
+   it. `HomeHero` and `HomeFactory`, used only on that page, keep the legacy tokens directly.
+4. **The homepage keeps its own header and footer.** They now look the same as the shared ones
+   (same lockup, same translucent graphite bar, same amber CTA), but the shared header also carries
+   the Springs mega-menu and a Resources link, and the shared footer the full link columns. Worth
+   unifying — I left it alone because it would change the design you approved.
+5. **Long technical reading stays on the dark sheet**, not on paper. The `paper` tone is built and
+   documented for panels that need it; the homepage's spec sheet is the example. Say the word if
+   you want articles and product pages on paper instead.
+
+### Accessibility
+
+Every text pair in use was measured, not assumed (ratios against the surface each one sits on):
+
+| Pair | Ratio |
+|---|---|
+| body text on sheet / on panel | 17.6 : 1 · 15.9 : 1 |
+| lede (text-2) on sheet / on panel | 7.8 : 1 · 7.1 : 1 |
+| captions (text-3) on sheet / on panel | 5.6 : 1 · 5.1 : 1 |
+| amber eyebrow on sheet / on panel | 8.5 : 1 · 7.7 : 1 |
+| H3 and monogram (brand-lift) on sheet | 8.2 : 1 |
+| primary button label on amber / on hover | 8.0 : 1 · 9.4 : 1 |
+| WhatsApp label on green | 8.6 : 1 |
+| error / success / warning on sheet | 7.4 : 1 · 10.2 : 1 · 10.7 : 1 |
+| body / secondary / accent / monogram on paper | 13.1 : 1 · 5.7 : 1 · 5.4 : 1 · 11.3 : 1 |
+| technical drawing (steel) on sheet | 14.3 : 1 |
+
+The first measurement found form inputs and outline buttons outlined in a hairline at 1.75 : 1,
+below the 3 : 1 that WCAG 2.2 SC 1.4.11 asks of a control's boundary. They now use a dedicated
+`control` token at 3.8 : 1 on panel and 4.2 : 1 on the sheet. Decorative dividers stay as hairlines,
+which that rule exempts. The focus ring is amber at 8.5 : 1, and amber-ink on paper.
+
+### Share cards
+
+`scripts/make-og.mjs` drew its card in the blue-and-white tokens. It is now drawn in the sheet
+palette — graphite card, amber spine, the real monogram, the page's own technical drawing in steel
+with amber dimensions on the blueprint grid — and all 38 cards plus the default were re-rendered.
+
+### Validation (20 Nov 2026)
+
+| Gate | Result |
+|---|---|
+| `npm run check` | 0 errors, 0 warnings, 0 hints; ESLint and Prettier clean |
+| `npm test` | 62 passed |
+| `npm run test:e2e` | 44 passed |
+| `PUBLIC_SITE_URL=… npm run build` → `audit-html` | 41 pages (38 indexable), 38 sitemap URLs, 0 errors, 0 warnings |
+| Legacy tokens outside the preview | none (grep over every `.astro`, `.tsx` and `.css`) |
+| Hex values in components | none outside `global.css`, the preview's own two components and the homepage's spec sheet |
+| Reviewed in the browser | homepage, springs hub, torsion product page, measuring guide, compression calculator, RFQ, contact, ordering, switchgear industry page, 404, styleguide, and `/landing3/` — at 1280 px, plus the product page at 375 px |
+
+Not re-measured: Lighthouse and mobile LCP/CLS. The change is CSS-only and ships no new JavaScript
+or requests, but `npm run lh` is still worth running before launch.

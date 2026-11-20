@@ -1,0 +1,409 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import heroSpring from '@/assets/polished-stainless-steel-torsion-springs-hero-4k.webp';
+import compressionImg from '@/assets/products/compression.webp';
+import conicalImg from '@/assets/products/conical.webp';
+import extensionImg from '@/assets/products/extension.webp';
+import spiralImg from '@/assets/products/spiral.webp';
+import torsionImg from '@/assets/products/torsion.webp';
+import wireformImg from '@/assets/products/wireform.webp';
+import ProductDiagram from '@/components/diagrams/ProductDiagram.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { products, wireFormsItem } from '@/data/navigation';
+import { linkTo } from '@/data/routes';
+import { site } from '@/data/site';
+import { quoteHref } from '@/lib/contact';
+import WireDefs from './WireDefs.astro';
+
+/**
+ * Real product photographs, keyed by diagram. Any product without an entry falls back to its
+ * rendered illustration, so photos can be adopted one at a time as the shoot delivers them:
+ * drop the file in `src/assets/products/`, import it, and add a line here.
+ * See PHOTO-SHOOT-BRIEF.md for how the shots need to be taken.
+ */
+const photos: Partial<Record<string, { src: ImageMetadata; alt: string }>> = {
+  torsion: {
+    src: torsionImg,
+    alt: 'Torsion spring with a close-wound coil and a long straight leg',
+  },
+  doubleTorsion: {
+    src: heroSpring,
+    alt: 'Polished stainless steel double torsion spring with two coils and formed legs',
+  },
+  extension: {
+    src: extensionImg,
+    alt: 'Zinc-plated extension spring, close wound, with a machine loop at each end',
+  },
+  compression: {
+    src: compressionImg,
+    alt: 'Zinc-plated compression spring with open coils and ground ends',
+  },
+  conical: {
+    src: conicalImg,
+    alt: 'Conical compression spring whose coils taper so they nest when compressed',
+  },
+  spiral: {
+    src: spiralImg,
+    alt: 'Flat spiral spring wound from strip, with a formed hook on the outer end',
+  },
+  wireForm: {
+    src: wireformImg,
+    alt: 'Zinc-plated R-clip wire form, shown fitted over a pin',
+  },
+};
+
+/**
+ * Wire gauge per spring, in viewBox units. Close-wound types (torsion, extension) take a
+ * thinner stroke or adjacent coils merge; open-pitch types carry a heavier wire.
+ */
+/** Optical balance so the seven parts read at a comparable size in the grid. */
+const artScale: Record<string, number> = {
+  torsion: 1.22,
+  doubleTorsion: 1,
+  extension: 1,
+  compression: 1.04,
+  conical: 1,
+  spiral: 1.06,
+  wireForm: 1.04,
+};
+
+const gauge: Record<string, number> = {
+  torsion: 4.6,
+  doubleTorsion: 4.8,
+  extension: 5.2,
+  compression: 7,
+  conical: 7,
+  spiral: 6.4,
+  wireForm: 7.2,
+};
+
+const catalogue = [...products, wireFormsItem].map((p, i) => ({
+  ...p,
+  index: String(i + 1).padStart(2, '0'),
+  href: linkTo(p.route),
+  photo: photos[p.diagram],
+}));
+---
+
+<section class="cat l3-sec" aria-labelledby="cat-title">
+  <div class="l3-wrap">
+    <header class="l3-head is-split l3-reveal">
+      <div>
+        <p class="l3-mono l3-eyebrow">01 — What we make</p>
+        <h2 id="cat-title" class="l3-h2">
+          Seven shapes of wire.
+          <br />
+          All of them yours.
+        </h2>
+      </div>
+      <p class="l3-lede">
+        We do not sell a catalogue. Every part on this page is coiled to a drawing a customer sent
+        us, in {site.capability.wireRangeLabel} wire. Torsion and double torsion are the bulk of
+        what leaves the unit.
+      </p>
+    </header>
+
+    <WireDefs />
+
+    <ul class="cat-grid l3-reveal">
+      {catalogue.map((p) => (
+        <li class="cat-cell">
+          <article class="cat-card">
+            <p class="l3-mono cat-index">{p.index}</p>
+
+            <div
+              class="cat-art"
+              style={`--wire-w:${gauge[p.diagram] ?? 6};--art-scale:${artScale[p.diagram] ?? 1}`}
+            >
+              {p.photo ? (
+                <Image
+                  class="cat-photo"
+                  src={p.photo.src}
+                  alt={p.photo.alt}
+                  width={560}
+                  widths={[300, 440, 560, 800]}
+                  sizes="(min-width: 1060px) 280px, (min-width: 620px) 34vw, 78vw"
+                  format="webp"
+                  quality={90}
+                  loading="lazy"
+                />
+              ) : (
+                <ProductDiagram name={p.diagram} decorative class="cat-drawing" />
+              )}
+            </div>
+
+            <h3 class="cat-name">
+              {p.href ? (
+                <a href={p.href}>
+                  <span class="cat-hit"></span>
+                  {p.name}
+                </a>
+              ) : (
+                p.name
+              )}
+            </h3>
+            <p class="cat-blurb">{p.blurb}</p>
+
+            <ul class="cat-chips">
+              {p.chips.map((c) => (
+                <li class="l3-mono">{c}</li>
+              ))}
+            </ul>
+
+            {p.href && <Icon name="arrow-up-right" size={18} class="cat-go" />}
+          </article>
+        </li>
+      ))}
+
+      <li class="cat-cell is-cta">
+        <a class="cat-card cat-cta" href={quoteHref('', 'a part that is not on your list')}>
+          <p class="l3-mono cat-index">08</p>
+          <p class="cat-cta-title">Something else bent from wire?</p>
+          <p class="cat-blurb">
+            Clips, hooks, pins, brackets. If it is round wire between 0.40 and 2.50 mm, send the
+            drawing — you will have an answer and a price within 24 hours.
+          </p>
+          <span class="cat-cta-link">
+            Send a drawing
+            <Icon name="arrow-right" size={16} />
+          </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .cat {
+    background: var(--void);
+  }
+
+  .cat-grid {
+    display: grid;
+    gap: 1px;
+    list-style: none;
+    background: var(--line);
+    border: var(--rail);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  .cat-cell {
+    background: var(--ink);
+    transition: background-color 200ms var(--ease-out);
+  }
+
+  .cat-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 26px 24px 24px;
+  }
+
+  .cat-index {
+    color: var(--text-3);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    transition: color 200ms var(--ease-out);
+  }
+
+  .cat-art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    margin: 18px 0 22px;
+    padding-block: 6px;
+    height: 196px;
+  }
+
+  .cat-card :global(.cat-drawing),
+  .cat-card :global(.cat-photo) {
+    position: relative;
+    width: 100%;
+    height: auto;
+    transform: scale(var(--art-scale, 1));
+    transition: transform 320ms var(--ease-out);
+  }
+
+  .cat-card :global(.cat-photo) {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 16px rgb(0 0 0 / 0.55));
+  }
+
+  /*
+   * Repaint the shared technical drawings as lit steel: a vertical gradient for the coil's
+   * cylindrical form, plus the specular filter that rounds each flat stroke into a wire.
+   * Centre lines are hidden — they belong on the spec sheet, not on a product render.
+   */
+  .cat-card :global(.cat-drawing .w) {
+    stroke: url(#rkw-steel);
+    stroke-width: var(--wire-w, 6);
+    vector-effect: none;
+    filter: url(#rkw-3d);
+  }
+
+  .cat-card :global(.cat-drawing .w-back) {
+    stroke: url(#rkw-steel-back);
+    stroke-width: calc(var(--wire-w, 6) * 0.94);
+    opacity: 1;
+    filter: url(#rkw-3d-back);
+  }
+
+  .cat-card :global(.cat-drawing .c) {
+    display: none;
+  }
+
+  .cat-card :global(.cat-drawing) {
+    overflow: visible;
+    filter: drop-shadow(0 12px 14px rgb(0 0 0 / 0.5));
+  }
+
+  .cat-name {
+    font-size: 1.1875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+  }
+
+  .cat-name a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Whole card is the click target, without nesting interactive elements. */
+  .cat-hit {
+    position: absolute;
+    inset: 0;
+  }
+
+  .cat-blurb {
+    margin-top: 10px;
+    color: var(--text-2);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    text-wrap: pretty;
+  }
+
+  .cat-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: var(--rail);
+    list-style: none;
+  }
+
+  .cat-chips li {
+    padding: 4px 8px;
+    border: 1px solid var(--line-2);
+    border-radius: 2px;
+    color: var(--text-3);
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+  }
+
+  .cat-card :global(.cat-go) {
+    position: absolute;
+    top: 24px;
+    right: 22px;
+    color: var(--text-3);
+    opacity: 0;
+    transform: translate(-4px, 4px);
+    transition:
+      opacity 200ms var(--ease-out),
+      transform 200ms var(--ease-out),
+      color 200ms var(--ease-out);
+  }
+
+  .cat-cell:hover {
+    background: var(--panel);
+  }
+
+  .cat-cell:hover .cat-index {
+    color: var(--amber);
+  }
+
+  .cat-cell:hover :global(.cat-go) {
+    opacity: 1;
+    transform: none;
+    color: var(--amber);
+  }
+
+  .cat-cell:hover :global(.cat-drawing),
+  .cat-cell:hover :global(.cat-photo) {
+    transform: scale(calc(var(--art-scale, 1) * 1.05));
+  }
+
+  .cat-cell:has(a:focus-visible) {
+    background: var(--panel);
+  }
+
+  /* --- the closing CTA cell --- */
+
+  .cat-cell.is-cta {
+    background: var(--panel-2);
+  }
+
+  .cat-cta {
+    justify-content: flex-start;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .cat-cta-title {
+    margin-top: 18px;
+    font-size: 1.1875rem;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    color: var(--text);
+    text-wrap: balance;
+  }
+
+  .cat-cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 22px;
+    color: var(--amber);
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .cat-cta-link :global(svg) {
+    transition: transform 200ms var(--ease-out);
+  }
+
+  .cat-cell.is-cta:hover {
+    background: color-mix(in srgb, var(--amber) 12%, var(--panel-2));
+  }
+
+  .cat-cell.is-cta:hover .cat-cta-link :global(svg) {
+    transform: translateX(4px);
+  }
+
+  @media (min-width: 620px) {
+    .cat-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1060px) {
+    .cat-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cat-cell:hover :global(.cat-drawing),
+    .cat-cell:hover :global(.cat-photo) {
+      transform: scale(var(--art-scale, 1));
+    }
+  }
+</style>

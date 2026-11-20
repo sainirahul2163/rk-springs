@@ -1,12 +1,77 @@
 @import 'tailwindcss';
 
 /*
- * Design tokens: CURSOR-BUILD-PROMPT.md §4.
- * This file is the ONLY place colour values may appear. The palette may change once the
- * client's logo arrives, so components must use these tokens via utilities or var(--color-*).
+ * Design tokens.
+ *
+ * The palette is the engineering-sheet one the client approved on the homepage (graphite base,
+ * warm drawing-paper panels, a single amber annotation accent, brand navy for identity). It
+ * replaces the blue-and-white scale of CURSOR-BUILD-PROMPT.md §4 — that document and AGENTS.md §6
+ * predate the client's decision; see CONTENT-REVIEW.md §19.
+ *
+ * This file is the ONLY place colour values may appear. Components use the tokens, never a hex.
+ *
+ * Surfaces, darkest to lightest:  void → sheet → panel → panel-2  |  paper → paper-2 (light)
+ * Text on dark: text / text-2 / text-3.  Text on paper: ink / slate.
+ * Accent: amber on dark, amber-ink on paper. Identity: brand-lift on dark, brand on paper.
+ * Every pair below clears WCAG 2.2 AA (4.5:1 for text, 3:1 for UI).
  */
 @theme {
   --color-*: initial;
+
+  /* --- dark surfaces --- */
+  --color-void: #08090b;
+  --color-sheet: #0d0f12;
+  --color-panel: #14171c;
+  --color-panel-2: #1b1f26;
+  --color-line: #272c34;
+  --color-line-2: #3a414d;
+  /*
+   * Boundary of an interactive control (inputs, outline buttons, the burger). WCAG 2.2 SC 1.4.11
+   * wants 3:1 against both sides: 3.8:1 on panel, 4.2:1 on void. The hairlines above are
+   * decorative dividers, which that rule exempts.
+   */
+  --color-control: #6b7480;
+
+  /* --- light surfaces (drawing paper) --- */
+  --color-paper: #f2f1ed;
+  --color-paper-2: #e6e4dd;
+
+  /* --- text --- */
+  --color-text: #f2f1ed; /* on dark: 16.8:1 on void */
+  --color-text-2: #9aa3b0; /* on dark: 7.6:1 on void */
+  --color-text-3: #808997; /* on dark: 5.5:1 on void */
+  --color-ink: #1f2933; /* on paper: 13.1:1 */
+  --color-slate: #52606d; /* on paper: 6.1:1 */
+
+  /* --- accent --- */
+  --color-amber: #ff8a3d; /* 8.2:1 on void */
+  --color-amber-2: #e8690b;
+  --color-amber-ink: #a84300; /* 5.2:1 on paper */
+  --color-amber-hover: #ffa166;
+  --color-on-amber: #16120d; /* text on an amber fill: 11.9:1 */
+  --color-on-wa: #0b2010; /* text on WhatsApp green: 11.1:1 */
+
+  /* --- identity (sampled from the client's logo) --- */
+  --color-brand: #0a3262; /* 11.3:1 on paper */
+  --color-brand-lift: #7fa9de; /* 8.2:1 on void */
+  --color-steel: #cfdcea; /* technical drawings on dark */
+
+  /* --- state --- */
+  --color-success: #5ad07f;
+  --color-warning: #f0b429;
+  --color-error: #ff6f6f;
+  --color-success-ink: #1b7f3b;
+  --color-warning-ink: #b45309;
+  --color-error-ink: #b42318;
+  --color-whatsapp: #25d366;
+  --color-white: #ffffff;
+
+  /*
+   * Legacy blue-and-white scale. Kept ONLY so `/landing3/` — the earlier homepage, parked as a
+   * design preview — still renders in the look it was designed in. It is applied through
+   * `.theme-blue` (see the base layer) and is referenced by `HomeHero`, `HomeFactory` and that
+   * page alone. Nothing else may use these; the restyle removed every other reference.
+   */
   --color-navy-950: #071a33;
   --color-navy-900: #0b2545;
   --color-blue-800: #123a6b;
@@ -18,29 +83,23 @@
   --color-blue-100: #dce9f8;
   --color-blue-50: #eef4fb;
   --color-grid: #c9daf0;
-  --color-ink: #1f2933;
-  --color-slate: #52606d;
   --color-border-strong: #7b8794;
   --color-border: #e4e7eb;
   --color-surface: #f5f7fa;
-  --color-white: #ffffff;
-  --color-success: #1b7f3b;
-  --color-warning: #b45309;
-  --color-error: #b42318;
-  --color-whatsapp: #25d366;
 
   --font-sans: 'IBM Plex Sans', 'Plex Sans Fallback', ui-sans-serif, system-ui, sans-serif;
   --font-mono:
     'IBM Plex Mono', 'Plex Mono Fallback', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
+  /* Display scale matched to the homepage: heavier and tighter than the original §4.2 scale. */
   --text-h1: clamp(2rem, 1.35rem + 2.6vw, 3.5rem);
-  --text-h1--line-height: 1.1;
-  --text-h1--letter-spacing: -0.015em;
-  --text-h1--font-weight: 600;
-  --text-h2: clamp(1.625rem, 1.3rem + 1.3vw, 2.5rem);
-  --text-h2--line-height: 1.15;
-  --text-h2--letter-spacing: -0.01em;
-  --text-h2--font-weight: 600;
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h1--font-weight: 700;
+  --text-h2: clamp(1.75rem, 1.35rem + 1.6vw, 2.75rem);
+  --text-h2--line-height: 1.08;
+  --text-h2--letter-spacing: -0.025em;
+  --text-h2--font-weight: 700;
   --text-h3: 1.375rem;
   --text-h3--line-height: 1.3;
   --text-h3--font-weight: 600;
@@ -54,13 +113,13 @@
   --text-eyebrow--line-height: 1.4;
   --text-eyebrow--letter-spacing: 0.08em;
 
-  --radius-control: 4px;
-  --radius-card: 8px;
+  --radius-control: 3px;
+  --radius-card: 4px;
 
   --breakpoint-nav: 75rem;
 
-  --shadow-header: 0 1px 10px color-mix(in srgb, var(--color-navy-950) 9%, transparent);
-  --shadow-menu: 0 12px 32px color-mix(in srgb, var(--color-navy-950) 14%, transparent);
+  --shadow-header: 0 1px 12px color-mix(in srgb, #000 55%, transparent);
+  --shadow-menu: 0 16px 40px color-mix(in srgb, #000 60%, transparent);
 
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -113,6 +172,53 @@
   --section-y: 64px;
   --header-h: 64px;
   --mobile-bar-h: 0px;
+
+  /*
+   * Link colours as properties, so a surface can retune them from an ancestor: the `link`
+   * utility and `.prose a` both read these, and utilities outrank any descendant rule.
+   */
+  --link-color: var(--color-text);
+  --link-rule: var(--color-line-2);
+  --link-hover: var(--color-amber);
+
+  /*
+   * Short aliases. The homepage components were authored against these names, and they read
+   * better inside a component's own CSS. Note `--ink` is the dark section surface, while
+   * `--color-ink` is the body text colour used on drawing-paper panels.
+   */
+  --void: var(--color-void);
+  --ink: var(--color-sheet);
+  --panel: var(--color-panel);
+  --panel-2: var(--color-panel-2);
+  --line: var(--color-line);
+  --line-2: var(--color-line-2);
+  --paper: var(--color-paper);
+  --paper-2: var(--color-paper-2);
+  --text: var(--color-text);
+  --text-2: var(--color-text-2);
+  --text-3: var(--color-text-3);
+  --amber: var(--color-amber);
+  --amber-2: var(--color-amber-2);
+  --amber-ink: var(--color-amber-ink);
+  --brand: var(--color-brand);
+  --brand-lift: var(--color-brand-lift);
+  --steel: var(--color-steel);
+  --wa: var(--color-whatsapp);
+  --rail: 1px solid var(--color-line);
+}
+
+/* Links on a drawing-paper panel. */
+[data-surface='paper'] {
+  --link-color: var(--color-brand);
+  --link-rule: color-mix(in srgb, var(--color-brand) 45%, transparent);
+  --link-hover: var(--color-amber-ink);
+}
+
+/* Links in the parked blue-and-white preview. */
+.theme-blue {
+  --link-color: var(--color-blue-700);
+  --link-rule: currentColor;
+  --link-hover: var(--color-action-700);
 }
 
 @media (min-width: 768px) {
@@ -138,8 +244,8 @@
 @layer base {
   html {
     font-family: var(--font-sans);
-    color: var(--color-ink);
-    background: var(--color-white);
+    color: var(--color-text);
+    background: var(--color-void);
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     scroll-padding-top: calc(var(--header-h) + 16px);
@@ -159,7 +265,7 @@
   h2,
   h3,
   h4 {
-    color: var(--color-navy-900);
+    color: var(--color-text);
     font-weight: 600;
     text-wrap: balance;
   }
@@ -169,16 +275,94 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-action-600);
-    outline-offset: 2px;
+    outline: 2px solid var(--color-amber);
+    outline-offset: 3px;
     border-radius: 2px;
   }
 
-  [data-surface='dark'] :focus-visible {
+  ::selection {
+    background: var(--color-amber);
+    color: var(--color-on-amber);
+  }
+
+  /*
+   * Drawing-paper panels. Long technical reading sits on paper inside the dark sheet, the way
+   * the homepage's spec sheet does. Anything inside flips to the paper text and accent pair.
+   */
+  [data-surface='paper'] {
+    color: var(--color-ink);
+  }
+
+  [data-surface='paper'] :is(h1, h2, h3, h4) {
+    color: var(--color-brand);
+  }
+
+  [data-surface='paper'] :focus-visible {
+    outline-color: var(--color-amber-ink);
+  }
+
+  [data-surface='paper'] ::selection {
+    background: var(--color-amber-ink);
+    color: var(--color-paper);
+  }
+
+  /*
+   * The earlier blue-and-white look, kept for the `/landing3/` preview only (BaseLayout
+   * `theme="blue"`).
+   *
+   * Every component reads the semantic tokens, so re-pointing those tokens at the old scale on
+   * one ancestor renders the whole page in the original palette without a single component
+   * knowing about it. `HomeHero` and `HomeFactory`, which are only used there, still read the
+   * legacy tokens directly.
+   */
+  .theme-blue {
+    --color-void: var(--color-white);
+    --color-sheet: var(--color-surface);
+    --color-panel: var(--color-blue-50);
+    --color-panel-2: var(--color-blue-100);
+    --color-line: var(--color-border);
+    --color-line-2: var(--color-grid);
+    --color-control: var(--color-border-strong);
+    --color-text: var(--color-navy-900);
+    --color-text-2: var(--color-ink);
+    --color-text-3: var(--color-slate);
+    --color-amber: var(--color-blue-700);
+    --color-amber-hover: var(--color-action-700);
+    --color-amber-2: var(--color-action-700);
+    --color-on-amber: var(--color-white);
+    --color-steel: var(--color-navy-900);
+    /* The monogram is lifted for graphite; on white it takes the true brand navy. */
+    --color-brand-lift: var(--color-brand);
+    --color-paper: var(--color-white);
+    --color-paper-2: var(--color-blue-50);
+    --color-success: var(--color-success-ink);
+    --color-warning: var(--color-warning-ink);
+    --color-error: var(--color-error-ink);
+
+    color: var(--color-ink);
+    background: var(--color-white);
+  }
+
+  /* The primary button stays action blue rather than becoming a blue-on-blue fill. */
+  .theme-blue .btn-primary,
+  .theme-blue .bg-amber {
+    background: var(--color-action-600);
+  }
+
+  .theme-blue :is(h1, h2, h3, h4) {
+    color: var(--color-navy-900);
+  }
+
+  .theme-blue :focus-visible {
+    outline-color: var(--color-action-600);
+    outline-offset: 2px;
+  }
+
+  .theme-blue [data-surface='dark'] :focus-visible {
     outline-color: var(--color-blue-400);
   }
 
-  ::selection {
+  .theme-blue ::selection {
     background: var(--color-blue-100);
     color: var(--color-navy-900);
   }
@@ -223,23 +407,45 @@
   font-weight: 500;
 }
 
+/* Eyebrow with the sheet's leading rule, as the section headers and the homepage use. */
+@utility eyebrow-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  &::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: currentColor;
+    flex: none;
+  }
+}
+
 @utility tabular {
   font-variant-numeric: tabular-nums;
 }
 
-/* Body-text links are always underlined (§4.1). */
+/* Body-text links are always underlined (§4.1); the rule thickens and turns amber on hover. */
 @utility link {
-  color: var(--color-blue-700);
+  color: var(--link-color);
   text-decoration-line: underline;
+  text-decoration-color: var(--link-rule);
   text-decoration-thickness: 1px;
-  text-underline-offset: 0.2em;
+  text-underline-offset: 0.25em;
   transition:
-    text-decoration-thickness 150ms var(--ease-out),
-    color 150ms var(--ease-out);
+    text-decoration-color 160ms var(--ease-out),
+    text-decoration-thickness 160ms var(--ease-out),
+    color 160ms var(--ease-out);
   &:hover {
-    color: var(--color-action-700);
+    color: var(--link-hover);
+    text-decoration-color: var(--link-hover);
     text-decoration-thickness: 2px;
   }
+}
+
+/* Hairline rule, the one divider the sheet uses. */
+@utility rail {
+  border-color: var(--color-line);
 }
 
 /*
@@ -247,66 +453,67 @@
  * Decorative only; never place behind long body text.
  */
 @utility bp-grid {
-  background-color: var(--color-white);
+  background-color: var(--color-void);
   background-image:
-    linear-gradient(color-mix(in srgb, var(--color-grid) 85%, transparent) 1px, transparent 1px),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--color-grid) 85%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(color-mix(in srgb, var(--color-grid) 45%, transparent) 1px, transparent 1px),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--color-grid) 45%, transparent) 1px,
-      transparent 1px
-    );
+    linear-gradient(var(--color-line-2) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line-2) 1px, transparent 1px),
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
   background-size:
     120px 120px,
     120px 120px,
     24px 24px,
     24px 24px;
   background-position: -1px -1px;
+}
+
+/* Grid lines only, over whatever surface the element already has. */
+@utility grid-lines {
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size:
+    24px 24px,
+    24px 24px;
+  background-position: center center;
 }
 
 @utility bp-grid-fade {
   mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, black 40%, transparent 100%);
 }
 
-@utility bp-grid-dark {
-  background-color: var(--color-navy-900);
-  background-image:
-    linear-gradient(
-      color-mix(in srgb, var(--color-blue-400) 16%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--color-blue-400) 16%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(color-mix(in srgb, var(--color-blue-400) 7%, transparent) 1px, transparent 1px),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--color-blue-400) 7%, transparent) 1px,
-      transparent 1px
-    );
-  background-size:
-    120px 120px,
-    120px 120px,
-    24px 24px,
-    24px 24px;
-  background-position: -1px -1px;
-}
-
 /* ---------- Technical drawing primitives ---------- */
 
 @layer components {
+  /*
+   * Technical drawings. On the sheet the wire is steel and the dimensions are amber; on a
+   * drawing-paper panel both darken so they read on the light surface. The parked
+   * blue-and-white preview keeps the original ink-and-action-blue pairing.
+   */
   .drawing {
     display: block;
     width: 100%;
     height: auto;
     overflow: visible;
+    color: var(--color-steel);
+    --dim-color: var(--color-amber);
+    --dim-label-color: var(--color-amber);
+    --dim-label-bg: transparent;
+  }
+
+  [data-surface='paper'] .drawing,
+  .drawing.on-paper {
+    color: var(--color-ink);
+    --dim-color: var(--color-amber-ink);
+    --dim-label-color: var(--color-amber-ink);
+    --dim-label-bg: var(--color-paper);
+  }
+
+  .theme-blue .drawing {
+    color: inherit;
+    --dim-color: var(--color-action-600);
+    --dim-label-color: var(--color-navy-900);
+    --dim-label-bg: var(--color-white);
   }
 
   .drawing .w {
@@ -333,13 +540,13 @@
 
   .drawing .dim {
     fill: none;
-    stroke: var(--dim-color, var(--color-action-600));
+    stroke: var(--dim-color, var(--color-amber));
     stroke-width: 1;
     vector-effect: non-scaling-stroke;
   }
 
   .drawing .dim-head {
-    fill: var(--dim-color, var(--color-action-600));
+    fill: var(--dim-color, var(--color-amber));
     stroke: none;
   }
 
@@ -347,12 +554,12 @@
     font-family: var(--font-mono);
     font-size: 11px;
     font-weight: 500;
-    fill: var(--dim-label-color, var(--color-navy-900));
+    fill: var(--dim-label-color, var(--color-amber));
     letter-spacing: 0.02em;
   }
 
   .drawing .dim-label-bg {
-    fill: var(--dim-label-bg, var(--color-white));
+    fill: var(--dim-label-bg, transparent);
   }
 
   /* Form controls (shared by RFQ and calculators). */
@@ -360,13 +567,13 @@
     display: block;
     font-weight: 500;
     font-size: 0.9375rem;
-    color: var(--color-navy-900);
+    color: var(--color-text);
     margin-bottom: 6px;
   }
 
   .field-hint {
     font-size: var(--text-small);
-    color: var(--color-slate);
+    color: var(--color-text-3);
     margin-top: 6px;
   }
 
@@ -377,23 +584,27 @@
     padding: 9px 12px;
     font: inherit;
     font-size: 1rem;
-    color: var(--color-ink);
-    background: var(--color-white);
-    border: 1px solid var(--color-border-strong);
+    color: var(--color-text);
+    background: var(--color-panel);
+    border: 1px solid var(--color-control);
     border-radius: var(--radius-control);
     transition:
       border-color 150ms var(--ease-out),
-      box-shadow 150ms var(--ease-out);
+      background-color 150ms var(--ease-out);
+  }
+
+  .field-input::placeholder {
+    color: var(--color-text-3);
   }
 
   .field-input:hover {
-    border-color: var(--color-navy-900);
+    border-color: var(--color-text-2);
   }
 
   .field-input:focus-visible {
-    outline: 2px solid var(--color-action-600);
+    outline: 2px solid var(--color-amber);
     outline-offset: 0;
-    border-color: var(--color-action-600);
+    border-color: var(--color-amber);
   }
 
   .field-input[aria-invalid='true'] {
@@ -402,8 +613,8 @@
   }
 
   .field-input:disabled {
-    background: var(--color-surface);
-    color: var(--color-slate);
+    background: var(--color-panel-2);
+    color: var(--color-text-3);
     cursor: not-allowed;
   }
 
@@ -411,8 +622,8 @@
     appearance: none;
     padding-right: 40px;
     background-image:
-      linear-gradient(45deg, transparent 50%, var(--color-navy-900) 50%),
-      linear-gradient(135deg, var(--color-navy-900) 50%, transparent 50%);
+      linear-gradient(45deg, transparent 50%, var(--color-text-2) 50%),
+      linear-gradient(135deg, var(--color-text-2) 50%, transparent 50%);
     background-position:
       calc(100% - 20px) 50%,
       calc(100% - 15px) 50%;
@@ -435,7 +646,7 @@
   .check {
     width: 20px;
     height: 20px;
-    accent-color: var(--color-action-600);
+    accent-color: var(--color-amber);
     flex: none;
     margin-top: 3px;
   }
@@ -455,12 +666,12 @@
   }
 
   .btn-primary {
-    background: var(--color-action-600);
-    color: var(--color-white);
+    background: var(--color-amber);
+    color: var(--color-on-amber);
   }
 
   .btn-primary:hover {
-    background: var(--color-action-700);
+    background: var(--color-amber-hover);
   }
 
   .btn-primary:disabled {
@@ -469,23 +680,22 @@
   }
 
   .btn-secondary {
-    border: 1px solid var(--color-blue-700);
-    background: var(--color-white);
-    color: var(--color-blue-700);
+    border: 1px solid var(--color-control);
+    background: transparent;
+    color: var(--color-text);
   }
 
   .btn-secondary:hover {
-    background: var(--color-blue-50);
-    border-color: var(--color-action-700);
-    color: var(--color-action-700);
+    background: var(--color-panel);
+    border-color: var(--color-text-2);
   }
 
   .rfq-sketch {
     padding: 12px 16px;
-    background: var(--color-blue-50);
-    border: 1px solid var(--color-border);
+    background: var(--color-panel);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-card);
-    color: var(--color-navy-900);
+    color: var(--color-text);
     max-width: 20rem;
   }
 
@@ -499,7 +709,7 @@
 @layer components {
   .prose {
     max-width: 70ch;
-    color: var(--color-ink);
+    color: var(--color-text-2);
   }
 
   .prose > * + * {
@@ -516,7 +726,7 @@
   .prose h3 {
     font-size: var(--text-h3);
     line-height: var(--text-h3--line-height);
-    color: var(--color-blue-700);
+    color: var(--color-brand-lift);
     margin-top: 1.6em;
   }
 
@@ -526,14 +736,16 @@
   }
 
   .prose a {
-    color: var(--color-blue-700);
+    color: var(--link-color);
     text-decoration: underline;
+    text-decoration-color: var(--link-rule);
     text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
+    text-underline-offset: 0.25em;
   }
 
   .prose a:hover {
-    color: var(--color-action-700);
+    color: var(--link-hover);
+    text-decoration-color: var(--link-hover);
     text-decoration-thickness: 2px;
   }
 
@@ -555,32 +767,33 @@
   }
 
   .prose li::marker {
-    color: var(--color-blue-700);
+    color: var(--color-amber);
   }
 
   .prose strong {
     font-weight: 600;
-    color: var(--color-navy-900);
+    color: var(--color-text);
   }
 
   .prose code {
     font-family: var(--font-mono);
     font-size: 0.9em;
-    background: var(--color-blue-50);
-    border: 1px solid var(--color-border);
+    background: var(--color-panel);
+    border: 1px solid var(--color-line);
     border-radius: 3px;
     padding: 0.05em 0.35em;
+    color: var(--color-text);
   }
 
   .prose blockquote {
-    border-left: 3px solid var(--color-blue-700);
+    border-left: 3px solid var(--color-amber);
     padding-left: 1em;
-    color: var(--color-slate);
+    color: var(--color-text-3);
   }
 
   .prose hr {
     border: 0;
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-line);
     margin-block: 2em;
   }
 
@@ -594,7 +807,7 @@
   .prose td {
     text-align: left;
     padding: 10px 12px;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-line);
     vertical-align: top;
   }
 
@@ -603,18 +816,80 @@
     font-size: var(--text-eyebrow);
     letter-spacing: var(--text-eyebrow--letter-spacing);
     text-transform: uppercase;
-    color: var(--color-slate);
+    color: var(--color-amber);
     font-weight: 500;
-    border-bottom: 1px solid var(--color-border-strong);
+    border-bottom: 1px solid var(--color-line-2);
   }
 
   .prose tbody tr:nth-child(even) {
-    background: var(--color-blue-50);
+    background: var(--color-panel);
   }
 
   .prose figure figcaption {
     font-size: var(--text-small);
-    color: var(--color-slate);
+    color: var(--color-text-3);
     margin-top: 8px;
+  }
+
+  /* Long-form copy on a drawing-paper panel. */
+  [data-surface='paper'] .prose {
+    color: var(--color-ink);
+  }
+
+  [data-surface='paper'] .prose h3 {
+    color: var(--color-brand);
+  }
+
+  [data-surface='paper'] .prose li::marker {
+    color: var(--color-amber-ink);
+  }
+
+  [data-surface='paper'] .prose strong {
+    color: var(--color-brand);
+  }
+
+  [data-surface='paper'] .prose code {
+    background: var(--color-paper-2);
+    border-color: color-mix(in srgb, var(--color-ink) 18%, transparent);
+    color: var(--color-ink);
+  }
+
+  [data-surface='paper'] .prose blockquote {
+    border-left-color: var(--color-amber-ink);
+    color: var(--color-slate);
+  }
+
+  [data-surface='paper'] .prose :is(hr, th, td) {
+    border-color: color-mix(in srgb, var(--color-ink) 18%, transparent);
+  }
+
+  [data-surface='paper'] .prose thead th {
+    color: var(--color-amber-ink);
+    border-bottom-color: color-mix(in srgb, var(--color-ink) 35%, transparent);
+  }
+
+  [data-surface='paper'] .prose tbody tr:nth-child(even) {
+    background: var(--color-paper-2);
+  }
+
+  [data-surface='paper'] .prose figure figcaption {
+    color: var(--color-slate);
+  }
+
+  /* The parked blue-and-white preview keeps its original prose colours. */
+  .theme-blue .prose {
+    color: var(--color-ink);
+  }
+
+  .theme-blue .prose h3 {
+    color: var(--color-blue-700);
+  }
+
+  .theme-blue .prose li::marker {
+    color: var(--color-blue-700);
+  }
+
+  .theme-blue .prose strong {
+    color: var(--color-navy-900);
   }
 }

@@ -9,12 +9,12 @@ interface Props {
 const { variant = 'default', class: className } = Astro.props;
 
 const styles = {
-  default: 'bg-blue-100 text-navy-900 border-blue-100',
-  outline: 'bg-white text-blue-700 border-blue-700',
-  success: 'bg-white text-success border-success',
-  warning: 'bg-white text-warning border-warning',
-  error: 'bg-white text-error border-error',
-  dark: 'bg-transparent text-blue-300 border-blue-300',
+  default: 'bg-panel text-text border-line-2',
+  outline: 'bg-transparent text-amber border-amber',
+  success: 'bg-transparent text-success border-success',
+  warning: 'bg-transparent text-warning border-warning',
+  error: 'bg-transparent text-error border-error',
+  dark: 'bg-transparent text-text-2 border-line-2',
 } as const;
 
 const icon = {

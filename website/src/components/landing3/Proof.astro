@@ -1,0 +1,142 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { linkTo } from '@/data/routes';
+
+/** Three things that are true of this unit and are not true of a big catalogue supplier. */
+const proofs = [
+  {
+    icon: 'ruler' as const,
+    t: 'No drawing? Send the spring.',
+    d: 'We reverse-engineer from a sample. Post us the old part, tell us where it sits and what it has to do, and we work the drawing back out of it.',
+    to: 'reverseEngineering' as const,
+    cta: 'How reverse engineering works',
+  },
+  {
+    icon: 'badge-check' as const,
+    t: 'Nothing runs without your yes.',
+    d: 'New parts get development samples first. You fit them in the real assembly. Production starts only after you have said the sample is right.',
+    to: 'prototype' as const,
+    cta: 'Prototype development',
+  },
+  {
+    icon: 'wrench' as const,
+    t: 'Torsion is the day job.',
+    d: 'Torsion and double torsion springs are the bulk of what leaves this unit — not a line item under a thousand others. It is the geometry we know best.',
+    to: 'torsion' as const,
+    cta: 'Torsion springs',
+  },
+].map((p) => ({ ...p, href: linkTo(p.to) }));
+---
+
+<section class="pf" aria-label="Why buyers come to us">
+  <div class="l3-wrap">
+    <ul class="pf-list">
+      {proofs.map((p) => (
+        <li class="pf-item l3-reveal">
+          <span class="pf-icon" aria-hidden="true">
+            <Icon name={p.icon} size={20} />
+          </span>
+          <h2 class="pf-t">{p.t}</h2>
+          <p class="pf-d">{p.d}</p>
+          {p.href && (
+            <a class="pf-cta" href={p.href}>
+              {p.cta}
+              <Icon name="arrow-right" size={15} />
+            </a>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .pf {
+    background: var(--ink);
+    border-bottom: var(--rail);
+    padding-block: clamp(44px, 5vw, 76px);
+  }
+
+  .pf-list {
+    display: grid;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .pf-item {
+    position: relative;
+    padding-top: 26px;
+    border-top: 1px solid var(--line-2);
+    min-width: 0;
+  }
+
+  /* Short amber tick that reads as a datum mark on the rule above. */
+  .pf-item::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--amber);
+  }
+
+  .pf-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    color: var(--amber);
+    margin-bottom: 18px;
+  }
+
+  .pf-t {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.28;
+    letter-spacing: -0.02em;
+  }
+
+  .pf-d {
+    margin-top: 10px;
+    color: var(--text-2);
+    font-size: 0.9375rem;
+    line-height: 1.62;
+    max-width: 46ch;
+    text-wrap: pretty;
+  }
+
+  .pf-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 44px;
+    margin-top: 10px;
+    color: var(--text-3);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 180ms var(--ease-out);
+  }
+
+  .pf-cta :global(svg) {
+    transition: transform 180ms var(--ease-out);
+  }
+
+  .pf-cta:hover {
+    color: var(--amber);
+  }
+
+  .pf-cta:hover :global(svg) {
+    transform: translateX(3px);
+  }
+
+  @media (min-width: 860px) {
+    .pf-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 40px;
+    }
+  }
+</style>

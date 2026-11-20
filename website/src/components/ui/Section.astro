@@ -1,6 +1,12 @@
 ---
+/**
+ * Section band. The tones are the surfaces of the engineering sheet, darkest first:
+ * `white` (the sheet itself) → `surface` → `tint`, plus `grid`/`dark` for a blueprint band and
+ * `paper` for a drawing-paper panel, which flips the text, link and drawing colours.
+ * The names are kept so every page that already passes a tone keeps working.
+ */
 interface Props {
-  tone?: 'white' | 'surface' | 'tint' | 'dark' | 'grid';
+  tone?: 'white' | 'surface' | 'tint' | 'dark' | 'grid' | 'paper';
   id?: string;
   labelledby?: string;
   class?: string;
@@ -19,18 +25,19 @@ const {
 } = Astro.props;
 
 const tones = {
-  white: 'bg-white',
-  surface: 'bg-surface',
-  tint: 'bg-blue-50',
-  dark: 'bp-grid-dark text-white',
+  white: 'bg-void',
+  surface: 'bg-sheet',
+  tint: 'bg-panel',
+  dark: 'bp-grid',
   grid: 'bp-grid',
+  paper: 'bg-paper',
 } as const;
 ---
 
 <section
   id={id}
   aria-labelledby={labelledby}
-  data-surface={tone === 'dark' ? 'dark' : undefined}
+  data-surface={tone === 'paper' ? 'paper' : undefined}
   class:list={[!flush && 'section-y', tones[tone], className]}
 >
   <div class:list={['container-page', containerClass]}>

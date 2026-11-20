@@ -42,10 +42,10 @@ const { rows, caption, class: className } = Astro.props;
 
 <style>
   .spec-wrap {
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-line);
     border-radius: var(--radius-card);
     overflow: hidden;
-    background: var(--color-white);
+    background: var(--color-panel);
   }
 
   .spec {
@@ -57,17 +57,17 @@ const { rows, caption, class: className } = Astro.props;
   caption {
     text-align: left;
     padding: 12px 16px;
-    color: var(--color-slate);
-    border-bottom: 1px solid var(--color-border-strong);
-    background: var(--color-white);
+    color: var(--color-text-3);
+    border-bottom: 1px solid var(--color-line-2);
+    background: var(--color-panel);
   }
 
   tr:nth-child(even) {
-    background: var(--color-blue-50);
+    background: var(--color-panel-2);
   }
 
   tr + tr {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-line);
   }
 
   th {
@@ -76,14 +76,14 @@ const { rows, caption, class: className } = Astro.props;
     vertical-align: top;
     font-weight: 400;
     font-size: 0.9375rem;
-    color: var(--color-slate);
+    color: var(--color-text-3);
     padding: 12px 16px;
   }
 
   td {
     font-family: var(--font-mono);
     font-size: 0.9375rem;
-    color: var(--color-navy-900);
+    color: var(--color-text);
     padding: 12px 16px;
     vertical-align: top;
   }
@@ -98,7 +98,7 @@ const { rows, caption, class: className } = Astro.props;
     margin-top: 4px;
     font-family: var(--font-sans);
     font-size: var(--text-small);
-    color: var(--color-slate);
+    color: var(--color-text-3);
   }
 
   @media (max-width: 479.98px) {

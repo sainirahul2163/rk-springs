@@ -27,11 +27,11 @@ const { items, class: className } = Astro.props;
 
 <style>
   .faq {
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-line);
   }
 
   .faq-item {
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-line);
   }
 
   .faq-q {
@@ -45,7 +45,7 @@ const { items, class: className } = Astro.props;
     list-style: none;
     font-weight: 500;
     font-size: 1.0625rem;
-    color: var(--color-navy-900);
+    color: var(--color-text);
     transition: color 150ms var(--ease-out);
   }
 
@@ -54,7 +54,7 @@ const { items, class: className } = Astro.props;
   }
 
   .faq-q:hover {
-    color: var(--color-action-700);
+    color: var(--color-amber);
   }
 
   .faq-icon {
@@ -62,7 +62,7 @@ const { items, class: className } = Astro.props;
     flex: none;
     width: 20px;
     height: 20px;
-    border: 1px solid var(--color-border-strong);
+    border: 1px solid var(--color-line-2);
     border-radius: 3px;
   }
 
@@ -89,6 +89,6 @@ const { items, class: className } = Astro.props;
 
   .faq-a {
     padding: 0 4px 20px;
-    color: var(--color-ink);
+    color: var(--color-text-2);
   }
 </style>
