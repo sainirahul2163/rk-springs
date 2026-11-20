@@ -52,8 +52,20 @@
    - Tap targets of at least 44 px.
 
 6. **Design tokens only.**
-   - Use only the blue-and-white tokens in `CURSOR-BUILD-PROMPT.md` §4.
-   - **No hard-coded hex values in components.** The palette may change after the client's logo arrives.
+   - Use only the tokens defined in `website/src/styles/global.css`. That file is the one place a
+     colour value may appear.
+   - The palette is the **engineering sheet** adopted on 20 Nov 2026: a graphite base, warm
+     drawing-paper panels, a single amber annotation accent and the brand navy for identity.
+     Tokens are named by surface and role, never by hue — `void → sheet → panel → panel-2` for the
+     dark surfaces, `paper → paper-2` for light panels, `text / text-2 / text-3` on dark,
+     `ink / slate` on paper, `amber` (`amber-ink` on paper), `brand / brand-lift`, `steel` for
+     technical drawings, `line / line-2` for hairlines, `control` for the boundary of an
+     interactive control. `/styleguide/` shows all of them with their use.
+   - **No hard-coded hex values in components.** This is what let the whole site be re-skinned by
+     changing the tokens; keep it that way.
+   - The blue-and-white scale in `CURSOR-BUILD-PROMPT.md` §4 is **superseded**. It survives in
+     `global.css` only to render `/landing3/`, the parked earlier homepage, through `theme="blue"`.
+     Do not use it anywhere else.
 
 7. **Copy style.**
    - Plain, specific Indian-English B2B writing.

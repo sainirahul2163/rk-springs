@@ -58,7 +58,7 @@ Pages flagged **draft-gated** are built but excluded from the production build, 
 ## 2. Open TODO(client) items
 
 From CLIENT-PROFILE.md §8:
-- [ ] Logo file
+- [x] Logo file — redrawn as vector from the supplied photo; original artwork file still wanted
 - [ ] ZED certificate PDF and level
 - [ ] Machine list and name-plate photos
 - [ ] Factory map pin and coordinates
@@ -78,7 +78,7 @@ From CLIENT-PROFILE.md §8:
 - [ ] Factory photo and video shoot
 
 Added in Phase 1:
-- [ ] Replace the temporary coil wordmark and `favicon.svg` with the real logo
+- [x] Replace the temporary coil wordmark and `favicon.svg` with the real logo — done 20 Nov 2026 (§19)
 - [ ] Confirm the spiral-spring drawing once we know wire vs flat-strip (drawing is generic on purpose)
 
 Added in Phase 0:

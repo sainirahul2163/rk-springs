@@ -25,8 +25,7 @@ Build the site in /website exactly as specified.
 
 The quality bar: this must be the best spring-manufacturer website in India. It has to be
 faster, clearer, more technically useful and more trustworthy than every competitor in the
-blueprint, with a distinctive blue-and-white "engineering blueprint" design that doesn't
-look like a template.
+blueprint, with a distinctive engineering-sheet design (§4) that doesn't look like a template.
 
 Never invent facts. Mark unknowns as TODO(client).
 
@@ -65,7 +64,7 @@ Then stop and wait for my go-ahead.
 - **Fastest in the category.** Content pages ship close to 0 KB of JS. LCP is under 1.8 s on mobile 4G. Lighthouse scores are ≥ 95 in every category.
 - **Most useful content.** Real engineering depth: diagrams, spec tables, end types, materials, design tips, calculators. No fluff.
 - **Most trustworthy.** Honest, specific facts; clear terms (MOQ, quote time, payment, ex-works delivery); no fake claims; full company details (name, address, phone, GSTIN, Udyam).
-- **Distinctive design.** A blue-and-white "engineering blueprint" look that's consistent and polished at every breakpoint, from 360 px to 1440 px+.
+- **Distinctive design.** The engineering-sheet look (§4), consistent and polished at every breakpoint, from 360 px to 1440 px+.
 - **Perfect technical SEO.** Clean structure, a structured-data graph, sitemap, canonicals, internal linking.
 - **Accessible.** WCAG 2.2 AA throughout.
 
@@ -121,46 +120,84 @@ website/
 
 Put `CONTENT-REVIEW.md` and, at the end, `LAUNCH-CHECKLIST.md` in the **repo root**.
 
-## 4. Design system: "Engineering blueprint" in blue and white
+## 4. Design system: the engineering sheet
 
-### 4.1 Colour tokens (client wants blue and white; may change after the logo arrives)
+> **Updated 20 Nov 2026.** The client rejected the blue-and-white look. The site now uses the
+> engineering-sheet palette: a graphite base, warm drawing-paper panels, a single amber annotation
+> accent and the brand navy for identity. The original scale is kept at the end of this section for
+> reference, and still renders `/landing3/`, the parked earlier homepage. Everything else in §4 —
+> the layout rhythm, the signature elements, the component list, the motion and imagery rules —
+> still stands as written.
 
-Define these once in `@theme` (e.g. `--color-navy-950`) and use them only through utilities or CSS variables.
+### 4.1 Colour tokens
+
+Defined once in `@theme` in `website/src/styles/global.css`, which is the only place a colour value
+may appear. Components use them through utilities or `var(--color-*)`, never a hex — that is what
+let the whole site be re-skinned by changing this one file. Tokens are named by **surface and
+role**, not by hue, so a future palette change is the same one-file edit.
 
 | Token | Hex | Use | Contrast |
 |---|---|---|---|
-| `navy-950` | `#071A33` | Footer background | white text 17.4:1 |
-| `navy-900` | `#0B2545` | Dark sections, H1/H2 colour, header text | white text 15.4:1 |
-| `blue-800` | `#123A6B` | Secondary dark | white text 11.4:1 |
-| `blue-700` | `#1D4E89` | Links, icons, H3, outline buttons | 8.4:1 on white |
-| `action-600` | `#1A56DB` | **Primary button** background (white text), focus ring | 6.2:1 |
-| `action-700` | `#1E40AF` | Primary button hover and active | 8.7:1 |
-| `blue-400` | `#6EA8FE` | Links and accents **on dark** backgrounds | 6.4:1 on navy |
-| `blue-300` | `#9CC3F5` | Secondary text on dark backgrounds | 8.5:1 on navy |
-| `blue-100` | `#DCE9F8` | Badges, chips, selected states | navy text 12.5:1 |
-| `blue-50` | `#EEF4FB` | Tinted sections, table zebra rows | — |
-| `grid` | `#C9DAF0` | Blueprint grid lines (decorative only) | — |
-| `ink` | `#1F2933` | Body text | 14.8:1 |
-| `slate` | `#52606D` | Secondary text | 6.5:1 |
-| `border-strong` | `#7B8794` | Input borders, meaningful outlines | 3.7:1 (UI) |
-| `border` | `#E4E7EB` | Dividers, card borders (decorative) | — |
-| `surface` | `#F5F7FA` | Alternate section background | — |
-| `white` | `#FFFFFF` | Page background, product photo background | — |
-| `success` / `warning` / `error` | `#1B7F3B` / `#B45309` / `#B42318` | Form and calculator states (always icon + text) | ≥ 5:1 |
-| `whatsapp` | `#25D366` | WhatsApp button background, **navy-900 text only** | 7.8:1 (never white text: 2.0:1) |
+| `void` | `#08090B` | Page | — |
+| `sheet` | `#0D0F12` | Section band, card figures, menus | — |
+| `panel` | `#14171C` | Cards, inputs, tinted bands | — |
+| `panel-2` | `#1B1F26` | Card hover, zebra rows | — |
+| `line` | `#272C34` | Hairlines and dividers (decorative) | — |
+| `line-2` | `#3A414D` | Stronger hairline, card hover border | — |
+| `control` | `#6B7480` | Boundary of an interactive control (inputs, outline buttons) | 3.8:1 on panel, 4.2:1 on void (UI) |
+| `paper` | `#F2F1ED` | Drawing-paper panel | — |
+| `paper-2` | `#E6E4DD` | Paper zebra rows | — |
+| `text` | `#F2F1ED` | Headings and body on the sheet | 17.6:1 on void |
+| `text-2` | `#9AA3B0` | Ledes and body on the sheet | 7.8:1 on void |
+| `text-3` | `#808997` | Captions, hints, meta | 5.6:1 on void |
+| `ink` | `#1F2933` | Body text on paper | 13.1:1 on paper |
+| `slate` | `#52606D` | Secondary text on paper | 5.7:1 on paper |
+| `amber` | `#FF8A3D` | Eyebrows, **primary button**, focus ring, dimension callouts | 8.5:1 on void |
+| `amber-hover` | `#FFA166` | Primary button hover | — |
+| `amber-2` | `#E8690B` | Primary button active | — |
+| `amber-ink` | `#A84300` | The accent on a paper panel | 5.4:1 on paper |
+| `on-amber` | `#16120D` | Text on an amber fill | 8.0:1 |
+| `brand` | `#0A3262` | The monogram on paper. Sampled from the client's logo | 11.3:1 on paper |
+| `brand-lift` | `#7FA9DE` | The monogram and prose H3 on the sheet | 8.2:1 on void |
+| `steel` | `#CFDCEA` | Technical drawings on the sheet | 14.3:1 on void |
+| `success` / `warning` / `error` | `#5AD07F` / `#F0B429` / `#FF6F6F` | Form and calculator states (always icon + text) | ≥ 7:1 on void |
+| `whatsapp` | `#25D366` | WhatsApp button background, with `on-wa` text only | 8.6:1 (never white text) |
 
 **Rules**
-- On light sections the primary button is `action-600` with white text.
-- On dark sections the primary button is white with `navy-900` text.
-- Body-text links are always underlined.
-- Only one primary CTA style across the site.
+- The primary button is `amber` with `on-amber` text, everywhere. One primary CTA style site-wide.
+- A drawing-paper panel carries `data-surface="paper"`, which flips text, links, drawings and the
+  focus ring to the paper pairings. Use it where dense technical reading needs a light surface.
+- Body-text links are always underlined, in `text` with a `line-2` rule, turning amber on hover.
+- Hairlines (`line`, `line-2`) are decorative. Anything that is the boundary of a control uses
+  `control`, because WCAG 2.2 SC 1.4.11 asks 3:1 of those.
+- Drawings take `steel` with amber dimensions; on paper they darken to `ink` with `amber-ink`.
+
+### 4.1b Superseded: the original blue-and-white scale
+
+Kept only to render `/landing3/`, the parked earlier homepage, through `BaseLayout theme="blue"` —
+which re-points the semantic tokens above at this scale for that page alone. Do not use it for
+anything else.
+
+| Token | Hex | Former use |
+|---|---|---|
+| `navy-950` | `#071A33` | Footer background |
+| `navy-900` | `#0B2545` | Dark sections, H1/H2 colour, header text |
+| `blue-800` | `#123A6B` | Secondary dark |
+| `blue-700` | `#1D4E89` | Links, icons, H3, outline buttons |
+| `action-600` / `action-700` | `#1A56DB` / `#1E40AF` | Primary button and hover |
+| `blue-400` / `blue-300` | `#6EA8FE` / `#9CC3F5` | Links and secondary text on dark |
+| `blue-100` / `blue-50` | `#DCE9F8` / `#EEF4FB` | Chips, tints, zebra rows |
+| `grid` | `#C9DAF0` | Blueprint grid lines |
+| `border-strong` / `border` | `#7B8794` / `#E4E7EB` | Input borders, dividers |
+| `surface` / `white` | `#F5F7FA` / `#FFFFFF` | Alternate sections, page |
+| `success` / `warning` / `error` | `#1B7F3B` / `#B45309` / `#B42318` | States on a light page |
 
 ### 4.2 Typography
 
 - **IBM Plex Sans** for UI and body text. **IBM Plex Mono** for specs, numbers, units, eyebrow labels, breadcrumbs, table values and calculator results.
 - **Fluid scale:**
-  - H1 `clamp(2rem, 1.35rem + 2.6vw, 3.5rem)` / 1.1 / weight 600 / tracking −0.015em
-  - H2 `clamp(1.625rem, 1.3rem + 1.3vw, 2.5rem)` / 1.15 / 600
+  - H1 `clamp(2rem, 1.35rem + 2.6vw, 3.5rem)` / 1.05 / weight 700 / tracking −0.03em
+  - H2 `clamp(1.75rem, 1.35rem + 1.6vw, 2.75rem)` / 1.08 / 700 / tracking −0.025em
   - H3 1.375rem / 1.3 / 600
   - Body 1.0625rem / 1.65
   - Small 0.875rem
@@ -171,13 +208,13 @@ Define these once in `@theme` (e.g. `--color-navy-950`) and use them only throug
 
 - Container max-width 1240 px. Side padding 20 / 32 / 40 px at mobile / ≥768 / ≥1280.
 - 12-column grid on desktop. Section rhythm is 64 px on mobile and 96 px on desktop.
-- 4 px spacing base. Corner radius 4 px on controls and 8 px on cards (crisp and engineered, not bubbly).
+- 4 px spacing base. Corner radius 3 px on controls and 4 px on cards (crisp and engineered, not bubbly).
 - 1 px borders. **No drop shadows**, except a subtle shadow on the sticky header after scroll and on menus.
 
 ### 4.4 Signature elements (these make it look unlike any competitor)
 
 1. **Blueprint grid:**
-   - A CSS-only background grid: 24 px minor lines, 120 px major lines, using `grid` at reduced opacity, fading out at the edges with a mask.
+   - A CSS-only background grid: 24 px minor lines in `line`, 120 px major lines in `line-2`, over `void`, fading out at the edges with a mask.
    - Use it in the hero, tool pages and selected section dividers. Never put it behind long body text.
 2. **Dimension lines:** SVG annotations with thin lines, tick or arrow ends and mono labels (e.g. `Ø 0.40–2.50 mm`, `Quote ≤ 24 h`), placed around the hero drawing and product visuals.
 3. **Technical line drawings:**
@@ -194,7 +231,7 @@ Define these once in `@theme` (e.g. `--color-navy-950`) and use them only throug
 ### 4.5 Components (build all of them in Phase 1 on `/styleguide`)
 
 - **Header:**
-  - Sticky, white, 1 px bottom border.
+  - Sticky, translucent graphite with a blur, 1 px bottom hairline.
   - Nav order: Springs (mega-menu showing the six spring types with mini drawings, plus Wire forms), Industries, Capabilities, Tools, Resources, About, Contact.
   - Right side: phone link and a **"Get a quote"** button.
 - **MobileNav:** an accessible disclosure menu.

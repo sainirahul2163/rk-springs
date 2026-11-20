@@ -21,7 +21,7 @@
 | Email | rkent102017@gmail.com · rutvikkashid.rkent@gmail.com. TODO(client): pick the main one; plan a domain email such as sales@rksprings.com (not published until it exists) |
 | Hours | Mon–Wed and Fri–Sun, 9:00 AM – 8:00 PM · **Thursday closed** |
 | Domain | **rksprings.com** (final, chosen 23 Oct 2026; purchase and DNS still to do). Canonical host **https://www.rksprings.com**; the bare domain redirects to `www`. Set in `website/src/data/site.ts` (`site.origin`) |
-| Logo | TODO(client): file pending. Use a temporary text wordmark |
+| Logo | Supplied 3 Nov 2026 as a photograph of the physical sign board, redrawn as vector (`website/public/brand/`). In use site-wide since 20 Nov 2026. TODO(client): the original artwork file (AI / CDR / PDF) from the sign-maker, for print |
 | Existing listings | IndiaMART (TODO(client): link) · Justdial "RK Enterprises", Pune 411062 (claimed; probably theirs). The Justdial "R K Spring Works, Bhosari" listing is **not** theirs |
 
 ## 2. Products and capability
@@ -74,8 +74,17 @@
 
 ## 6. Brand and design
 
-- **Colours: blue and white** (the client's preference). The palette may change once the logo arrives, so use tokens only. The tokens are listed in `CURSOR-BUILD-PROMPT.md` §4.
-- **Design concept:** an "engineering blueprint" look. Clean white pages, deep blues, fine technical line drawings, dimension callouts, a monospace font for specs.
+- **Colours, as the client stated them on 4 Oct 2026: blue and white.**
+- **What is built, since 20 Nov 2026: the "engineering sheet".** A graphite base, warm
+  drawing-paper panels, a single amber annotation accent, and the brand navy from his logo for
+  identity. Fine technical line drawings, dimension callouts and a monospace font for specs are
+  unchanged — the drawing language survived; the page colour did not. The tokens are in
+  `website/src/styles/global.css` and shown on `/styleguide/`; `CURSOR-BUILD-PROMPT.md` §4 explains
+  them. The earlier blue-and-white homepage is parked at `/landing3/` for comparison.
+  - The client rejected the blue-and-white homepage twice, and this design was adopted at Rahul's
+    instruction. **TODO(client): confirm he is happy that it replaces the blue-and-white preference
+    he gave on 4 Oct**, before stationery, signage or listings are produced to match.
+  - Use tokens only, never a hex in a component. That rule is what allowed this change.
 - **Photos:** pending a factory shoot. Use tasteful labelled placeholders. **No stock photos, and no AI-generated factory or product photos.**
 
 ## 7. Overrides to `RESEARCH-AND-SEO-BLUEPRINT.md`
@@ -93,7 +102,7 @@
 
 ## 8. Open items before launch (TODO(client))
 
-- [ ] Logo file
+- [x] Logo file — supplied as a photo and redrawn as vector; the **original artwork file** is still wanted for print
 - [ ] ZED certificate PDF and level
 - [ ] Machine list and name-plate photos
 - [ ] Factory map pin and coordinates

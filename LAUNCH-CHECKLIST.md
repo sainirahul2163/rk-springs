@@ -6,7 +6,7 @@ Phase 7 quality gates were run on 4 Oct 2026 and re-run after the SEO pass on 23
 
 - [ ] Domain **rksprings.com** bought (decided 23 Oct 2026). In Vercel → Project → Domains add `www.rksprings.com` (primary) and `rksprings.com` (set to redirect to `www`). At the registrar: `A @ 76.76.21.21` and `CNAME www cname.vercel-dns.com` (or whatever Vercel shows), or move nameservers to Vercel.
 - [ ] Nothing else to configure for SEO: the code already uses `https://www.rksprings.com` for every canonical, the sitemap, robots.txt, JSON-LD, share cards and llms.txt. Delete any old `PUBLIC_SITE_URL` from the Vercel env: it is ignored now, and a `*.vercel.app` value there made the first PR preview fail (see `SEO-WORK-LOG.md`).
-- [ ] Logo file (wordmark + favicon). The coil mark is temporary.
+- [x] Logo. The client's mark is redrawn as vector and used for the wordmark, the favicon, the app icons and the schema logo. Still wanted: the sign-maker's original artwork file for print.
 - [ ] Confirm `+91 72620 92185` is the public main number, or give the real one.
 - [ ] Pick the public email (plan a domain address such as `sales@<domain>`).
 - [ ] ZED level (Bronze / Silver / Gold) and a PDF of the certificate.
@@ -136,11 +136,22 @@ Island pages (RFQ and the calculators) ship 239–331 KB of React. A later media
 - [ ] Click-test WhatsApp, tel, and the RFQ from a phone.
 - [ ] Only then turn on GA4 / Clarity if you want them.
 
-## 7. What this phase did not do
+## 7. What is still not done
 
-- No real logo, photos, or customer names.
+Written after Phase 7 (4 Oct 2026) and kept current.
+
+- No customer names, and no factory photographs of RK's own bench. The product photos on the site
+  are studio shots whose provenance is still to be confirmed with the client (CONTENT-REVIEW §16.4);
+  `PHOTO-SHOOT-BRIEF.md` is the 45-minute phone shoot that replaces them.
 - No ISO / IATF / lab / PPAP / CPK claims.
 - No public ₹ price bands.
 - No IndiaMART widget, chat bubble, carousel, or third-party script beyond optional GA4/Clarity.
-- Per-page OG images (satori) were not added; `og-default.png` is used.
-- Direct-to-Supabase uploads for large drawings were not added.
+- Direct-to-Supabase uploads for large drawings were not added — and the RFQ backend itself is
+  unresolved: Supabase was ruled out (free projects pause after 7 days), and the replacement has
+  not been built. **This blocks launch**, since nothing catches an enquiry without it.
+- Lighthouse and mobile LCP/CLS have not been re-measured since the homepage changed and the site
+  was re-skinned (20 Nov 2026). Run `npm run lh` before launch; the §5 tables predate both.
+
+**Done since this list was written:** the real logo is in use site-wide (wordmark, favicon, app
+icons, schema logo); every page has its own share card, rendered by `npm run og` from the page's own
+technical drawing — the satori dependency was never needed.
