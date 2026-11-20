@@ -11,7 +11,7 @@ Pages flagged **draft-gated** are built but excluded from the production build, 
 
 | # | URL | Template | Phase | Status | Client input it depends on |
 |---|---|---|---|---|---|
-| 1 | `/` | Home | 2 | draft | ZED level/PDF, map pin, main phone |
+| 1 | `/` | Home — engineering-sheet design since 20 Nov 2026 (§18) | 2 | draft | ZED level/PDF, map pin, main phone |
 | 2 | `/springs/` | Hub | 2 | draft | — |
 | 3 | `/springs/torsion-springs/` | Product | 2 | draft | Leg types made, finishes via partners, max OD/length |
 | 4 | `/springs/double-torsion-springs/` | Product | 2 | draft | Same as torsion + centre-loop limits |
@@ -53,6 +53,7 @@ Pages flagged **draft-gated** are built but excluded from the production build, 
 | 40 | `/terms/` | Legal | 2 | draft | Legal review |
 | 41 | `404` | Utility (noindex) | 2 | draft | — |
 | — | `/styleguide/` | Internal (noindex) | 1 | draft | Logo (wordmark and favicon are temporary) |
+| — | `/landing3/` | Design preview (noindex) — the earlier blue-and-white homepage, §18 | — | draft | — |
 
 ## 2. Open TODO(client) items
 
@@ -451,3 +452,90 @@ Full record in `SEO-WORK-LOG.md`. What changed, for content review:
   - [ ] `sales@rksprings.com` once it exists.
   - [ ] Client OK on allowing AI training crawlers in `robots.txt` (allowed by default, per the blueprint).
   - [x] `SEO-MASTER-PLAYBOOK.md` is now in the repo (committed on `landing-redesign`), so it can be checked against this pass.
+
+## 18. Homepage swap: `/landing3/` design promoted to `/` (20 Nov 2026)
+
+- **Status: ready for review. Not deployed, not merged to `main`.** At Rahul's instruction the two
+  homepages changed places: the engineering-sheet concept from §16 is now `/`, and the earlier
+  blue-and-white homepage is now the noindex preview at `/landing3/`. Both designs are unchanged;
+  this was a move, not a redesign.
+- **Files:** `src/pages/index.astro` and `src/pages/landing3.astro` swapped their contents and
+  layouts (`Landing3Layout` ↔ `BaseLayout`). The section components stay where they are — the live
+  homepage is still assembled from `src/components/landing3/*` and the preview from
+  `src/components/home/*`. Renaming those folders was left out on purpose: it would churn the diff
+  without changing a single rendered byte. Worth doing later.
+
+### What was kept so the homepage's SEO did not move
+
+- **Title and meta description are the old homepage's, unchanged:** "Spring Manufacturer in Pune |
+  RK Springs & Wireforms" and the 147-character description. They are the keyword targets from
+  build spec §5 and the 23 Oct SEO pass, and they belong to the URL, not to the design.
+- Canonical `https://www.rksprings.com/`, `index, follow`, and the sitemap entry are unchanged.
+  `lastmod` for `/` moves to 2026-11-20 in `page-dates.ts`, because the visible copy really changed.
+- `/landing3/` stays `noindex, nofollow`, stays out of the sitemap (`astro.config.mjs`), and now
+  carries its own preview title, so it cannot compete with `/`.
+- **New H1 on the homepage:** "The small spring your assembly depends on." The old
+  "Your design. Our springs. / Spring & wire-form manufacturer in Pune" moves to the preview.
+
+### What genuinely changed, and why
+
+- **No more `FAQPage` schema on `/`.** The new homepage has no visible FAQ section, and schema must
+  describe what is on the page. The FAQ content itself is unchanged on the product, location and
+  ordering pages, and `homeFaqs` still renders on the preview. If you want the FAQ block back on
+  the homepage it has to be designed into the new layout first; the schema follows the content.
+- **Two hub links added to the homepage copy** (`components/landing3/Resources.astro`): "All spring
+  calculators" → `/tools/` and "All spring design guides" → `/resources/`. The 23 Oct pass added
+  those links on purpose; without them both hubs would have been reachable from navigation only,
+  which `audit-html` warns about. Nothing else in the design was touched.
+- **Analytics parity:** `Landing3Layout` now renders `<Analytics />` and the `data-event` click
+  listener that `BaseLayout` has. The homepage header already carried `data-event="call_click"`
+  attributes that fired nothing. GA4 and Clarity still load only when their env vars are set.
+- **The mobile action bar is deliberately not on the homepage.** Its header is sticky and carries
+  the phone number and "Request a quote", so the function survives; the bar would sit over a layout
+  that was not designed for it. Flagging it because the old homepage had Call / WhatsApp / Quote
+  pinned to the bottom on phones.
+
+### Share cards (`npm run og`, committed in `public/og/`)
+
+- The card template is drawn in the blue-and-white tokens and is rendered **on top of** a real page.
+  The homepage is now dark, so a `FORCE_BORROW` set in `scripts/make-og.mjs` renders the home card
+  on `/springs/double-torsion-springs/` instead. Only the H1 and the eyebrow come from the page
+  itself, so the card is honest; it shows the double torsion drawing and the brand mark.
+- The borrow fallback for pages with no drawing of their own moved from `/` to
+  `/springs/double-torsion-springs/` for the same reason — about 18 cards used to be rendered on the
+  old homepage.
+- **Bug fixed:** `make-og` stripped HTML tags from an H1 with no space, so a headline split over
+  `<span>` or `<br>` fused into "The small springyour assemblydepends on.". `audit-html` strips with
+  a space, so the two fingerprints could never match and `/` was reported as a stale card no matter
+  how often the cards were rebuilt. Both now use the same rule. The build is at **0 warnings** for
+  the first time since the SEO pass.
+
+### Open points for you
+
+1. **Two palettes on one site.** The homepage uses the `.l3` graphite-and-amber palette; every other
+   page is blue and white. That was fine for a review page and is a real inconsistency now, and it
+   sits outside AGENTS.md §6 and build spec §4. Either roll the new palette through the site, or
+   keep the homepage as a deliberately different front door.
+2. **Favicon and theme colour.** The homepage serves `/brand/favicon-rk.svg` (the client's real
+   logo) with a dark theme colour; the rest of the site still serves the temporary coil mark on
+   white. Decide which is the site-wide mark — adopting the real logo means re-running `npm run og`
+   to re-render the icons and the schema logo.
+3. The `landing3` names (folder, `.l3` class, the `/landing3/` URL) now describe the live homepage
+   and the preview respectively. Renaming is cosmetic and can wait.
+
+### Validation (20 Nov 2026)
+
+| Gate | Result |
+|---|---|
+| `npm run check` (astro check, ESLint, Prettier) | 0 errors, 0 warnings, 0 hints |
+| `npm test` (Vitest) | 62 passed |
+| `npm run test:e2e` (Playwright) | 44 passed |
+| `PUBLIC_SITE_URL=… npm run build` → `audit-html` | 41 pages (38 indexable), 38 sitemap URLs, **0 errors, 0 warnings** |
+| `npm run js-budget` | 0 KB of external JS on content pages; homepage 9.2 KB inline by the script's method (JSON-LD included). Largest island unchanged: RFQ 332 KB |
+| Homepage weight | 98.1 KB raw / 18.8 KB gzipped (the preview, i.e. the old homepage, is 127.8 KB / 21.0 KB) |
+| Overflow | 360, 390, 768, 1024, 1280, 1440 px on `/` — no horizontal scroll |
+| Keyboard | New homepage skip link and `<details>` menu covered by a new Playwright test; the shared-header mega-menu and mobile-nav tests now run on `/springs/torsion-springs/`, which still has that header |
+
+Not re-measured in this pass: Lighthouse and mobile LCP/CLS for the new homepage. Worth running
+`npm run lh` before launch, since the hero art and the pointer-driven wire field differ from the
+page the §5 numbers were taken on.

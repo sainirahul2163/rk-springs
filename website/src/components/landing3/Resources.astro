@@ -56,6 +56,14 @@ const guides = (
 )
   .map((x) => ({ ...x, href: linkTo(x.to) }))
   .filter((x): x is typeof x & { href: string } => x.href !== null);
+
+/**
+ * Hub links in page copy, not only in navigation: the 23 Oct SEO pass added them to the
+ * homepage on purpose (SEO-WORK-LOG.md §6), and `audit-html` warns when a page is reachable
+ * from the header alone.
+ */
+const toolsHub = linkTo('tools');
+const resourcesHub = linkTo('resources');
 ---
 
 <section class="res l3-sec" aria-labelledby="res-title">
@@ -95,6 +103,12 @@ const guides = (
               </li>
             ))}
           </ul>
+          {toolsHub && (
+            <a class="l3-mono res-all" href={toolsHub}>
+              All spring calculators
+              <Icon name="arrow-up-right" size={14} />
+            </a>
+          )}
         </div>
       )}
 
@@ -111,6 +125,12 @@ const guides = (
               </li>
             ))}
           </ul>
+          {resourcesHub && (
+            <a class="l3-mono res-all" href={resourcesHub}>
+              All spring design guides
+              <Icon name="arrow-up-right" size={14} />
+            </a>
+          )}
         </div>
       )}
     </div>
@@ -138,6 +158,21 @@ const guides = (
 
   .res-grid ul {
     list-style: none;
+  }
+
+  /* Hub link under each column. 44 px target, like every other control on the page. */
+  .res-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    color: var(--text-2);
+    text-decoration: none;
+    transition: color 200ms var(--ease-out);
+  }
+
+  .res-all:hover {
+    color: var(--amber);
   }
 
   /* --- calculators --- */

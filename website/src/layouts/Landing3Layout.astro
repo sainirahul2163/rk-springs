@@ -1,10 +1,12 @@
 ---
 /**
- * Standalone dark shell for the /landing3 design preview.
+ * Standalone dark shell for the engineering-sheet design. Used by `/` since 20 Nov 2026,
+ * when that concept was promoted from `/landing3/` to the homepage.
  *
- * This page deliberately sits outside the blue-and-white token system (AGENTS.md §6) at the
- * client's request: it is a separate concept for review, not part of the live site. Every colour
- * lives in the `.l3` scope below, so nothing here can leak into the production pages.
+ * It deliberately sits outside the blue-and-white token system (AGENTS.md §6, build spec §4),
+ * on Rahul's instruction to ignore the palette for this concept. Every colour lives in the
+ * `.l3` scope below, so nothing here reaches the rest of the site — which means the homepage
+ * and the inner pages are now two different palettes. Flagged in CONTENT-REVIEW.md §18.
  */
 import '@/styles/global.css';
 import plexMono400 from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url';
@@ -12,6 +14,7 @@ import plexMono500 from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500
 import plexSans400 from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2?url';
 import plexSans500 from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-500-normal.woff2?url';
 import plexSans700 from '@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-700-normal.woff2?url';
+import Analytics from '@/components/seo/Analytics.astro';
 import SEO, { type SEOProps } from '@/components/seo/SEO.astro';
 import Header from '@/components/landing3/Header.astro';
 import Footer from '@/components/landing3/Footer.astro';
@@ -41,6 +44,19 @@ const extraFonts = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <SEO {...seo} />
+    <Analytics />
+    <script is:inline>
+      document.addEventListener('click', function (e) {
+        const el = e.target && e.target.closest ? e.target.closest('[data-event]') : null;
+        if (!el) return;
+        const name = el.getAttribute('data-event');
+        if (!name) return;
+        const gtag = window.gtag;
+        if (typeof gtag === 'function') {
+          gtag('event', name, { href: el.getAttribute('href') || undefined });
+        }
+      });
+    </script>
     <link rel="preload" href={plexSans400} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={plexSans700} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={plexMono400} as="font" type="font/woff2" crossorigin />

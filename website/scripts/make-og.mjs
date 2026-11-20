@@ -27,10 +27,18 @@ const ogDir = join(publicDir, 'og');
 const SKIP = new Set([
   '/404/',
   '/styleguide/',
-  '/landing/',
+  '/landing3/',
   '/request-a-quote/thank-you/',
   '/springs/spiral-springs/',
 ]);
+
+/**
+ * Pages whose own layout cannot host the card. The card template is drawn in the blue-and-white
+ * tokens, and `/` now uses the dark `.l3` palette (its body class would colour the card frame and
+ * its drawing is tinted for a dark sheet), so the homepage card is rendered on another page.
+ * Only the H1 and the eyebrow come from the page itself, so nothing about the card is borrowed.
+ */
+const FORCE_BORROW = new Set(['/']);
 
 /** Pages without their own drawing borrow one, by topic. First match wins. */
 const BORROW = [
@@ -41,7 +49,8 @@ const BORROW = [
   [/compression|grinding|heat-treatment/, '/springs/compression-springs/'],
   [/conical/, '/springs/conical-springs/'],
   [/wire-form|automotive|coiling/, '/wire-forms/'],
-  [/./, '/'],
+  // Default: the double torsion spring, the unit's signature part.
+  [/./, '/springs/double-torsion-springs/'],
 ];
 
 const TYPES = {
@@ -82,15 +91,20 @@ function ogSlug(path) {
 }
 
 function decode(s) {
-  return s
-    .replace(/<[^>]+>/g, '')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/\s+/g, ' ')
-    .trim();
+  return (
+    s
+      // A space, not nothing: an H1 split over <span> or <br> would otherwise fuse its words
+      // ("springyour"). Same rule as text() in scripts/audit-html.ts, so the share-card
+      // fingerprints on both sides agree and a card can stop being "stale".
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/\s+/g, ' ')
+      .trim()
+  );
 }
 
 function fileFor(urlPath) {
@@ -249,7 +263,8 @@ async function shoot(target, sourcePath, out) {
 }
 
 for (const p of pages) {
-  const source = p.ownDrawing ? p.path : BORROW.find(([re]) => re.test(p.path))[1];
+  const source =
+    p.ownDrawing && !FORCE_BORROW.has(p.path) ? p.path : BORROW.find(([re]) => re.test(p.path))[1];
   const slug = ogSlug(p.path);
   const ok = await shoot(p, source, join(ogDir, `${slug}.png`));
   manifest[p.path] = createHash('sha1').update(`${p.h1}|${p.section}`).digest('hex').slice(0, 12);

@@ -7,9 +7,14 @@ async function noHorizontalScroll(page: Page) {
   expect(overflow, `horizontal overflow ${overflow}px`).toBeLessThanOrEqual(1);
 }
 
+/**
+ * The shared header (skip link, mega-menu, mobile nav) is on every page except `/`, which has
+ * its own header since the homepage swap of 20 Nov 2026. These two tests use a product page;
+ * the homepage header is covered separately below.
+ */
 test('skip link and mega-menu work from the keyboard', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto('/');
+  await page.goto('/springs/torsion-springs/');
 
   await page.keyboard.press('Tab');
   await expect(page.getByRole('link', { name: 'Skip to main content' })).toBeFocused();
@@ -32,7 +37,7 @@ test('skip link and mega-menu work from the keyboard', async ({ page }) => {
 
 test('mobile nav opens from the keyboard', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/');
+  await page.goto('/springs/torsion-springs/');
   const menu = page.getByRole('button', { name: 'Menu' });
   await menu.focus();
   await page.keyboard.press('Enter');
@@ -40,6 +45,25 @@ test('mobile nav opens from the keyboard', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Torsion springs' }).first()).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(menu).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('homepage skip link and header menu work from the keyboard', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+
+  await page.keyboard.press('Tab');
+  await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#main')).toBeFocused();
+
+  // The homepage header uses a native <details> disclosure, so it needs no script.
+  const menu = page.locator('details.hdr-menu');
+  await page.locator('summary[aria-label="Menu"]').focus();
+  await page.keyboard.press('Enter');
+  await expect(menu).toHaveJSProperty('open', true);
+  await expect(menu.getByRole('link', { name: 'Springs' })).toBeVisible();
+  await page.keyboard.press('Enter');
+  await expect(menu).toHaveJSProperty('open', false);
 });
 
 test('RFQ fields are labelled and reachable by keyboard', async ({ page }) => {

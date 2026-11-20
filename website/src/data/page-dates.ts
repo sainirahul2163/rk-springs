@@ -10,8 +10,9 @@ const written: Record<string, string> = {
   '/resources/hsn-code-gst-springs/': '2026-10-04',
   '/resources/spring-price-guide-india/': '2026-10-04',
   '/resources/spring-glossary/': '2026-10-23',
+  // 20 Nov 2026: the homepage became the engineering-sheet design (SEO-WORK-LOG.md).
+  '/': '2026-11-20',
   // 23 Oct 2026 SEO pass: new H1s, intro links or related-link sections (SEO-WORK-LOG.md).
-  '/': '2026-10-23',
   '/springs/torsion-springs/': '2026-10-23',
   '/springs/double-torsion-springs/': '2026-10-23',
   '/springs/extension-springs/': '2026-10-23',

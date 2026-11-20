@@ -217,3 +217,61 @@ These come from blueprint §4.3 and §4.9. They are new pages, not fixes, so per
 - The client made the GitHub repo **public**, which lifts the Hobby author check. A follow-up commit to `main` triggers the production deploy.
 - If the repo is ever made private again, deploy with **Redeploy** in the Vercel dashboard, or upgrade to Pro.
 
+
+---
+
+## 20 Nov 2026: homepage swapped to the engineering-sheet design
+
+The `/landing3/` concept became `/`, and the earlier blue-and-white homepage became the noindex
+preview at `/landing3/`. Design review notes are in `CONTENT-REVIEW.md` §18; this is the SEO record.
+
+### Unchanged on purpose
+
+- **Title** `Spring Manufacturer in Pune | RK Springs & Wireforms` and the 147-character
+  description, both from the 23 Oct pass. The keyword target belongs to the URL, not to the layout.
+- Canonical `https://www.rksprings.com/`, `index, follow, max-image-preview:large`, one H1,
+  `lang="en-IN"`, Organization + LocalBusiness + WebSite + WebPage `@graph`, sitemap entry.
+- No new facts, no reviews, ratings, prices, ISO/IATF, PPAP, lab or export claims.
+
+### Changed
+
+- **H1** is now "The small spring your assembly depends on." The old headline moved to the preview.
+- **`FAQPage` is no longer emitted on `/`**: the new homepage shows no FAQ block, and the markup
+  must match the page. FAQ content and schema are untouched everywhere else. Note that Google
+  retired FAQ rich results on 7 May 2026, so the loss is for AI answers and readers, not snippets.
+- **`lastmod` for `/`** is 2026-11-20 in `page-dates.ts`.
+- **Internal links:** the homepage keeps body links to all six live product pages, wire forms, the
+  four industry pages, two capability pages, six guides, three calculators, the Talawade page,
+  about, quality and the RFQ. "All spring calculators" (`/tools/`) and "All spring design guides"
+  (`/resources/`) were added to the homepage's resources section, because the 23 Oct pass had put
+  those two hub links in homepage copy and the new layout did not have them. With them, no page is
+  navigation-only.
+- **Share cards** (`scripts/make-og.mjs`, `public/og/`):
+  - the card template is blue-and-white and renders on top of a real page, so the homepage card is
+    now rendered on `/springs/double-torsion-springs/` (`FORCE_BORROW`). Only the H1 and eyebrow
+    come from `/`.
+  - the fallback for pages without their own drawing moved from `/` to the double-torsion page.
+  - `/landing3/` replaced the dead `/landing/` entry in the script's SKIP list; a noindex page needs
+    no card and falls back to `og-default.png`.
+  - **fixed:** `make-og` stripped tags from the H1 with no space while `audit-html` uses a space.
+    That fused words on the card ("springyour") and made the two fingerprints disagree, which is why
+    `/` was reported as a stale card even straight after a rebuild. Both use the same rule now.
+
+### Verification (20 Nov 2026)
+
+| Gate | Result |
+|---|---|
+| `npm run check` | 0 errors, 0 warnings, 0 hints |
+| `npm test` | 62 passed |
+| `npm run test:e2e` | 44 passed |
+| `PUBLIC_SITE_URL=https://www.rksprings.com npm run build` → `audit-html` | 41 pages (38 indexable), 38 sitemap URLs, **0 errors, 0 warnings** |
+| Sitemap | `/` present with `lastmod` 2026-11-20; `/landing3/` absent |
+| `/landing3/` head | `noindex, nofollow`, self-canonical, no JSON-LD |
+
+### Still open
+
+- Lighthouse / mobile LCP and CLS were not re-measured for the new homepage. Run `npm run lh` before
+  launch: the hero art and the pointer-driven wire field are not what the October numbers measured.
+- The homepage palette (graphite and amber) and its favicon (`/brand/favicon-rk.svg`) differ from
+  the rest of the site. Decide whether to roll them site-wide; adopting the real logo site-wide means
+  re-running `npm run og` so the icons and the schema logo are rebuilt from it.
